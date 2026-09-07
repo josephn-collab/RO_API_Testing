@@ -1,0 +1,35 @@
+{
+  "path": "depots.location_index",
+  "summary": "Index into locations.location where the depot sits. Required.",
+  "range": "Required integer in [0, len(location)).",
+  "constraints": [
+    "Required.",
+    "Range [0, len(location))."
+  ],
+  "businessRules": [
+    "location_index defines: Specify the index of coordinates (in the location array) denoting the depot’s location. The valid range of values is \\[0, length of location array). If the location index exceeds the count of input…",
+    "Must stay consistent with: locations.location. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Missing/out of range -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: valid index.",
+    "Negative: out of range -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field location_index",
+    "Interaction: Negative: a job location_index equal to len(location) -> 400.",
+    "Interaction: Negative: a non-integer index like \"first\" -> 400 type error."
+  ],
+  "related": [
+    "locations.location"
+  ],
+  "rules": [
+    "location-index-range"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

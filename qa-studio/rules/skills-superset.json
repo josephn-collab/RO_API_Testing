@@ -1,0 +1,14 @@
+{
+  "id": "skills-superset",
+  "summary": "A task is assignable to a vehicle only if the vehicle's skills contain ALL of the task's required skills.",
+  "applies_to": [
+    "jobs.skills",
+    "vehicles.skills",
+    "shipments.skills"
+  ],
+  "rule": "Assignment is allowed iff task.skills is a subset of vehicle.skills (superset match). A task requiring a skill no vehicle has always goes to result.unassigned (skill reason), even when capacity and time are ample. Empty task skills match any vehicle.",
+  "testingGuidance": [
+    "Infeasible: job needs skill 3, no vehicle has 3 -> unassigned.",
+    "Positive: job needs [2]; only the vehicle whose skills include 2 serves it."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "path": "zones.geometry.coordinates",
+  "summary": "The coordinate rings of a zone polygon, in GeoJSON [longitude, latitude] order.",
+  "range": "Nested arrays of [lon, lat] pairs forming closed rings. NOTE: lon/lat order (opposite of locations.location).",
+  "constraints": [
+    "Each position is [longitude, latitude] (GeoJSON), not \"lat, lon\".",
+    "Rings must be closed (first point == last)."
+  ],
+  "businessRules": [
+    "coordinates defines: An array of coordinates in the \\[longitude, latitude\\] format, representing the zone boundary.",
+    "Each element in coordinates must be valid and consistent with related fields.",
+    "Must stay consistent with: zones.geometry.type. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A non-closed ring -> 400.",
+    "Out-of-range lon/lat -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: a valid closed square ring.",
+    "Negative: an open ring -> 400.",
+    "Gotcha: authoring [lat, lon] here (wrong order) places the zone incorrectly.",
+    "Positive: omit optional field coordinates"
+  ],
+  "related": [
+    "zones.geometry.type"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

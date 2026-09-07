@@ -1,0 +1,52 @@
+{
+  "path": "vehicles.capacity",
+  "summary": "Multi-dimensional maximum load a vehicle can carry. Cumulative onboard load must never exceed capacity on any dimension at any point along the route.",
+  "range": "Array of non-negative integers, one value per load dimension (e.g. [weight, volume, pallets]). No fixed upper bound in the spec.",
+  "constraints": [
+    "Values must be non-negative integers.",
+    "Dimension count must stay consistent with jobs[].delivery, jobs[].pickup, and shipments[].amount."
+  ],
+  "businessRules": [
+    "Hard constraint: for every dimension d, running onboard load <= capacity[d] at every step of the route.",
+    "Pickups increase load mid-route, so a load that is feasible at the depot can still breach capacity between a pickup and its delivery.",
+    "When violated, the offending task is placed in result.unassigned[] with a capacity reason; the solve still returns HTTP 200 and result.code == 0.",
+    "capacity defines: capacity attribute is used to define multidimensional capacities of the vehicle. It is recommended to keep the dimensions of capacity consistent with the dimensions provided in quantity related att…",
+    "Each element in capacity must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.delivery, jobs.pickup, shipments.amount. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Rule: Higher priority jobs are serviced first; ties break by job ID order.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Inconsistent dimension lengths across capacity/delivery/pickup/amount -> 400 input validation failed.",
+    "Negative capacity value -> 400 input validation failed."
+  ],
+  "testingGuidance": [
+    "Positive: capacity [100] with a single delivery [40] -> onboard load <= 100 at every step.",
+    "Boundary: demand exactly equal to capacity (delivery [50] on capacity [50]) fits.",
+    "Multi-dimension: capacity [10,100] with all deliveries/pickups/amounts 2-D and within both bounds -> accepted.",
+    "Negative-validation: negative capacity value like [-5] -> 400.",
+    "Negative-validation: dimension mismatch (capacity [10,100] but a job delivery [5]) -> 400.",
+    "Negative-infeasible: a single job whose delivery exceeds every vehicle's capacity -> in result.unassigned (capacity reason), still HTTP 200, result.code 0.",
+    "Negative-infeasible: capacity [10,100] with deliveries [2,60]+[2,50] breaches VOLUME (110>100) though weight (4<=10) is fine -> second job unassigned by volume.",
+    "Negative-infeasible: N jobs each delivery [1] on capacity [N] all fit; the (N+1)th on the same route breaches -> unassigned.",
+    "Interaction: zero-quantity demand is always capacity-feasible (a weightless stop).",
+    "Positive: omit optional field capacity",
+    "Interaction: Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+    "Interaction: Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+    "Interaction: Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+    "Interaction: Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400.",
+    "Interaction: Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+    "Interaction: Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+    "Interaction: Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first."
+  ],
+  "related": [
+    "jobs.delivery",
+    "jobs.pickup",
+    "shipments.amount"
+  ],
+  "rules": [
+    "capacity-dimension-consistency"
+  ],
+  "_source": "Knowledge/Product Knowledge/OptimizationConstraints.md#C1"
+}

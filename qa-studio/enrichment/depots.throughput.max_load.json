@@ -1,0 +1,26 @@
+{
+  "path": "depots.throughput.max_load",
+  "summary": "Soft cap on total load handled at the depot (per dimension); needs load_penalty.",
+  "range": "Array of integers, dimensions match capacity. Soft — requires load_penalty.",
+  "constraints": [
+    "Dimension count matches capacity.",
+    "Requires load_penalty."
+  ],
+  "businessRules": [
+    "max_load defines: Specify the sum total of load or orders that the depot can load into the available vehicles within the handling_duration. Please note that: * This is a soft constraint and requires load_penalty to …",
+    "Each element in max_load must be valid and consistent with related fields.",
+    "Must stay consistent with: depots.throughput.load_penalty, vehicles.capacity. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: load beyond max_load incurs load_penalty.",
+    "Positive: omit optional field max_load"
+  ],
+  "related": [
+    "depots.throughput.load_penalty",
+    "vehicles.capacity"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

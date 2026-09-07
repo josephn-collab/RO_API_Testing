@@ -1,0 +1,29 @@
+{
+  "path": "options.routing.profiles",
+  "summary": "Named routing profiles; each holds any options.routing property. Vehicles reference one via vehicles.profile.",
+  "range": "Object mapping profile name -> routing config. 'default' reserved; no nesting. Profile-count limit scales down with location count (15/6/2/1).",
+  "constraints": [
+    "'default' name is reserved.",
+    "No nested profiles.",
+    "Profile count limited by problem size."
+  ],
+  "businessRules": [
+    "profiles defines: Defines all the vehicle profiles. profiles is implemented as a dictionary of objects where each profile name is the unique key and the associated value is an object describing the routing propertie…",
+    "Must stay consistent with: vehicles.profile. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A vehicle referencing an undefined profile -> 400.",
+    "Nested profiles -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: profiles {\"truck\": {mode:truck}} referenced by vehicles.profile.",
+    "Negative: vehicles.profile naming a profile not defined here -> 400.",
+    "Positive: omit optional field profiles"
+  ],
+  "related": [
+    "vehicles.profile"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

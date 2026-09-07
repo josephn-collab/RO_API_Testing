@@ -1,0 +1,22 @@
+{
+  "path": "options.webhook",
+  "summary": "Async status callback configuration.",
+  "range": "Object: { url, events, timeout }.",
+  "constraints": [],
+  "businessRules": [
+    "webhook defines: Use this attribute to configure your webhook configurations for receiving status updates about submitted optimization requests. Read more about this attribute in the [Webhook Configurations](https:…",
+    "Must stay consistent with: options.webhook.url, options.webhook.events. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: webhook to an HTTPS endpoint for JOB_COMPLETED.",
+    "Positive: omit optional field webhook"
+  ],
+  "related": [
+    "options.webhook.url",
+    "options.webhook.events"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

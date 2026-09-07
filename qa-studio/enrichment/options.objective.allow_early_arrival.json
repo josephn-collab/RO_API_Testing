@@ -1,0 +1,23 @@
+{
+  "path": "options.objective.allow_early_arrival",
+  "summary": "Whether the driver waits AT the task (true) or at the previous stop and departs just-in-time (false).",
+  "range": "Boolean. Default true.",
+  "constraints": [],
+  "businessRules": [
+    "Affects where waiting time accrues, not feasibility; interacts with time windows.",
+    "allow_early_arrival defines: Choose where the optimizer should schedule the driver’s wait time. When set to true the driver waits at the location of the task until its time window allows him to start the task. When set to fals…",
+    "Must stay consistent with: jobs.time_windows. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: true — driver waits at the task location.",
+    "Behavioral: false — waits at previous stop, arrives just in time.",
+    "Positive: omit optional field allow_early_arrival"
+  ],
+  "related": [
+    "jobs.time_windows"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

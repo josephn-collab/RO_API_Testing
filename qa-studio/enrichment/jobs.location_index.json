@@ -1,0 +1,41 @@
+{
+  "path": "jobs.location_index",
+  "summary": "Index into locations.location where the job is served. Required.",
+  "range": "Required integer in [0, len(location)).",
+  "constraints": [
+    "Required.",
+    "Range [0, len(location)).",
+    "Integer only."
+  ],
+  "businessRules": [
+    "location_index defines: An integer denoting the index (in the location array) of the location coordinates where the job needs to be performed. The valid range of values is \\[0, length of location array). Please note the l…",
+    "Must stay consistent with: locations.location. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Missing -> 400.",
+    "Out of range (>= len or < 0) -> 400.",
+    "Non-integer (e.g. \"first\") -> 400 type error."
+  ],
+  "testingGuidance": [
+    "Positive: a valid in-range index.",
+    "Boundary: index len-1 (last valid).",
+    "Negative-validation: index == len(location) -> 400 (out of range).",
+    "Negative-validation: missing location_index -> 400.",
+    "Negative-validation: a string index like \"first\" -> 400 type error.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field location_index",
+    "Interaction: Negative: a job location_index equal to len(location) -> 400.",
+    "Interaction: Negative: a non-integer index like \"first\" -> 400 type error."
+  ],
+  "related": [
+    "locations.location"
+  ],
+  "rules": [
+    "location-index-range"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

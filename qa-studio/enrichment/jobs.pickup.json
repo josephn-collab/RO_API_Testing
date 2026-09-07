@@ -1,0 +1,43 @@
+{
+  "path": "jobs.pickup",
+  "summary": "Multi-dimensional quantity picked up at the job (added to onboard load, carried onward).",
+  "range": "Array of non-negative integers; dimension count must match vehicles.capacity.",
+  "constraints": [
+    "Non-negative integers.",
+    "Dimension count consistent with capacity."
+  ],
+  "businessRules": [
+    "Pickups raise mid-route load; a depot-feasible load can breach capacity between pickup and a later stop (C1).",
+    "pickup defines: In case the job involves a pickup step, use this attribute to describe pickup quantity. This attribute supports multidimensional quantities, to support picking up quantities of different units/dime…",
+    "Each element in pickup must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.capacity, jobs.delivery. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Negative value -> 400.",
+    "Dimension mismatch with capacity -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: pickup [2] on capacity [5] carried within the bound.",
+    "Boundary: pickup equal to capacity (pickup [5] on capacity [5]) fits.",
+    "Negative-validation: negative pickup value like [-1] -> 400.",
+    "Negative-validation: pickup dimension count != capacity dimension count -> 400.",
+    "Negative-infeasible: a single pickup exceeding every vehicle's capacity -> unassigned (capacity reason), HTTP 200.",
+    "Negative-infeasible: two pickups stacking load past capacity mid-route -> at least one unassigned.",
+    "Interaction: zero pickup [0] is always capacity-feasible (a weightless stop).",
+    "Positive: omit optional field pickup",
+    "Interaction: Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+    "Interaction: Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+    "Interaction: Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+    "Interaction: Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400."
+  ],
+  "related": [
+    "vehicles.capacity",
+    "jobs.delivery"
+  ],
+  "rules": [
+    "capacity-dimension-consistency"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

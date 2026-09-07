@@ -1,0 +1,35 @@
+{
+  "path": "shipments.pickup",
+  "summary": "The pickup step of a shipment: where/when the load is collected. Required.",
+  "range": "Object: { id (req), location_index (req), service?, time_windows?, setup?, sequence_order?, max_visit_lateness? }.",
+  "constraints": [
+    "Required.",
+    "Requires id and location_index."
+  ],
+  "businessRules": [
+    "Served by the same vehicle as its delivery, and BEFORE the delivery step (C4).",
+    "pickup defines: Specify the details of the pickup step of the shipment.",
+    "Must stay consistent with: shipments.delivery, shipments.pickup.location_index. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Required field. Missing causes HTTP 400 validation error."
+  ],
+  "validationRules": [
+    "Missing pickup -> 400.",
+    "Duplicate pickup/delivery id -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: pickup with a valid location_index and window.",
+    "Infeasible: pickup window strictly after the delivery window -> pair unassigned.",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ],
+  "related": [
+    "shipments.delivery",
+    "shipments.pickup.location_index"
+  ],
+  "rules": [
+    "pickup-delivery-precedence"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

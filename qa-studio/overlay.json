@@ -1,0 +1,530 @@
+{
+  "note": "Draft feature definitions for capabilities NOT yet in openapi.json. Each draft feature defines schema structure and overlay into the spec so draft fields appear in the tree, validate (typed), and feed the prompt/coverage — each flagged 'draft'. Remove a feature entry once it lands in the real openapi.json. Enrichment and rules are in qa-studio/enrichment/ and qa-studio/rules/ respectively, prefixed with the feature name (e.g., jobs.split.can_be_split.json).",
+  "features": [
+    {
+      "id": "split-order",
+      "source": "[Atomic] Split Order Feature-2026071721444587.pdf",
+      "status": "draft",
+      "title": "Split Order / Split Jobs Across Vehicles",
+      "target": "jobs.items.properties",
+      "description": "Allow large jobs to be split across multiple vehicles when a single vehicle lacks sufficient capacity. Split orders apply to jobs only (not shipments). Each split portion retains the original job ID and is tagged with a split_indicator in the response route steps.",
+      "fields": {
+        "split": {
+          "type": "object",
+          "description": "Split Order configuration (DRAFT, not in spec): enable splitting a large job across multiple vehicles.",
+          "additionalProperties": false,
+          "properties": {
+            "can_be_split": {
+              "type": "boolean",
+              "description": "Whether this job may be split across multiple vehicles. Default: false. If false and job demand exceeds single-vehicle capacity, the job becomes unassigned.",
+              "default": false
+            },
+            "max_splits": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum number of vehicles this job can be split across. Required if can_be_split=true. Each split sub-job receives a split_indicator in response (0 to max_splits-1)."
+            },
+            "quant": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Minimum quantity each split must carry, as a ratio of the original job load (0.0 to 1.0). Applies only when problem.objective.load_dimension=1; multi-dimension behavior is TBC. Optional."
+            }
+          }
+        }
+      },
+      "constraints": [
+        "Split applies to jobs.items only; shipments do not support split.",
+        "If can_be_split=true, max_splits must be present and ≥ 1.",
+        "quant applies only when problem.objective.load_dimension=1; multi-dimension semantics undefined (mark TBC).",
+        "Sub-jobs created by a split share the same job ID as the original.",
+        "Each split sub-job carries split_indicator (0-based) and per-split pickup/delivery arrays in response route steps."
+      ],
+      "responseFields": {
+        "routes.steps.split_indicator": {
+          "type": "integer",
+          "description": "0-based indicator identifying which split portion this step represents. Only present for split jobs. Range: 0 to (job.split.max_splits - 1).",
+          "note": "Informational only; not validated in request. Present in response only if split job."
+        },
+        "routes.steps.pickup": {
+          "type": "array",
+          "description": "Sub-volume(s) of the original job's pickup load carried in this split. Sum of all split portions' pickup arrays equals the original job's pickup.",
+          "note": "Informational only; reflects the split allocation computed by the solver."
+        },
+        "routes.steps.delivery": {
+          "type": "array",
+          "description": "Sub-volume(s) of the original job's delivery load carried in this split. Sum of all split portions' delivery arrays equals the original job's delivery.",
+          "note": "Informational only; reflects the split allocation computed by the solver."
+        }
+      },
+      "testingSuggestions": [
+        "Negative-validation: Malformed split input (wrong types, split on a shipment) → expect HTTP 400 validation error.",
+        "Positive: High delivery volume (e.g. 5x vehicle capacity) with can_be_split=false or absent → expect job in result.unassigned.",
+        "Positive: Same high-volume job with can_be_split=true, max_splits sufficient, and enough vehicles → expect valid split solution where sub-deliveries sum to the original.",
+        "Boundary: max_splits exactly equal to the minimum number of vehicles needed; quant at the minimum feasible ratio.",
+        "Interaction: Multi-dimension load (load_dimension > 1) with quant set → test whether error or silently ignored (TBC)."
+      ],
+      "limitations": [
+        "Jobs only — shipments are not supported.",
+        "quant multi-dimension behavior is undefined in the source specification (mark TBC for future clarification)."
+      ],
+      "enrichment_references": [
+        "qa-studio/enrichment/jobs.split.can_be_split.json",
+        "qa-studio/enrichment/jobs.split.max_splits.json",
+        "qa-studio/enrichment/jobs.split.quant.json"
+      ],
+      "rule_references": [
+        "qa-studio/rules/split-job-capacity-feasibility.json",
+        "qa-studio/rules/split-shipment-rejection.json",
+        "qa-studio/rules/split-max-splits-validity.json",
+        "qa-studio/rules/split-load-dimension-constraint.json"
+      ]
+    },
+    {
+      "id": "unused-vehicle-reasons",
+      "source": "Unassigned Reasons for Vehicles Understanding Doc.pdf",
+      "status": "draft",
+      "title": "Explain Why Idle Vehicles Are Left Unused",
+      "target": "options.properties",
+      "description": "Add vehicle-side diagnostics explaining why idle vehicles weren't used when unassigned work exists. This is the vehicle-side dual of result.unassigned[].reason. Distinguishes hard capability limits (impossible to serve) from cost/objective decisions (could serve, but too expensive).",
+      "fields": {
+        "report_unused_vehicle_reason": {
+          "type": "boolean",
+          "description": "When true, populate result.unused_vehicles[] for idle vehicles whenever the solution has unassigned tasks. Flexible API only; Fast engine silently ignores.",
+          "default": false
+        }
+      },
+      "responseFields": {
+        "result.unused_vehicles": {
+          "type": "array",
+          "description": "Present only when report_unused_vehicle_reason=true AND result.unassigned[] is non-empty. Array of idle (empty-route) vehicles with explanations for why they were not used.",
+          "note": "Absent if no unassigned tasks exist (even if vehicles are idle). Present but empty [] if unassigned tasks exist but all vehicles are used."
+        },
+        "result.unused_vehicles.vehicle": {
+          "type": "string",
+          "description": "Idle vehicle ID"
+        },
+        "result.unused_vehicles.reasons": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Distinct hard-constraint reasons aggregated across all unassigned units this vehicle cannot serve. Empty if vehicle can feasibly serve every unassigned unit.",
+          "possibleValues": [
+            "unmatched skills",
+            "insufficient capacity",
+            "time_window requirements",
+            "zone constraints",
+            "max_distance exceeded",
+            "max_travel_time exceeded",
+            "max_tasks exceeded"
+          ]
+        },
+        "result.unused_vehicles.feasible_unassigned": {
+          "type": "boolean",
+          "description": "true if vehicle could serve at least one unassigned unit on its empty route (marks cost/objective decision, not capability limit). false if vehicle is incapable of serving any unassigned unit (hard constraint blocks all of them)."
+        }
+      },
+      "constraints": [
+        "Only emitted when report_unused_vehicle_reason=true and result.unassigned[] is non-empty.",
+        "Only reports completely idle (empty-route) vehicles; partially used vehicles with spare capacity are never reported.",
+        "Feasibility check is standalone per-unit; does not consider whether combination of units would be jointly feasible.",
+        "reasons are deduplicated and aggregated per vehicle, not linked to specific task IDs. Cross-reference each unassigned task's own reason to map specific task-constraint pairs.",
+        "Flexible API only; Fast engine (jsprit) silently ignores the option and never emits unused_vehicles.",
+        "Interaction with Split Orders: splitting phase runs before this diagnostic. An idle vehicle that could only carry a fragment of a splittable job still reports insufficient capacity / feasible_unassigned: false.",
+        "Re-optimization: report_unused_vehicle_reason is a request-level option. Each re-optimization computes idle/unassigned sets from that run's own solution; previous results never feed the diagnostic directly."
+      ],
+      "interpretationMatrix": [
+        {
+          "reasons": "non-empty",
+          "feasible_unassigned": false,
+          "interpretation": "Vehicle is incapable of every unassigned unit; the listed constraints explain why. Hard capability limit."
+        },
+        {
+          "reasons": "non-empty",
+          "feasible_unassigned": true,
+          "interpretation": "Vehicle is blocked from some units (listed) but could serve at least one other — that one was left unassigned by cost/objective decision, not capability."
+        },
+        {
+          "reasons": "empty",
+          "feasible_unassigned": true,
+          "interpretation": "Vehicle could serve every unassigned unit; all were left unassigned by cost/objective. Investigate tuning, not capability."
+        },
+        {
+          "reasons": "empty",
+          "feasible_unassigned": false,
+          "interpretation": "Not emitted — only occurs when there were no unassigned units (feature definition gate)."
+        }
+      ],
+      "testingSuggestions": [
+        "Positive: Flag off (regression): Existing flexible suite with option unset — unused_vehicles must be absent, no solution diffs.",
+        "Positive: Incapable vehicle: Idle vehicle blocked by hard constraints, feasible_unassigned: false, reasons populated.",
+        "Positive: Feasible but not selected: Lowered unassigned_count_penalty causes cost decision, feasible_unassigned: true.",
+        "Positive: All-feasible idle vehicle: Could serve every unassigned unit, reasons: [], feasible_unassigned: true.",
+        "Positive: No idle vehicles: Unassigned tasks exist but all vehicles used, unused_vehicles: [] (present but empty).",
+        "Positive: No unassigned tasks: Flag on, full assignment, unused_vehicles absent (not present).",
+        "Positive: Shipment unit: Unassigned atomic shipments; capacity block on pickup yields one insufficient capacity reason for the whole shipment.",
+        "Positive: Time-window block: Idle vehicle whose time_window cannot reach any unassigned task → time_window requirements reason.",
+        "Positive: Zone / max_distance / max_travel_time blocks: Verify each maps to matching reason.",
+        "Positive: Mixed aggregate: Idle vehicle blocked from some units by skills and from others by capacity → both reasons present, deduplicated.",
+        "Negative-validation: Non-boolean report_unused_vehicle_reason → HTTP 400 Bad Request.",
+        "Positive: Fast engine: report_unused_vehicle_reason=true on jsprit → ignored, no unused_vehicles in response, no error.",
+        "Positive: Re-optimization: Flag carried through each optimization call; idle/unassigned sets recomputed from new solution.",
+        "Interaction: Split Orders: Splittable job remains unassigned after split phase → idle vehicle evaluated at full job demand, not fragments."
+      ],
+      "limitations": [
+        "Flexible API only. Fast engine (jsprit) silently ignores report_unused_vehicle_reason.",
+        "Empty-route vehicles only. A vehicle used but with spare capacity for an unassigned task is NOT reported — only fully idle vehicles appear in unused_vehicles[].",
+        "Standalone per-unit feasibility. The check evaluates each unassigned unit independently on an empty route. Does not detect cases where a combination of units would be jointly infeasible.",
+        "Aggregated per vehicle. reasons is deduplicated and not linked to specific task IDs. To find which task hit which constraint, cross-reference each unassigned task's own reason with the vehicle's list.",
+        "Feasibility, not insertion order. feasible_unassigned reflects hard-constraint feasibility on an empty route. Under heuristic search a feasible unit may, rarely, be missed even under the default objective; treat feasible_unassigned: true as 'capability exists', not 'solver bug'.",
+        "Reason quality inherits unassigned caveats. Under a unified objective the exact reasons strings may degrade the same way unassigned[].reason does, but feasible_unassigned remains reliable."
+      ],
+      "enrichment_references": [
+        "qa-studio/enrichment/options.report_unused_vehicle_reason.json",
+        "qa-studio/enrichment/result.unused_vehicles.json",
+        "qa-studio/enrichment/result.unused_vehicles.reasons.json",
+        "qa-studio/enrichment/result.unused_vehicles.feasible_unassigned.json"
+      ],
+      "rule_references": []
+    },
+    {
+      "id": "one-to-many-shipment",
+      "source": "One-to-Many Delivery Shipment Understanding Doc.pdf",
+      "status": "draft",
+      "title": "One-to-Many Delivery Shipment",
+      "target": "shipments.items.properties",
+      "description": "Allow a single pickup to distribute its load to multiple delivery locations as one logical shipment. Enables efficient modeling of warehouse distribution scenarios. Alternative to creating multiple shipments that share a pickup. All deliveries are jointly assigned or unassigned together.",
+      "fields": {
+        "deliveries": {
+          "type": "array",
+          "description": "Array of delivery locations for a single pickup (ONE-TO-MANY). Must contain at least 2 deliveries. Mutually exclusive with singular delivery field.",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "description": "Individual delivery in a one-to-many shipment.",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for this delivery. Must be unique across all shipment steps (including pickup ID)."
+              },
+              "location_index": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Index into the locations[] array. Identifies the delivery location."
+              },
+              "amount": {
+                "type": "array",
+                "items": {"type": "number"},
+                "description": "Delivery amount per dimension. Sum of all delivery amounts must equal shipment.amount dimension-by-dimension."
+              },
+              "service": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Service duration at this delivery location in seconds. Optional."
+              },
+              "time_window": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {"type": "integer"},
+                "description": "Time window [start, end] in seconds since epoch. Optional. Evaluated per delivery."
+              }
+            },
+            "required": ["id", "location_index", "amount"]
+          }
+        }
+      },
+      "constraints": [
+        "Exactly one of delivery or deliveries must be present; never both, never neither. Returns HTTP 400 if violated.",
+        "deliveries must contain at least 2 items (minimum array size). Single-delivery shipments use the singular delivery field.",
+        "SUM(deliveries[].amount) must equal shipment.amount, checked dimension-by-dimension. Returns HTTP 400 if sum mismatch.",
+        "All delivery IDs must be unique across the entire shipment (pickup + all deliveries). Returns HTTP 400 if duplicate.",
+        "Pickup and delivery IDs must not collide. Returns HTTP 400 if pickup ID equals any delivery ID.",
+        "Joint assignment: if any delivery becomes infeasible (capacity, time window, constraint), the entire shipment (pickup + all deliveries) is UNASSIGNED. No partial delivery is possible.",
+        "No partial fulfillment: each delivery is atomic. It must deliver 100% of its amount or be unassigned entirely.",
+        "All activities in a one-to-many shipment are assigned to the same vehicle. Cannot be split across multiple vehicles.",
+        "Delivery order is determined by the solver subject to sequence_order, time_windows, and follow_lifo_order constraints. Input array order is not preserved.",
+        "Compartments are NOT supported with deliveries (Stage 1 limitation). Returns HTTP 400 if both compartments and deliveries are present.",
+        "Shipment-level constraints (skills, zones, priority, etc.) apply to the entire shipment and cannot be overridden per delivery.",
+        "Relations (pinned assignments) do not yet support one-to-many shipments. Referencing a delivery ID in relations.steps returns HTTP 400.",
+        "Re-optimization does not yet support shipment_changes.modify/add/remove for one-to-many shipments."
+      ],
+      "responseFields": {
+        "result.routes[].steps[].id": {
+          "type": "string",
+          "description": "Each pickup and each delivery appears as a separate step in the route. Pickup occurs once; deliveries follow."
+        },
+        "result.routes[].steps[].type": {
+          "type": "string",
+          "description": "Step type: 'pickup' for the shipment pickup, 'delivery' for each delivery.",
+          "note": "No new step type introduced; deliveries use type: 'delivery' as before."
+        },
+        "result.routes[].steps[].load": {
+          "type": "array",
+          "description": "Vehicle load after this step. Increases at pickup, decreases at each delivery. Final load is 0 after last delivery."
+        },
+        "result.routes[].steps[].distance": {
+          "type": "number",
+          "description": "Distance from previous step to this step in meters."
+        },
+        "result.routes[].steps[].duration": {
+          "type": "number",
+          "description": "Duration from previous step to this step in seconds (travel + service)."
+        },
+        "result.routes[].steps[].arrival": {
+          "type": "number",
+          "description": "Arrival time at this step in seconds since epoch."
+        }
+      },
+      "testingSuggestions": [
+        "Positive: Basic 1 pickup + 2 deliveries with correct amount sum (100+80=180 total).",
+        "Positive: 1 pickup + 3 deliveries, different locations, all deliveries after pickup.",
+        "Positive: Verify final vehicle load = 0 after all deliveries.",
+        "Positive: Verify load progression: start 0 → pickup +180 → D1 -100 → D2 -80 → end 0.",
+        "Positive: Multiple deliveries at same location (allowed, treated as separate steps).",
+        "Positive: Multi-dimensional amounts: amount=[300, 15], deliveries sum to [300, 15] per dimension.",
+        "Positive: All activities on same vehicle (joint assignment verified).",
+        "Negative-validation: Both delivery and deliveries provided → HTTP 400.",
+        "Negative-validation: Neither delivery nor deliveries provided → HTTP 400.",
+        "Negative-validation: deliveries=[] (empty array) → HTTP 400.",
+        "Negative-validation: deliveries with 1 item (min=2) → HTTP 400.",
+        "Negative-validation: Duplicate delivery IDs → HTTP 400.",
+        "Negative-validation: Pickup ID matches delivery ID → HTTP 400.",
+        "Negative-validation: Amount sum mismatch (100+80=180 but shipment amount=300) → HTTP 400.",
+        "Negative-validation: Wrong amount dimensionality (delivery has 2 dims but shipment has 1) → HTTP 400.",
+        "Negative-validation: Missing delivery ID → HTTP 400.",
+        "Negative-validation: Missing delivery amount → HTTP 400.",
+        "Negative-validation: Compartments + deliveries both present → HTTP 400.",
+        "Negative-infeasible: Vehicle capacity insufficient for pickup amount → entire shipment UNASSIGNED (not just pickup, not just one delivery).",
+        "Negative-infeasible: Time window violation on delivery 1 → entire shipment UNASSIGNED.",
+        "Negative-infeasible: max_time_in_vehicle violated for delivery 3 → entire shipment UNASSIGNED.",
+        "Boundary: Vehicle capacity exactly equals shipment amount → assigned successfully.",
+        "Boundary: Vehicle capacity exactly equals largest single delivery (not total) → depends on solver; expect infeasible.",
+        "Interaction: follow_lifo_order=true with multiple shipments → deliveries respect LIFO relative to other shipments.",
+        "Interaction: time_window on pickup and on deliveries → all must be satisfied.",
+        "Interaction: Skills required on shipment → pickup and all deliveries inherit; cannot override per delivery.",
+        "Interaction: Zones on shipment → all activities must be in permitted zones.",
+        "Backward compatibility: Existing 1-to-1 shipments (singular delivery) must pass regression suite unchanged."
+      ],
+      "limitations": [
+        "Compartments NOT supported. If both compartments and deliveries are present, returns HTTP 400.",
+        "Relations (pinned assignments) do not yet support delivery groups. Attempting to reference a delivery ID in relations.steps returns HTTP 400.",
+        "Re-optimization does not yet support one-to-many shipments in shipment_changes. Modify/add/remove will return an error or silently ignore.",
+        "Delivery order is solver-determined; input array order is not preserved. Do not write tests expecting specific delivery order unless sequence_order or time_windows force it.",
+        "max_time_in_vehicle is evaluated per-delivery independently but triggers joint unassignment if any delivery violates it."
+      ],
+      "enrichment_references": [],
+      "rule_references": []
+    },
+    {
+      "id": "multi-technician",
+      "source": "Multi Technician Understanding Doc.pdf",
+      "status": "draft",
+      "title": "Coordinated Multi-Technician Jobs",
+      "target": "coordinate_jobs.items.properties",
+      "description": "Assign multiple technicians (jobs) to the same location with synchronized arrival within a specified tolerance. Each technician has their own vehicle, skills, service duration, availability, and load. Core guarantee: N technicians arrive within tolerance or entire group is unassigned (all-or-nothing). Uses different vehicles, joins skills at the group + member level, supports both last_arrival (default) and first_arrival service-start rules.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "description": "Unique group identifier. Must be globally unique across jobs, shipments, groups, and member IDs."
+        },
+        "location_index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index into locations[] array. All members of this group must service this single location."
+        },
+        "skills": {
+          "type": "array",
+          "items": {"type": "integer"},
+          "description": "Group-level skills required by all members. Each member's vehicle must have (group skills UNION member skills). Optional."
+        },
+        "service": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Default service duration (seconds) for members who don't specify their own. Overridden by member-level service. Optional."
+        },
+        "setup": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Setup duration (seconds) before service begins. Applied before service starts. Optional; default 0."
+        },
+        "time_windows": {
+          "type": "array",
+          "description": "Default time windows [start, end] in seconds since epoch. Each member's time_windows overrides this entirely (not intersection). Optional.",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {"type": "integer"}
+          }
+        },
+        "arrival_sync_tolerance_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400,
+          "description": "Maximum allowed spread (latest arrival - earliest arrival) for members of this group, in seconds. Default: 300 (5 minutes). Max: 86400 (1 day)."
+        },
+        "service_start_rule": {
+          "type": "string",
+          "enum": ["last_arrival", "first_arrival"],
+          "description": "When synchronized arrival starts service. 'last_arrival' (default): all start service at latest arrival. 'first_arrival': each starts on own arrival."
+        },
+        "jobs": {
+          "type": "array",
+          "minItems": 2,
+          "description": "Member technicians in this group. Minimum 2 members required. Each is a distinct technician with own ID.",
+          "items": {
+            "type": "object",
+            "description": "A member technician (job) within a coordination group.",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "Unique member (technician) ID. Must be unique globally."
+              },
+              "description": {
+                "type": "string",
+                "description": "Human-readable description (e.g., 'Electrician', 'HVAC Tech'). Not validated."
+              },
+              "skills": {
+                "type": "array",
+                "items": {"type": "integer"},
+                "description": "Member-specific skills. Vehicle must have (group skills UNION member skills). Optional."
+              },
+              "service": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Member-specific service duration (seconds). Overrides group service. Optional."
+              },
+              "setup": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Member-specific setup duration (seconds). Overrides group setup. Optional; default 0."
+              },
+              "time_windows": {
+                "type": "array",
+                "description": "Member-specific time windows. Fully replaces group time_windows. Optional.",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {"type": "integer"}
+                }
+              },
+              "pickup": {
+                "type": "array",
+                "items": {"type": "number"},
+                "description": "Pickup load for this member per dimension. Independent; affects member's vehicle capacity only. Optional."
+              },
+              "delivery": {
+                "type": "array",
+                "items": {"type": "number"},
+                "description": "Delivery load for this member per dimension. Independent; affects member's vehicle capacity only. Optional."
+              }
+            },
+            "required": ["id"]
+          }
+        }
+      },
+      "constraints": [
+        "Flexible API only. Fast API (jsprit) returns HTTP 400 if coordinate_jobs is present.",
+        "Group IDs and all member IDs must be globally unique across jobs, shipments, shipment steps, and other group/member IDs. Returns HTTP 400 on collision.",
+        "Minimum 2 members per group required. Single-member groups return HTTP 400.",
+        "All members of a group must be assigned to different vehicles. If only one vehicle satisfies all skills, entire group → UNASSIGNED. Returns HTTP 400 if duplicate vehicles pinned to members.",
+        "All members must service the same location (group location_index). This is enforced; cannot be overridden per member.",
+        "Time windows: member time_windows fully replaces group time_windows (not intersection). If member omits time_windows, group default applies.",
+        "Skills union: vehicle must have (group skills UNION member skills) to be eligible for that member.",
+        "Service timing: under last_arrival (default), all members start service at max(arrival_times). Under first_arrival, each starts on own arrival.",
+        "Setup applies before service: arrival → (wait until sync instant) → setup → service → departure.",
+        "Loads are per-member, independent. Each member's load affects only its own vehicle's capacity. No group-level load.",
+        "All-or-nothing: if any member is infeasible (skills, capacity, time window, arrival tolerance violated), entire group → UNASSIGNED. No partial assignment.",
+        "Arrival synchronization: abs(serviceStart_A - serviceStart_B) <= arrival_sync_tolerance_seconds (after accounting for wait time). Raw arrivals need not satisfy tolerance.",
+        "Pinned technician: use relations with type=pinned, vehicle=<vehicle_id>, steps=[{type=job, id=<member_id>}] to force member to specific vehicle.",
+        "Cannot pin same vehicle to multiple members in the same group. Returns HTTP 400.",
+        "Cannot pin same member twice. Returns HTTP 400.",
+        "Member referenced in non-pinned relation returns HTTP 400.",
+        "Group referenced in any relation returns HTTP 400.",
+        "Re-optimization: job_changes.add/modify referencing member or group ID → rejected. job_changes.remove with group ID or all member IDs → removes entire group. Partial removal → HTTP 400.",
+        "shipment_changes not guarded (by design); coordinate members occupy same ID namespace as ordinary jobs; shipment ID namespaces remain separate (existing platform guarantee)."
+      ],
+      "responseFields": {
+        "result.routes[].steps[].id": {
+          "type": "integer",
+          "description": "Member ID (technician ID). Each member appears as an ordinary job step in a vehicle route."
+        },
+        "result.routes[].steps[].coordination_group_id": {
+          "type": "integer",
+          "description": "Coordination group ID. Links this step to its group for synchronization verification."
+        },
+        "result.routes[].steps[].arrival": {
+          "type": "number",
+          "description": "Arrival time at location (seconds since epoch). Raw arrival; not necessarily synchronized. Use waiting_time to compute service_start."
+        },
+        "result.routes[].steps[].waiting_time": {
+          "type": "number",
+          "description": "Waiting time (seconds) before service starts. Includes time-window wait + coordination wait (wait for other members to arrive). service_start = arrival + waiting_time."
+        },
+        "result.routes[].steps[].service": {
+          "type": "number",
+          "description": "Actual service duration (seconds) applied to this member."
+        },
+        "result.unassigned": {
+          "type": "array",
+          "description": "If any member of a group is infeasible, all members appear in unassigned[] with reason explaining the blockage (e.g., 'insufficient vehicles', 'arrival_sync tolerance exceeded', 'time window infeasible')."
+        }
+      },
+      "testingSuggestions": [
+        "Positive: Basic 2-member group (electrician + HVAC), different vehicles, same location, arrival within 5 min tolerance.",
+        "Positive: 3-member group, 3 distinct vehicles, all within tolerance.",
+        "Positive: Verify coordination_group_id populated on all members.",
+        "Positive: Verify members on different vehicles (vehicle(member1) != vehicle(member2)).",
+        "Positive: Verify same location for all members.",
+        "Positive: Verify arrival spread <= tolerance: abs(arrival_A - arrival_B) <= tolerance. Note: Check service_start sync, not raw arrival.",
+        "Positive: Different service durations: electrician 3600s, HVAC 1800s → both have same service_start under last_arrival, different finish times.",
+        "Positive: last_arrival (default): both members start service at same time (latest arrival).",
+        "Positive: first_arrival: each member starts service on own arrival; departures differ.",
+        "Positive: Group skills + member skills: group [7], member [20] → vehicle needs {7,20}.",
+        "Positive: No group-level load; each member's load independent.",
+        "Positive: Pinned member: force technician to specific vehicle using relations.",
+        "Positive: Multiple groups in one request: group 501 & group 777 coordinate independently; same vehicle can appear in both at different times.",
+        "Negative-validation: Fast API + coordinate_jobs → HTTP 400.",
+        "Negative-validation: 1 member (min 2) → HTTP 400.",
+        "Negative-validation: Missing group ID → HTTP 400.",
+        "Negative-validation: Missing location_index → HTTP 400.",
+        "Negative-validation: Duplicate group ID → HTTP 400.",
+        "Negative-validation: Member ID matches normal job ID → HTTP 400 (global uniqueness).",
+        "Negative-validation: Same vehicle pinned to two members of same group → HTTP 400.",
+        "Negative-validation: Invalid arrival_sync_tolerance_seconds (negative or > 86400) → HTTP 400.",
+        "Negative-validation: Invalid service_start_rule (not 'last_arrival' or 'first_arrival') → HTTP 400.",
+        "Negative-infeasible: Only 1 eligible vehicle (not enough for 2+ members) → entire group UNASSIGNED.",
+        "Negative-infeasible: Arrival spread > tolerance (e.g. 20 min with 5 min tolerance) → entire group UNASSIGNED.",
+        "Negative-infeasible: Non-overlapping member time windows → entire group UNASSIGNED.",
+        "Negative-infeasible: Member time window that cannot fit service duration → entire group UNASSIGNED.",
+        "Boundary: Arrival exactly at tolerance boundary → assigned.",
+        "Boundary: Arrival 1 second beyond tolerance → unassigned.",
+        "Boundary: arrival_sync_tolerance_seconds=0 (requires exact synchronization) → assigned only if shared time window forces identical arrivals.",
+        "Interaction: Skills test: group [7], members [20],[21] → vehicle_A needs {7,20}, vehicle_B needs {7,21}.",
+        "Interaction: Missing vehicle with group skill: group [7], member with [20], but no vehicle has both → entire group UNASSIGNED.",
+        "Interaction: Pinned + different vehicles: pin member A to vehicle X, member B to vehicle Y → both assigned (X!=Y maintained).",
+        "Interaction: Two members pinned to same vehicle → HTTP 400.",
+        "Interaction: Member pinned in non-coordinate context → HTTP 400.",
+        "Interaction: Re-optimization: remove group by ID → all members removed (not partial).",
+        "Backward compatibility: Requests without coordinate_jobs pass through unchanged; all coordinates-less tests must regress clean."
+      ],
+      "limitations": [
+        "Flexible API only. Fast API (jsprit) returns HTTP 400 if coordinate_jobs is present.",
+        "Shipment members not supported. Members are job-type visits only (not pickup+delivery pairs).",
+        "Nested coordination groups not supported. Groups cannot contain other groups.",
+        "Simulation mode not supported in v1.",
+        "Live hold/re-plan not supported. If technician is late in real life, re-optimize with updated inputs (no in-mission synchronization).",
+        "Time-window inheritance: member time_windows fully replaces group (not intersection). If member specifies windows, group windows ignored entirely.",
+        "Multi-window blind spot: if member A can reach its early window but member B cannot, A takes early window, spread check fails, group rejected. Planned for v2 coupled search.",
+        "No explicit meeting-window selection objective. Window is anchored at max(window intersections, earliest reachable), with randomized offsets (≤ 4 hours) across iterations; final plan selected by standard cost criteria.",
+        "No meeting-time persistence across re-optimization. If group re-planned, window re-chosen from scratch (not seeded from prior arrivals).",
+        "Synchronization asserted on service_start (arrival + waiting), not raw arrival. Raw arrivals can differ widely (up to 4+ hours) even with tolerance=300 if shared time window aligns them."
+      ],
+      "enrichment_references": [],
+      "rule_references": []
+    }
+  ]
+}

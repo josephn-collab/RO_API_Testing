@@ -1,0 +1,29 @@
+{
+  "path": "shipments.pickup.service",
+  "summary": "Service/dwell time at the pickup step (seconds).",
+  "range": "Non-negative integer seconds. Default 0.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Extends pickup occupancy; counts toward working time and shipment onboard timing.",
+    "service defines: Provide the time duration, in seconds, needed to complete the shipment pickup. Default value is 0.",
+    "Must stay consistent with: shipments.max_time_in_vehicle. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: pickup service 300.",
+    "Interaction: large pickup service can breach max_time_in_vehicle.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field service"
+  ],
+  "related": [
+    "shipments.max_time_in_vehicle"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,25 @@
+{
+  "path": "depots.throughput.load_penalty",
+  "summary": "Per-unit penalty for load over max_load (per dimension).",
+  "range": "Array of integers, dimensions match max_load.",
+  "constraints": [
+    "Dimension count matches max_load."
+  ],
+  "businessRules": [
+    "load_penalty defines: Specify the penalty to be applied when a depot exceeds its max_load limit during any handling_duration interval. The penalty is applied for each excess unit of load. A penalty value must be provide…",
+    "Each element in load_penalty must be valid and consistent with related fields.",
+    "Must stay consistent with: depots.throughput.max_load. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: scales with load overshoot at the depot.",
+    "Positive: omit optional field load_penalty"
+  ],
+  "related": [
+    "depots.throughput.max_load"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

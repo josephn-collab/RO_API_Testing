@@ -1,0 +1,27 @@
+{
+  "path": "vehicles.costs.fixed",
+  "summary": "Fixed cost of using the vehicle at all (added once if the vehicle is used).",
+  "range": "Integer. Default 0.",
+  "constraints": [],
+  "businessRules": [
+    "Discourages using an extra vehicle unless it reduces total cost enough.",
+    "fixed defines: Specify a fixed cost for using a vehicle. It should be a positive integer. Default value is 0.",
+    "Must stay consistent with: vehicles.costs. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: high fixed cost -> solver consolidates onto fewer vehicles.",
+    "Boundary: fixed 0 (no usage penalty).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field fixed"
+  ],
+  "related": [
+    "vehicles.costs"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

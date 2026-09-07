@@ -1,0 +1,17 @@
+{
+  "id": "relations-reference-integrity",
+  "summary": "Relation steps must reference valid jobs or shipment steps; pinned relations require a valid vehicle.",
+  "applies_to": [
+    "relations.steps.id",
+    "relations.steps.type",
+    "relations.vehicle",
+    "relations.type"
+  ],
+  "rule": "relations.steps[].id must reference an existing job id (job step) or shipment pickup/delivery id (pickup/delivery step), consistent with steps[].type: 'job' references jobs[].id; 'pickup' or 'delivery' references shipments[].id. Start/end type steps carry no id requirement. relations.vehicle is required when type='pinned' and must reference an existing vehicle id; the same vehicle cannot be pinned by more than one relation. Unresolved references are HTTP 400 validation errors.",
+  "testingGuidance": [
+    "Negative: relation type 'sequence' with steps=[{type: 'job', id: 'J999'}] but J999 does not exist in jobs -> HTTP 400.",
+    "Negative: relation type 'pinned' with vehicle='V999' but V999 not in vehicles -> HTTP 400.",
+    "Positive: relation type 'sequence' with steps=[{type: 'job', id: 'J1'}, {type: 'delivery', id: 'S1'}] where both ids exist -> accepted.",
+    "Negative: relation type 'pinned' with vehicle='V1' appears twice (two different relations) -> HTTP 400 (duplicate pinning)."
+  ]
+}

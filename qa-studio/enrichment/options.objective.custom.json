@@ -1,0 +1,27 @@
+{
+  "path": "options.objective.custom",
+  "summary": "Custom objective: a { type, value } pair (both required when custom is used).",
+  "range": "Object: { type (required), value (required) }.",
+  "constraints": [
+    "Both type and value required when custom is present.",
+    "value domain depends on type (see custom.value)."
+  ],
+  "businessRules": [
+    "custom defines: The custom parameter is used to define special objectives apart from the simpler travel cost minimization objectives.",
+    "Must stay consistent with: options.objective.custom.type, options.objective.custom.value. Changes here may require validation of those fields.",
+    "Required field. Missing causes HTTP 400 validation error."
+  ],
+  "validationRules": [
+    "custom with only type or only value -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: {type:min, value:vehicles} minimizes vehicle count.",
+    "Negative: custom missing value -> 400."
+  ],
+  "related": [
+    "options.objective.custom.type",
+    "options.objective.custom.value"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

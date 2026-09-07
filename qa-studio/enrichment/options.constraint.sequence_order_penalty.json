@@ -1,0 +1,27 @@
+{
+  "path": "options.constraint.sequence_order_penalty",
+  "summary": "Penalty when a task is not fulfilled at its sequence_order.",
+  "range": "Integer. Default 10000.",
+  "constraints": [],
+  "businessRules": [
+    "Soft enforcement of sequence_order; relations outrank and disable this.",
+    "sequence_order_penalty defines: Specify the penalty to be applied if a task is not fulfilled at its requested jobs.sequence_order. This penalty is ineffective if jobs.sequence_order is not provided. The default value is 10000.",
+    "Must stay consistent with: jobs.sequence_order. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: lower to let the solver reorder for efficiency.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field sequence_order_penalty"
+  ],
+  "related": [
+    "jobs.sequence_order"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

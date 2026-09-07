@@ -1,0 +1,29 @@
+{
+  "path": "shipments.volume.alignment",
+  "summary": "Cargo alignment rule for the shipment's volumetric packing.",
+  "range": "Enum: strict | parallel | fixed_bottom | \" \" (default = skip check).",
+  "constraints": [],
+  "businessRules": [
+    "alignment defines: Refers to the orientation of the cargo in the loading compartment. It supports the following values: * **\" \"** : A blank space to indicate that the dimension check for the cargo should be skipped. …",
+    "Valid options: strict, parallel, fixed_bottom, \" \". Each affects solver behavior differently.",
+    "Must stay consistent with: shipments.volume. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A value outside the enum set -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: alignment 'strict'.",
+    "Boundary: default ' ' skips the check.",
+    "Positive: test with alignment set to \"strict\"",
+    "Positive: test with alignment set to \"parallel\"",
+    "Positive: test with alignment set to \"fixed_bottom\"",
+    "Positive: test with alignment set to \"\" \"\"",
+    "Positive: omit optional field alignment"
+  ],
+  "related": [
+    "shipments.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

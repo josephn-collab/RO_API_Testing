@@ -1,0 +1,19 @@
+{
+  "path": "jobs.follow_lifo_order",
+  "summary": "Enforce last-in-first-out loading/unloading for this job.",
+  "range": "Boolean. Default false.",
+  "constraints": [],
+  "businessRules": [
+    "follow_lifo_order defines: Specify whether the job route should follow LIFO (last in, first out). Use this parameter when pickup or delivery jobs are involved and the loading or unloading sequence of cargo is important. The …",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: follow_lifo_order true respected in stop ordering.",
+    "Boundary: default false (no LIFO constraint).",
+    "Positive: omit optional field follow_lifo_order"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

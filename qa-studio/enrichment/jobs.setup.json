@@ -1,0 +1,29 @@
+{
+  "path": "jobs.setup",
+  "summary": "One-time setup time applied once per location (not per repeated task at the same spot).",
+  "range": "Non-negative integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Applied once per location_index on a route; repeated tasks at the same location don't re-incur it.",
+    "setup defines: Specify the job set-up duration, in seconds. setup is the one-time effort needed apart from working on the original task - for example, effort to record some information for compliance, or effort t…",
+    "Must stay consistent with: jobs.service. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: setup 60.",
+    "Behavioral: two jobs at the same location_index incur setup once.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field setup"
+  ],
+  "related": [
+    "jobs.service"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

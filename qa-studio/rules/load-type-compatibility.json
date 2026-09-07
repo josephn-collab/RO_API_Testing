@@ -1,0 +1,15 @@
+{
+  "id": "load-type-compatibility",
+  "summary": "Incompatible load types cannot share a vehicle's cargo history.",
+  "applies_to": [
+    "jobs.load_types",
+    "jobs.incompatible_load_types",
+    "shipments.load_types",
+    "shipments.incompatible_load_types"
+  ],
+  "rule": "A task whose incompatible_load_types intersects the load types already carried (or scheduled) on a vehicle cannot be co-assigned to it. Load types are effective only with a pickup/delivery step and ignored for a route's first task.",
+  "testingGuidance": [
+    "Behavioral: a job incompatible with 'raw' cannot ride a vehicle that carried 'raw'.",
+    "Positive: compatible load types share a vehicle without issue."
+  ]
+}

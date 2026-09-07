@@ -1,0 +1,32 @@
+{
+  "path": "options.routing.truck_size",
+  "summary": "Truck dimensions \"height,width,length\" in cm. mode=truck only.",
+  "range": "String \"H,W,L\" in centimeters. Requires mode=truck.",
+  "constraints": [
+    "Requires mode=truck.",
+    "Format \"height,width,length\" in cm."
+  ],
+  "businessRules": [
+    "truck_size defines: Specify the truck dimensions, in centimeters, in the format of “height,width,length”. Please note that this parameter is effective only when mode=truck.",
+    "Must stay consistent with: options.routing.mode. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "truck_size with mode != truck -> 400.",
+    "Malformed size string -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: \"400,250,1600\" with mode=truck.",
+    "Negative: truck_size with mode=car -> 400.",
+    "Positive: omit optional field truck_size",
+    "Interaction: Negative: truck_weight with mode=car -> 400.",
+    "Interaction: Negative: allow=[taxi] with mode=truck -> 400."
+  ],
+  "related": [
+    "options.routing.mode"
+  ],
+  "rules": [
+    "routing-mode-gating"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

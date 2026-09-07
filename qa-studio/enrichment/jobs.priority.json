@@ -1,0 +1,42 @@
+{
+  "path": "jobs.priority",
+  "summary": "Importance of a job used to decide which tasks are served first when demand is over-subscribed. Affects assignment likelihood, not stop sequence.",
+  "range": "Integer in the inclusive range [0, 100]. Default 0. Higher = more likely to be assigned when not all demand fits.",
+  "constraints": [
+    "Integer within [0, 100]; values outside this range are invalid.",
+    "Higher value means the job is preferred for assignment under contention."
+  ],
+  "businessRules": [
+    "Priority is a tiebreaker only: a higher-priority job with an impossible time window or a missing skill still goes to result.unassigned. Priority never overrides a hard constraint.",
+    "When jobs[].outsourcing_cost is present, the solver weighs it against priority in the assignment decision.",
+    "priority defines: Specify the priority of this job. The valid values are in the range of \\[0, 100\\]. Default value is 0. Please note that setting a priority will only decide whether this job will be assigned or not,…",
+    "Must stay consistent with: jobs.delivery, vehicles.capacity. Changes here may require validation of those fields.",
+    "Rule: Higher priority jobs are serviced first; ties break by job ID order.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "priority < 0 or priority > 100 -> input validation failed (HTTP 400).",
+    "Non-integer priority -> input validation failed (HTTP 400)."
+  ],
+  "testingGuidance": [
+    "Boundary: priority 0 and 100 are valid extremes; 101 and -1 are invalid (expect HTTP 400).",
+    "Behavioral: an over-subscribed fleet where a high-priority and a low-priority job compete for the last slot -> the high-priority job is assigned, the low-priority one lands in result.unassigned.",
+    "Interaction: a high-priority job with an infeasible window is still unassigned (priority cannot rescue an infeasible task).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field priority",
+    "Interaction: Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+    "Interaction: Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+    "Interaction: Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first."
+  ],
+  "related": [
+    "jobs.delivery",
+    "vehicles.capacity"
+  ],
+  "rules": [
+    "priority-tiebreaker"
+  ],
+  "_source": "Knowledge/RouteOptimizationKnowledge.md#2.1 + Knowledge/Product Knowledge/OptimizationConstraints.md (Constraint Interaction Notes)"
+}

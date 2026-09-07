@@ -1,0 +1,27 @@
+{
+  "path": "shipments.volume.depth",
+  "summary": "Shipment cargo depth (meters).",
+  "range": "Number, meters.",
+  "constraints": [
+    "Non-negative number."
+  ],
+  "businessRules": [
+    "depth defines: Cargo length, in meters.",
+    "Must stay consistent with: shipments.volume. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Boundary: depth equal to vehicle depth fits.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field depth"
+  ],
+  "related": [
+    "shipments.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "max-duration-distance-cap",
+  "summary": "Per-vehicle hard caps on driving time, working time, and distance (and the shift end) bound each route.",
+  "applies_to": [
+    "vehicles.max_travel_time",
+    "vehicles.max_working_time",
+    "vehicles.max_distance",
+    "vehicles.time_window",
+    "vehicles.breaks.service",
+    "vehicles.layover_config.layover_duration"
+  ],
+  "rule": "Route driving time <= max_travel_time; total working time (service+wait+setup+driving+breaks+layovers) <= max_working_time; distance <= max_distance; route end <= time_window[1]. An insertion that would breach any cap is rejected, routing the task elsewhere or leaving it unassigned. Waiting for a late window can breach max_working_time / the shift even when driving time is small. Break service duration and layover duration both count toward max_working_time.",
+  "testingGuidance": [
+    "Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480."
+  ]
+}

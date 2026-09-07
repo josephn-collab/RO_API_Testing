@@ -1,0 +1,47 @@
+{
+  "path": "relations.steps.type",
+  "summary": "The type of an individual step within a relation.",
+  "range": "Required enum: start | end | job | pickup | delivery. id is required for job/pickup/delivery; omitted for start/end.",
+  "constraints": [
+    "Required.",
+    "start/end reference the vehicle start/end (no id); job references a job id; pickup/delivery reference a shipment step id (§3.8)."
+  ],
+  "businessRules": [
+    "An unsatisfiable relation over these steps flags all its tasks unassigned (§3.8).",
+    "type defines: Specifies the type of the step. The start and end step types have to be the first and last steps, respectively, in a relation. Please note that the type is mandatory when using the relations object.",
+    "Valid options: start, end, job, pickup, delivery. Each affects solver behavior differently.",
+    "Must stay consistent with: relations.steps.id, relations.type. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A step type value outside the enum -> 400 input validation failed (API Facts §4)."
+  ],
+  "testingGuidance": [
+    "Positive: a start step (vehicle start, no id) beginning the sequence (§3.8).",
+    "Positive: an end step (vehicle end, no id) ending the sequence (§3.8).",
+    "Positive: a job step referencing an existing job id (§3.8).",
+    "Positive: a pickup step referencing an existing shipment pickup id (§3.8).",
+    "Positive: a delivery step referencing an existing shipment delivery id (§3.8).",
+    "Negative-validation: a step type value outside the enum -> 400 (API Facts §4).",
+    "Negative-infeasible: an unsatisfiable relation over these steps -> all its tasks unassigned (§3.8).",
+    "Positive: test with type set to \"start\"",
+    "Positive: test with type set to \"end\"",
+    "Positive: test with type set to \"job\"",
+    "Positive: test with type set to \"pickup\"",
+    "Positive: test with type set to \"delivery\"",
+    "Positive: omit optional field type",
+    "Interaction: Negative: relation type 'sequence' with steps=[{type: 'job', id: 'J999'}] but J999 does not exist in jobs -> HTTP 400.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V999' but V999 not in vehicles -> HTTP 400.",
+    "Interaction: Positive: relation type 'sequence' with steps=[{type: 'job', id: 'J1'}, {type: 'delivery', id: 'S1'}] where both ids exist -> accepted.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V1' appears twice (two different relations) -> HTTP 400 (duplicate pinning)."
+  ],
+  "related": [
+    "relations.steps.id",
+    "relations.type"
+  ],
+  "rules": [
+    "relations-reference-integrity"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.8 + API Facts §4"
+}

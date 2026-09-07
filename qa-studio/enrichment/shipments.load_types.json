@@ -1,0 +1,27 @@
+{
+  "path": "shipments.load_types",
+  "summary": "Load-type tags on the shipment.",
+  "range": "Array of string tags. Combine with incompatible_load_types.",
+  "constraints": [],
+  "businessRules": [
+    "load_types defines: Use this parameter to specify the type of loads for the given shipment. Once this property is configured, the shipment can not be served by a vehicle which has serviced any task whose load is incom…",
+    "Each element in load_types must be valid and consistent with related fields.",
+    "Must stay consistent with: shipments.incompatible_load_types. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Infeasible: shipment load type incompatible with onboard cargo -> deferred.",
+    "Positive: omit optional field load_types",
+    "Interaction: Behavioral: a job incompatible with 'raw' cannot ride a vehicle that carried 'raw'.",
+    "Interaction: Positive: compatible load types share a vehicle without issue."
+  ],
+  "related": [
+    "shipments.incompatible_load_types"
+  ],
+  "rules": [
+    "load-type-compatibility"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

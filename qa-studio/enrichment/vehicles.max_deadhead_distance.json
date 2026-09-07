@@ -1,0 +1,32 @@
+{
+  "path": "vehicles.max_deadhead_distance",
+  "summary": "Soft cap on empty-travel distance on the first/last leg (meters).",
+  "range": "Integer meters. Cannot combine with max_depot_runs.",
+  "constraints": [
+    "Cannot combine with max_depot_runs."
+  ],
+  "businessRules": [
+    "Soft: overruns are penalized via costs.deadhead_distance_penalty, not hard-rejected.",
+    "max_deadhead_distance defines: Specify the maximum distance, in meters, that the vehicle can accumulate as deadhead travel on a route. The scope for deadhead travel calculations is limited to only the first leg (start location /…",
+    "Must stay consistent with: vehicles.costs.deadhead_distance_penalty, vehicles.max_depot_runs. Changes here may require validation of those fields.",
+    "Values in meters; must be non-negative. Affects routing cost calculations.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "max_deadhead_distance together with max_depot_runs -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: modest deadhead cap keeps vehicles near demand.",
+    "Negative: combined with max_depot_runs -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_deadhead_distance"
+  ],
+  "related": [
+    "vehicles.costs.deadhead_distance_penalty",
+    "vehicles.max_depot_runs"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

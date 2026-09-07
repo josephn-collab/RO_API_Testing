@@ -1,0 +1,36 @@
+{
+  "path": "relations.steps.id",
+  "summary": "The id a relation step references: a job id (job step) or a shipment pickup/delivery id (pickup/delivery step). Not used for start/end steps.",
+  "range": "String matching an id present in the same request. Required for job/pickup/delivery steps; omitted for start/end steps.",
+  "constraints": [
+    "Required for job/pickup/delivery steps; omitted for start/end steps (§3.8).",
+    "Must reference an id present in the request, consistent with the step type (§3.8)."
+  ],
+  "businessRules": [
+    "start/end steps reference the vehicle start/end and carry no id (§3.8).",
+    "id defines: This represents the ID of the task and should be consistent with the input IDs provided in the jobs or shipments objects for a given step. The id is required for all steps other than start and end.",
+    "Must stay consistent with: relations.steps.type, relations.steps. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: a job step id matching an existing job id (§3.8).",
+    "Positive: a pickup/delivery step id matching an existing shipment step id (§3.8).",
+    "Boundary: a start/end step with the id omitted is valid (§3.8).",
+    "Negative-infeasible: a step referencing an id that cannot be satisfied makes the relation unsatisfiable -> its tasks unassigned (§3.8).",
+    "Positive: omit optional field id",
+    "Interaction: Negative: relation type 'sequence' with steps=[{type: 'job', id: 'J999'}] but J999 does not exist in jobs -> HTTP 400.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V999' but V999 not in vehicles -> HTTP 400.",
+    "Interaction: Positive: relation type 'sequence' with steps=[{type: 'job', id: 'J1'}, {type: 'delivery', id: 'S1'}] where both ids exist -> accepted.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V1' appears twice (two different relations) -> HTTP 400 (duplicate pinning)."
+  ],
+  "related": [
+    "relations.steps.type",
+    "relations.steps"
+  ],
+  "rules": [
+    "relations-reference-integrity"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.8"
+}

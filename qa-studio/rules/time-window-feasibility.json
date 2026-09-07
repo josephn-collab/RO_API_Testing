@@ -1,0 +1,25 @@
+{
+  "id": "time-window-feasibility",
+  "summary": "A stop is feasible only if the vehicle can start it within a window (or within lateness tolerance) and still fit the shift; early arrival waits.",
+  "applies_to": [
+    "jobs.time_windows",
+    "vehicles.time_window",
+    "jobs.max_visit_lateness",
+    "jobs.service",
+    "vehicles.max_working_time",
+    "shipments.pickup.time_windows",
+    "shipments.delivery.time_windows",
+    "shipments.pickup.max_visit_lateness",
+    "shipments.delivery.max_visit_lateness",
+    "depots.time_windows",
+    "options.constraint.max_visit_lateness",
+    "vehicles.breaks.time_windows"
+  ],
+  "rule": "Arrival must fall inside one of a task's time_windows, or within max_visit_lateness after it; early arrival waits (inflating elapsed/working time). The whole route including service and waiting must finish within the vehicle's time_window. An impossible window (ends before the earliest reachable arrival, beyond tolerance) sends the task to result.unassigned (time-window reason); HTTP stays 200. This applies uniformly to job steps, shipment pickup/delivery steps, depot anchor points, and break windows — each must satisfy its own window + lateness constraint.",
+  "testingGuidance": [
+    "Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ]
+}

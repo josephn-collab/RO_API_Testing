@@ -1,0 +1,31 @@
+{
+  "path": "options.objective.custom.type",
+  "summary": "Custom-objective aggregation type. Required within custom.",
+  "range": "Required enum: min | min-max.",
+  "constraints": [
+    "Required."
+  ],
+  "businessRules": [
+    "type=min pairs with value in {vehicles, completion_time}; type=min-max with value in {tasks, travel_cost}.",
+    "type defines: The type parameter accepts two inputs: * min: This type of customized objective will minimize the metric provided in the value parameter. * min-max: This type of customized objective will approxima…",
+    "Valid options: min, min-max. Each affects solver behavior differently.",
+    "type=distance/duration/cost changes optimization focus; custom allows weighted combination.",
+    "Must stay consistent with: options.objective.custom.value. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A value outside {min, min-max} -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: type=min-max, value=travel_cost (balance the worst route).",
+    "Negative: type=min with value=tasks (mismatched pairing) -> 400.",
+    "Positive: test with type set to \"min\"",
+    "Positive: test with type set to \"min-max\"",
+    "Positive: omit optional field type"
+  ],
+  "related": [
+    "options.objective.custom.value"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

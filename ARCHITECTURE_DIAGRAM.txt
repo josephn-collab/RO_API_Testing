@@ -1,0 +1,119 @@
+===============================================================================
+  QA AUTHORING STUDIO  —  ARCHITECTURE & FLOW
+===============================================================================
+  How a feature selection becomes a validated suite of test cases.
+  Truth flows from the Compiler · reasoning from Claude · every result is
+  validated before it is trusted.
+
+  LEGEND (ownership):
+    [1] COMPILER  — owns product truth        [3] CLAUDE   — reasoning engine
+    [2] QA STUDIO — assemble & validate        [4] OUTPUT   — trusted deliverable
+    (SKILLS = how Claude reasons; holds no product facts)
+
+
+ ############################################################################
+ #  [1]  COMPILER  —  single source of product truth   (build-time)         #
+ ############################################################################
+
+     +------------------+   +----------------------+   +--------------------+
+     |  openapi.json    |   |  enrichment/ (167)   |   |  rules/ (15)       |
+     |  spec: fields    | + |  ranges, business &  | + |  cross-field       |
+     |  & types         |   |  validation rules    |   |  invariants        |
+     +--------+---------+   +----------+-----------+   +---------+----------+
+              |                        |                         |
+              +------------------------+-------------------------+
+                                       |
+                                       v
+                       +-------------------------------------+
+                       |  compile.mjs                        |
+                       |  validate every path vs spec ·      |
+                       |  merge · HARD-FAIL on drift         |
+                       +------------------+------------------+
+                                          |
+                                          v
+             +---------------------------------------------------------+
+             |  data/compiled/  ->  features.json · _graph.json · ...   |
+             |  213 features · 167 in scope · 167 enriched · 0 drift    |
+             +---------------------------------------------------------+
+
+   WHY: all product facts live here and nowhere else -> test cases can never
+        drift from the real API. Change the spec, re-compile, all updates.
+
+                                    |
+                                    |  compiled knowledge loaded by the app
+                                    v
+
+ ############################################################################
+ #  [2]  QA STUDIO  —  select · assemble · validate · export                #
+ #       (runs in the browser · no server · no API key)                     #
+ ############################################################################
+
+    +-----------+     +--------------+     +-------------+     +-------------+
+    | Scenario  | --> | Feature tree | --> | Count plan  | --> | Prompt      |
+    | region ·  |     | live from    |     | Standard vs |     | Builder     |
+    | vehicles ·|     | openapi.json |     | Important ->|     | (assembles  |
+    | jobs ·    |     | (auto-syncs  |     | exact per-  |     |  ONE copy-  |
+    | Pos/Neg   |     |  with spec)  |     | feature     |     |  paste      |
+    |           |     |              |     | targets     |     |  prompt)    |
+    +-----------+     +--------------+     +-------------+     +------+------+
+                                                                     ^
+      The Prompt Builder assembles from three ingredients:           |
+        ( SKILLS )      how to reason + the output contract  --------+
+        ( COMPILED )    knowledge for the SELECTED features  --------+
+        ( COORDS )      real coordinates from the region pool -------+
+
+   WHY: inject only what the selected features need (not the 2.4 MB spec) ->
+        accurate & cheap; the count plan makes coverage explicit, not guessed.
+
+                                    |
+                                    |  Copy prompt  [manual]
+                                    v
+
+ ############################################################################
+ #  [3]  CLAUDE  —  the reasoning engine   (manual copy / paste)            #
+ ############################################################################
+
+    +-----------------------+     +----------------------+     +-------------+
+    | Paste prompt ->       | --> | Claude proposes the  | --> | Paste JSON  |
+    | Claude (governed by   |     | test cases: which    |     | back into   |
+    | SKILLS: use only      |     | scenarios, values &  |     | QA Studio   |
+    | injected knowledge,   |     | assertions ->        |     | (or load a  |
+    | never invent facts)   |     | returns a JSON array |     | .json file) |
+    +-----------------------+     +----------------------+     +-------------+
+
+   WHY: Claude is used ONLY for reasoning — never as the source of truth.
+        No server / API key keeps the tool zero-cost and zero-setup.
+
+                                    |
+                                    v
+
+ ############################################################################
+ #  [4]  VALIDATE & DELIVER  —  prove it, then hand it off                  #
+ ############################################################################
+
+    +--------------+   +---------------+   +----------------+   +-----------+
+    | Validation   |-->| Per-case      |-->| Results table  |-->| Export    |
+    | engine:      |   | badges:       |   | + Coverage     |   | CSV       |
+    | AJV vs the   |   | valid / bad   |   | matrix         |   | (Excel-   |
+    | OpenAPI      |   | (+errors) /   |   | (10-field rows |   | ready     |
+    | schema  +    |   | intended-bad  |   | · feature x    |   | hand-off) |
+    | 15 biz rules |   | · dup / draft |   | Pos/Neg · %)   |   |           |
+    +--------------+   +---------------+   +----------------+   +-----------+
+
+   WHY: the credibility step — every AI-generated payload is verified against
+        the REAL schema & rules BEFORE a human trusts it.
+        "Verified valid," not "probably valid."
+
+
+   .......................................................................
+   :  (loop)  Coverage-matrix GAPS feed back into the NEXT prompt as      :
+   :          priorities  ->  so each round targets what is still missing. :
+   :          [ 4 · Coverage matrix ]  ------>  [ 2 · Prompt Builder ]     :
+   .......................................................................
+
+
+-------------------------------------------------------------------------------
+  ONE LINE TO SAY OVER THIS DIAGRAM:
+  "The spec is the single source of truth, Claude does the reasoning, and the
+   tool proves every result before we trust it."
+-------------------------------------------------------------------------------

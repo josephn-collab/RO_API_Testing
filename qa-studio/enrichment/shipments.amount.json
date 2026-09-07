@@ -1,0 +1,47 @@
+{
+  "path": "shipments.amount",
+  "summary": "Load carried from a shipment's pickup to its delivery; consumes capacity between the two steps.",
+  "range": "Array of non-negative integers; dimension count must match vehicles.capacity.",
+  "constraints": [
+    "Non-negative integers.",
+    "Dimension count consistent with capacity."
+  ],
+  "businessRules": [
+    "Load added at pickup, removed at delivery; capacity honored cumulatively while onboard (C1+C4).",
+    "amount defines: This parameter defines the quantity that needs to be shipped. This attribute supports multidimensional quantities, to support shipment of quantities of different units/dimensions. It is recommended…",
+    "Each element in amount must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.capacity, shipments.pickup, shipments.delivery. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Negative value -> 400.",
+    "Dimension mismatch with capacity -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: amount [3] on capacity [5] carried between the two steps.",
+    "Boundary: amount equal to capacity (amount [5] on capacity [5]) fits between the steps.",
+    "Multi-dimension: amount [2,3] on capacity [10,10] within both dimensions.",
+    "Negative-validation: negative amount like [-1] -> 400.",
+    "Negative-validation: amount dimension count != capacity dimension count -> 400.",
+    "Negative-infeasible: two shipments each amount [3] onboard together on capacity [5] -> one deferred (6>5).",
+    "Positive: omit optional field amount",
+    "Interaction: Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+    "Interaction: Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+    "Interaction: Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+    "Interaction: Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400.",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ],
+  "related": [
+    "vehicles.capacity",
+    "shipments.pickup",
+    "shipments.delivery"
+  ],
+  "rules": [
+    "capacity-dimension-consistency",
+    "pickup-delivery-precedence"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

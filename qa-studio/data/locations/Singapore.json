@@ -1,0 +1,33 @@
+{
+  "region": "Singapore",
+  "note": "Seed pool of real Singapore coordinates. Format: lat/lon in WGS84 decimal degrees. The app formats these as \"lat, lon\" strings for locations.location and picks a random subset per scenario.",
+  "locations": [
+    { "lat": 1.3154391526502207, "lon": 103.67840633018163, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.350233203644748, "lon": 103.98536671029976, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.40011577542737, "lon": 103.85677343479524, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.4012148734377716, "lon": 103.90847777460046, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.404161862075543, "lon": 103.90409438259175, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.4041672686041247, "lon": 103.90388340029018, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.4020255859537343, "lon": 103.90944502191617, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.4013734354393261, "lon": 103.91196685726094, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.4011257277994948, "lon": 103.91388481072455, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.39977423452464, "lon": 103.91570232646805, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.398934130784506, "lon": 103.91703316014129, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3991269955444283, "lon": 103.91667020518872, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3980083392208873, "lon": 103.91626788506797, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3942827616287046, "lon": 103.91037273449915, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3941925915448012, "lon": 103.90879471534234, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3408550223725648, "lon": 103.95495427588226, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3381262549635502, "lon": 103.95147657937869, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3180154419564016, "lon": 103.94133941597995, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3126162567448005, "lon": 103.92965321511369, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3351306641327285, "lon": 103.85504977199956, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3357783014531328, "lon": 103.84639676663802, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3308849521653936, "lon": 103.8384566541255, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3185904198741452, "lon": 103.84076109155744, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.317607175939507, "lon": 103.83697116555108, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3195101700253975, "lon": 103.83394419465172, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.319967646467988, "lon": 103.83208716254755, "city": "Singapore", "state": "Singapore" },
+    { "lat": 1.3234682573658492, "lon": 103.8170461416353, "city": "Singapore", "state": "Singapore" }
+  ]
+}

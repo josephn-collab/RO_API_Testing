@@ -1,0 +1,37 @@
+{
+  "path": "vehicles.layover_config.layover_duration",
+  "summary": "Rest duration inserted after max_continuous_time. Required within layover_config.",
+  "range": "Required non-negative integer seconds.",
+  "constraints": [
+    "Required.",
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Adds to elapsed/working time and can push a route past the shift or max_working_time.",
+    "layover_duration defines: Specify the duration, in seconds, for which the driver should rest after driving continuously for the duration provided in max_continuous_time. This field is mandatory when using the layover_config…",
+    "Must stay consistent with: vehicles.layover_config.max_continuous_time, vehicles.max_working_time. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: layover_duration 2700 (45-min rest).",
+    "Interaction: rest time can breach max_working_time on long routes (C6).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field layover_duration",
+    "Interaction: Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Interaction: Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Interaction: Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Interaction: Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480."
+  ],
+  "related": [
+    "vehicles.layover_config.max_continuous_time",
+    "vehicles.max_working_time"
+  ],
+  "rules": [
+    "max-duration-distance-cap"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,24 @@
+{
+  "path": "vehicles.volume",
+  "summary": "Loading-compartment dimensions of the vehicle; required for it to carry tasks that specify volume.",
+  "range": "Object: { width, depth, height } in meters.",
+  "constraints": [],
+  "businessRules": [
+    "A vehicle WITHOUT volume cannot serve tasks that specify volume.",
+    "volume defines: Specify the dimensions of the vehicle's loading compartment. These inputs will be used to decide which cargo can be loaded into the vehicle based on their dimensions and alignment orientations. Ple…",
+    "Must stay consistent with: vehicles.volume.width, jobs.volume. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: vehicle volume covers a job's volume.",
+    "Infeasible: a job with volume but every vehicle lacks volume -> unassigned.",
+    "Positive: omit optional field volume"
+  ],
+  "related": [
+    "vehicles.volume.width",
+    "jobs.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

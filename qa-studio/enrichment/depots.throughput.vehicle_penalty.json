@@ -1,0 +1,26 @@
+{
+  "path": "depots.throughput.vehicle_penalty",
+  "summary": "Penalty per vehicle over max_vehicles at the depot.",
+  "range": "Integer.",
+  "constraints": [],
+  "businessRules": [
+    "vehicle_penalty defines: Specify the penalty, a positive integer, for simultaneously servicing vehicles that exceed the max_vehicles limit at any time. This attribute controls the balance between respecting max_vehicles li…",
+    "Must stay consistent with: depots.throughput.max_vehicles. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: higher penalty spreads vehicles across depots/time.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field vehicle_penalty"
+  ],
+  "related": [
+    "depots.throughput.max_vehicles"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

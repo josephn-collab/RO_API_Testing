@@ -1,0 +1,33 @@
+{
+  "path": "locations.approaches",
+  "summary": "Per-location curbside approach setting, aligned by position with the location array.",
+  "range": "Array of enum strings: unrestricted (default) | curb | \"\" (skip). Length must equal number of locations. Case-sensitive.",
+  "constraints": [
+    "If given, length MUST equal len(location)."
+  ],
+  "businessRules": [
+    "approaches defines: Describe if the location is curbside. An array of strings indicates the side of the road from which to approach the location in the calculated route. If provided, the number of approaches must be e…",
+    "Each element in approaches must be valid and consistent with related fields.",
+    "Valid options: unrestricted, curb, \"\"(empty string). Each affects solver behavior differently.",
+    "Must stay consistent with: locations.location. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Length mismatch vs locations -> 400.",
+    "A value outside {unrestricted, curb, \"\"} -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: approaches all 'unrestricted'.",
+    "Negative: approaches shorter than locations -> 400.",
+    "Boundary: mix 'curb' and '' (skip) across positions.",
+    "Positive: test with approaches set to \"unrestricted\"",
+    "Positive: test with approaches set to \"curb\"",
+    "Positive: test with approaches set to \"\"\"(empty string)\"",
+    "Positive: omit optional field approaches"
+  ],
+  "related": [
+    "locations.location"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

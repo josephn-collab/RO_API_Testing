@@ -1,0 +1,29 @@
+{
+  "path": "zones.geometry",
+  "summary": "Inline GeoJSON geometry for a zone (alternative to geofence_id).",
+  "range": "Object: { type (Polygon|MultiPolygon), coordinates }. coordinates use [longitude, latitude] (GeoJSON order — the one lon/lat exception).",
+  "constraints": [
+    "type is Polygon or MultiPolygon.",
+    "coordinates are [lon, lat] GeoJSON rings."
+  ],
+  "businessRules": [
+    "geometry defines: It is a [geoJSON object](https://datatracker.ietf.org/doc/html/rfc7946#page-9) with details of the geographic boundaries of the zone. Only “Polygon” and “MultiPolygon” geoJSON types are supported. …",
+    "Must stay consistent with: zones.geometry.type, zones.geometry.coordinates. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A type outside {Polygon, MultiPolygon} -> 400.",
+    "Malformed coordinate ring -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: a closed Polygon ring.",
+    "Negative: an unclosed ring / wrong type -> 400.",
+    "Positive: omit optional field geometry"
+  ],
+  "related": [
+    "zones.geometry.type",
+    "zones.geometry.coordinates"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

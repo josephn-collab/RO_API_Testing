@@ -1,0 +1,31 @@
+{
+  "path": "vehicles.speed_factor",
+  "summary": "Multiplier on travel speed; affects arrival times and duration-based cost.",
+  "range": "Number > 0 up to 5.0, two-decimal precision. Default 1. >1 = faster.",
+  "constraints": [
+    "Range (0, 5.0]; two decimals."
+  ],
+  "businessRules": [
+    "speed_factor defines: A positive number indicating the factor by which the vehicle’s speed should be adjusted , relative to normal speed, affecting the driving durations consequently. When speed_factor is greater than 1…",
+    "Must stay consistent with: vehicles.max_travel_time. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "speed_factor 0 or negative -> 400.",
+    "speed_factor > 5.0 -> 400."
+  ],
+  "testingGuidance": [
+    "Boundary: 0.01 (slowest) and 5.0 (fastest) accepted; 5.01 -> 400.",
+    "Behavioral: speed_factor 2 halves travel times, easing time-window/duration feasibility.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field speed_factor"
+  ],
+  "related": [
+    "vehicles.max_travel_time"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

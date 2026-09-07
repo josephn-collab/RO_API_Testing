@@ -1,0 +1,29 @@
+{
+  "path": "shipments.zones",
+  "summary": "Zone IDs constraining eligible vehicles; both steps' zones are considered.",
+  "range": "Array of integer zone IDs.",
+  "constraints": [],
+  "businessRules": [
+    "A vehicle must be allowed in the zones of BOTH pickup and delivery.",
+    "zones defines: An array of integers specifying the IDs of the zone(s) that this shipment belongs to. The shipment can be fulfilled by all vehicles which are allowed to complete tasks in the zone(s) assigned to th…",
+    "Each element in zones must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.allowed_zones. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Infeasible: pickup and delivery in different zones with no vehicle allowed in both -> unassigned.",
+    "Positive: omit optional field zones",
+    "Interaction: Infeasible: job in zone 2 with every vehicle restricting or not allowing zone 2 -> unassigned.",
+    "Interaction: Positive: job zones [1], vehicle allowed_zones [1] -> served."
+  ],
+  "related": [
+    "vehicles.allowed_zones"
+  ],
+  "rules": [
+    "zone-eligibility"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

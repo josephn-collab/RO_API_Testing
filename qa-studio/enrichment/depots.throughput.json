@@ -1,0 +1,29 @@
+{
+  "path": "depots.throughput",
+  "summary": "Depot loading-rate limits (soft). Ineffective with max_depot_runs or relations.",
+  "range": "Object: { handling_duration?, max_vehicles?, vehicle_penalty?, max_load?, load_penalty? }.",
+  "constraints": [
+    "Ineffective when max_depot_runs or relations is used."
+  ],
+  "businessRules": [
+    "max_vehicles needs vehicle_penalty; max_load needs load_penalty — both soft.",
+    "throughput defines: An object to collect the details about depot's throughput - speed of loading orders into vehicle. Please note that throughput attributes are ineffective when either of max_depot_runs and relations …",
+    "Must stay consistent with: depots.throughput.max_vehicles, vehicles.max_depot_runs. Changes here may require validation of those fields.",
+    "Rule: Relations define hard sequencing: job pairs, duration bounds, vehicle affinity.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: throughput limiting concurrent vehicles at a depot.",
+    "Interaction: with max_depot_runs set, throughput has no effect.",
+    "Positive: omit optional field throughput",
+    "Interaction: Interaction: with a relation set, raising visit_lateness_penalty has no effect.",
+    "Interaction: Infeasible: an in_direct_sequence relation whose ordering is impossible -> all its tasks unassigned."
+  ],
+  "related": [
+    "depots.throughput.max_vehicles",
+    "vehicles.max_depot_runs"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

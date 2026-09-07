@@ -1,0 +1,27 @@
+{
+  "path": "vehicles.profile",
+  "summary": "Routing profile the vehicle uses; must be defined in options.routing.profiles.",
+  "range": "String profile name. Defaults to the default profile if omitted.",
+  "constraints": [
+    "If set, must match a profile defined under options.routing.profiles."
+  ],
+  "businessRules": [
+    "profile defines: Specify the profile for this vehicle. The routing properties of the profile specified here must be defined within routing.profiles under options. If no profile is specified, then default routing pr…",
+    "Must stay consistent with: options.routing. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle profile affects speed factor, restrictions, and routing attributes availability."
+  ],
+  "validationRules": [
+    "A profile name not defined in options.routing.profiles -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: profile 'truck' defined in options.routing.profiles.",
+    "Negative: an undefined profile name -> 400.",
+    "Positive: omit optional field profile"
+  ],
+  "related": [
+    "options.routing"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

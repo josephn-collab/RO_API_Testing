@@ -1,0 +1,34 @@
+{
+  "path": "shipments.priority",
+  "summary": "Importance of the shipment when demand is over-subscribed.",
+  "range": "Integer in [0,100]. Default 0.",
+  "constraints": [
+    "Integer within [0,100]."
+  ],
+  "businessRules": [
+    "Tiebreaker only; cannot override hard constraints.",
+    "priority defines: Describe the priority of this shipment. The valid values are in the range of \\[0, 100\\]. Default value is 0. Please note that setting a priority will only decide whether this shipment will be assig…",
+    "Rule: Higher priority jobs are serviced first; ties break by job ID order.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Outside [0,100] -> 400."
+  ],
+  "testingGuidance": [
+    "Boundary: 0/100 valid; 101 -> 400.",
+    "Behavioral: higher-priority shipment wins the last slot.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field priority",
+    "Interaction: Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+    "Interaction: Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+    "Interaction: Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first."
+  ],
+  "related": [],
+  "rules": [
+    "priority-tiebreaker"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

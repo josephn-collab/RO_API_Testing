@@ -1,0 +1,33 @@
+{
+  "path": "depots",
+  "summary": "Depot definitions used as start/end anchors and pickup/delivery sources for jobs.",
+  "range": "Array of depot objects. Each requires id + location_index.",
+  "constraints": [
+    "Each depot requires id and location_index."
+  ],
+  "businessRules": [
+    "depots defines: depots object is used to collect the details of a depot. Depots can be used as a starting point and/or ending point for the routes and vehicles. They also can be used to fulfil pickup and delivery …",
+    "Each element in depots must be valid and consistent with related fields.",
+    "Must stay consistent with: depots.location_index, vehicles.start_depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A depot without location_index -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: two depots referenced by vehicles' start/end_depot_ids.",
+    "Negative: a depot missing location_index -> 400.",
+    "Positive: omit optional field depots",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Interaction: Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ],
+  "related": [
+    "depots.location_index",
+    "vehicles.start_depot_ids"
+  ],
+  "rules": [
+    "multi-depot-reachability"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

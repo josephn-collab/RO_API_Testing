@@ -1,0 +1,28 @@
+{
+  "path": "options.webhook.events",
+  "summary": "Which lifecycle events trigger a webhook POST.",
+  "range": "Array enum: JOB_COMPLETED | JOB_FAILED (docs also mention JOB_CREATED).",
+  "constraints": [],
+  "businessRules": [
+    "events defines: Specify the subscription that you want to subscribe to i.e. receive them on the webhook url configured above. Currently, \"JOB\\_CREATED\", \"JOB\\_COMPLETED\" and \"JOB\\_FAILED\" type events are supported.",
+    "Each element in events must be valid and consistent with related fields.",
+    "Valid options: JOB_COMPLETED, JOB_FAILED. Each affects solver behavior differently.",
+    "Must stay consistent with: options.webhook.url. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A value outside the enum set -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: [\"JOB_COMPLETED\",\"JOB_FAILED\"].",
+    "Negative: an unknown event -> 400.",
+    "Positive: test with events set to \"JOB_COMPLETED\"",
+    "Positive: test with events set to \"JOB_FAILED\"",
+    "Positive: omit optional field events"
+  ],
+  "related": [
+    "options.webhook.url"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

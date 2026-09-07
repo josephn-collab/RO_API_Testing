@@ -1,0 +1,15 @@
+{
+  "id": "relations-supersede-soft",
+  "summary": "When relations are present, options.constraint soft penalties (and sequence_order/throughput) become ineffective; an unsatisfiable relation unassigns all its tasks.",
+  "applies_to": [
+    "relations",
+    "options.constraint",
+    "jobs.sequence_order",
+    "depots.throughput"
+  ],
+  "rule": "Relations are hard constraints. While any relation is present, options.constraint soft penalties, jobs.sequence_order soft enforcement, and depots.throughput limits are ineffective. If a relation cannot be satisfied, ALL tasks referenced by that relation are placed in result.unassigned (still HTTP 200).",
+  "testingGuidance": [
+    "Interaction: with a relation set, raising visit_lateness_penalty has no effect.",
+    "Infeasible: an in_direct_sequence relation whose ordering is impossible -> all its tasks unassigned."
+  ]
+}

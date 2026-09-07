@@ -1,0 +1,36 @@
+{
+  "path": "jobs.service",
+  "summary": "Dwell time spent performing the job at its stop; added after arrival.",
+  "range": "Non-negative integer seconds. Default 0.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Service extends the stop's occupancy and counts toward max_working_time and the shift end.",
+    "service defines: Use this attribute to define the time duration, in seconds, needed to complete the job. Default value is 0.",
+    "Must stay consistent with: jobs.time_windows, vehicles.max_working_time. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: service 300 (5 min).",
+    "Boundary: service 0 (instantaneous).",
+    "Interaction: large service inflates working time and can breach max_working_time (C6).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field service",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "jobs.time_windows",
+    "vehicles.max_working_time"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

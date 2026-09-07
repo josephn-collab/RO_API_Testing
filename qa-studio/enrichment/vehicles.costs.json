@@ -1,0 +1,26 @@
+{
+  "path": "vehicles.costs",
+  "summary": "Per-vehicle cost configuration shaping which vehicle the solver prefers (soft — never forces infeasibility).",
+  "range": "Object: { fixed?, per_hour?, per_km?, per_order?, min_stop_load_*_penalty?, deadhead_*_penalty? }.",
+  "constraints": [],
+  "businessRules": [
+    "Costs steer selection/ordering but never violate a hard constraint or force an otherwise-servable task unassigned.",
+    "costs defines: The cost attribute is used to define the cost of using the vehicle. It is a positive integer value with no specific unit of its own, but assumes the unit as per the value of travel_cost parameter. …",
+    "Must stay consistent with: vehicles.costs.fixed, vehicles.costs.per_km, vehicles.costs.per_hour. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: fixed + per_km cost makes a cheaper vehicle preferred.",
+    "Behavioral: raising fixed cost discourages using an extra vehicle.",
+    "Positive: omit optional field costs"
+  ],
+  "related": [
+    "vehicles.costs.fixed",
+    "vehicles.costs.per_km",
+    "vehicles.costs.per_hour"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

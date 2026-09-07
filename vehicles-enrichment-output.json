@@ -1,0 +1,2079 @@
+[
+  {
+    "path": "vehicles",
+    "summary": "The fleet array; at least one vehicle is required. Each entry is a vehicle with capacity, skills, shift, and anchors.",
+    "range": "Array of vehicle objects; length >= 1. Each requires id.",
+    "constraints": [
+      {
+        "text": "Required field; at least one vehicle must be present.",
+        "origin": "kept"
+      },
+      {
+        "text": "Each vehicle object must have a mandatory 'id' field (string or integer).",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "Missing or empty vehicles array -> HTTP 400.",
+        "origin": "kept"
+      },
+      {
+        "text": "A vehicle without an 'id' field -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: one well-formed vehicle with id and capacity.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: vehicles is an array of vehicle objects"
+      },
+      {
+        "text": "Negative-validation: empty vehicles array [] -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: at least one vehicle required"
+      },
+      {
+        "text": "Negative-validation: vehicle missing 'id' field -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: id is mandatory"
+      },
+      {
+        "text": "Positive: three vehicles with distinct ids (1, 2, 3) and no id duplicates.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: unique IDs required per vehicle"
+      },
+      {
+        "text": "Positive: vehicle id as integer (10) and another as string (\"veh_A\") in same request.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: id can be either string or integer (oneOf)"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.allowed_zones",
+    "summary": "Zones the vehicle may serve tasks in. Empty array restricts to zone-less tasks only. Omission allows all zones.",
+    "range": "Array of integer zone IDs. Empty array restricts vehicle to only zone-less tasks. Omission = unlimited.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Empty allowed_zones restricts the vehicle to tasks with no zone assignment.",
+        "origin": "kept"
+      },
+      {
+        "text": "A task in a non-allowed zone cannot be served by this vehicle.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: allowed_zones [1, 2] serves jobs in zones [1] or [2].",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "zone-eligibility rule: vehicle allowed in zone matches job zone"
+      },
+      {
+        "text": "Negative-infeasible: job in zone 5 with no vehicle allowed there -> unassigned (zone reason).",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "zone-eligibility rule: task in non-allowed zone"
+      },
+      {
+        "text": "Boundary: allowed_zones empty array [] with a zoned job -> unassigned.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "zone-eligibility rule: empty allowed_zones means zone-less tasks only"
+      },
+      {
+        "text": "Positive: vehicle allowed_zones [1] serves job with zones [1].",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "zone-eligibility: direct zone match"
+      },
+      {
+        "text": "Negative-infeasible: every vehicle restricts zone 2, but job requires zone 2 -> unassigned.",
+        "origin": "new",
+        "category": "Negative-infeasible",
+        "rationale": "zone-eligibility rule: no eligible vehicle"
+      },
+      {
+        "text": "Interaction: allowed_zones and restricted_zones both set on same vehicle; a task in allowed but not restricted can be served.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "zone-eligibility: must check both allowed and restricted"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.alternative_capacities",
+    "summary": "Alternate capacity configurations the vehicle can adopt (the solver picks one at optimization time).",
+    "range": "Array of integer arrays; each inner array has the SAME dimension count as capacity. Cannot be shared/merged across vehicles.",
+    "constraints": [
+      {
+        "text": "Each inner array's length must equal the dimension count of vehicles.capacity.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "Dimension mismatch between an alternative_capacity array and the primary capacity -> HTTP 400 input validation failed.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: capacity [100] with alternative_capacities [[80], [150]] — solver picks best fit.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: alt configs used for flexible capacity"
+      },
+      {
+        "text": "Negative-validation: capacity [10, 100] but an alternative [[5]] (1-D vs 2-D) -> HTTP 400 dimension mismatch.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "capacity-dimension-consistency rule: dimension mismatch"
+      },
+      {
+        "text": "Positive: capacity [10, 100] with alternative_capacities [[8, 90], [15, 120]] — all 2-D, dimensions consistent.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "capacity-dimension-consistency: all arrays same length"
+      },
+      {
+        "text": "Boundary: alternative_capacities with same values as primary capacity [[10, 100]] — logically redundant but valid.",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "spec: allows duplicate configs"
+      },
+      {
+        "text": "Negative-validation: capacity [100] but min_stop_load [5, 10] (1-D vs 2-D) in same vehicle -> HTTP 400.",
+        "origin": "new",
+        "category": "Negative-validation",
+        "rationale": "capacity-dimension-consistency: min_stop_load dimension must match capacity"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.breaks",
+    "summary": "Mandatory driver breaks scheduled within permitted windows; appear as break steps in the route.",
+    "range": "Array of break objects. Only ONE of breaks / layover_config allowed per vehicle.",
+    "constraints": [
+      {
+        "text": "Cannot be combined with layover_config on the same vehicle.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Each break must be scheduled inside one of its time_windows, which must lie within the vehicle's shift.",
+        "origin": "kept"
+      },
+      {
+        "text": "All breaks are treated as mandatory; if feasible, all will be part of the route.",
+        "origin": "new"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "Both breaks and layover_config set on the same vehicle -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: one lunch break with time_windows [43200, 46800] inside the vehicle's 09:00–17:00 shift.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: breaks with single window"
+      },
+      {
+        "text": "Negative-validation: breaks and layover_config both specified -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: mutually exclusive"
+      },
+      {
+        "text": "Negative-infeasible: a break window entirely outside the vehicle's time_window -> unschedulable.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "spec: break windows must fit within shift"
+      },
+      {
+        "text": "Positive: two breaks each with non-overlapping time_windows, both inside the shift.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: multiple breaks supported"
+      },
+      {
+        "text": "Interaction: a long break duration (1 hour) increases working time; combined with max_working_time cap can breach limit.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: break service counts toward max_working_time"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.capacity",
+    "summary": "Multi-dimensional maximum load a vehicle can carry. Cumulative onboard load must never exceed capacity on any dimension at any point along the route.",
+    "range": "Array of non-negative integers, one value per load dimension (e.g. [weight, volume, pallets]). No fixed upper bound in the spec.",
+    "constraints": [
+      {
+        "text": "Values must be non-negative integers.",
+        "origin": "kept"
+      },
+      {
+        "text": "Dimension count must stay consistent with jobs[].delivery, jobs[].pickup, and shipments[].amount.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Hard constraint: for every dimension d, running onboard load <= capacity[d] at every step of the route.",
+        "origin": "kept"
+      },
+      {
+        "text": "Pickups increase load mid-route, so a load that is feasible at the depot can still breach capacity between a pickup and its delivery.",
+        "origin": "kept"
+      },
+      {
+        "text": "When violated, the offending task is placed in result.unassigned[] with a capacity reason; the solve still returns HTTP 200 and result.code == 0.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "Inconsistent dimension lengths across capacity/delivery/pickup/amount -> HTTP 400 input validation failed.",
+        "origin": "kept"
+      },
+      {
+        "text": "Negative capacity value like [-5] -> HTTP 400 input validation failed.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: capacity [100] with a single delivery [40] -> onboard load <= 100 at every step.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: capacity must accommodate delivery"
+      },
+      {
+        "text": "Boundary: demand exactly equal to capacity (delivery [50] on capacity [50]) fits.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: full utilization is acceptable"
+      },
+      {
+        "text": "Positive: multi-dimension capacity [10, 100] with all deliveries/pickups/amounts 2-D and within both bounds -> accepted.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "capacity-dimension-consistency: all same dimension"
+      },
+      {
+        "text": "Negative-validation: negative capacity value like [-5] -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: capacity must be non-negative"
+      },
+      {
+        "text": "Negative-validation: dimension mismatch (capacity [10, 100] but a job delivery [5]) -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "capacity-dimension-consistency rule: dimension count mismatch"
+      },
+      {
+        "text": "Negative-infeasible: a single job whose delivery exceeds every vehicle's capacity -> in result.unassigned (capacity reason), still HTTP 200, result.code 0.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "spec: unservable load goes to unassigned"
+      },
+      {
+        "text": "Negative-infeasible: capacity [10, 100] with two deliveries [2, 60] + [2, 50] on same vehicle breaches VOLUME (110 > 100) though weight (4 <= 10) is fine -> second job unassigned by volume.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "spec: breach on any dimension blocks assignment"
+      },
+      {
+        "text": "Negative-infeasible: N jobs each delivery [1] on capacity [N] all fit; the (N+1)th on the same route breaches -> unassigned.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "spec: cumulative load must not exceed capacity"
+      },
+      {
+        "text": "Interaction: zero-quantity demand [0] is always capacity-feasible (a weightless stop).",
+        "origin": "kept",
+        "category": "Interaction",
+        "rationale": "spec: zero load does not consume capacity"
+      },
+      {
+        "text": "Interaction: pickup increases load; if pickup [30] on capacity [50] but next delivery [50], running load becomes 50+30=80 > 50 -> infeasible between pickup and delivery.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: pickups raise onboard load mid-route"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs",
+    "summary": "Per-vehicle cost configuration shaping which vehicle the solver prefers (soft — never forces infeasibility).",
+    "range": "Object: { fixed?, per_hour?, per_km?, per_order?, min_stop_load_*_penalty?, deadhead_*_penalty? }.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Costs steer selection/ordering but never violate a hard constraint or force an otherwise-servable task unassigned.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: fixed 500 + per_km 10 makes a cheaper vehicle preferred.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: costs drive vehicle selection"
+      },
+      {
+        "text": "Behavioral: raising fixed cost discourages using an extra vehicle.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: fixed cost incentivizes consolidation"
+      },
+      {
+        "text": "Positive: per_order 50 balances fulfilling more orders against the per-order surcharge.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: per_order always added to route cost"
+      },
+      {
+        "text": "Interaction: high deadhead_distance_penalty reduces empty-leg distance; pairs with max_deadhead_distance.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: deadhead penalty steers empty-travel behavior"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.deadhead_distance_penalty",
+    "summary": "Penalty per unit of deadhead (empty-leg) distance beyond max_deadhead_distance.",
+    "range": "Integer. Default 0.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Soft: discourages long empty first/last legs; pairs with max_deadhead_distance.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Behavioral: high penalty (e.g., 100) reduces empty-travel distance.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: penalty cost discourages deadhead"
+      },
+      {
+        "text": "Positive: penalty 0 (default) applies no cost to deadhead overruns.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: default 0 means no penalty"
+      },
+      {
+        "text": "Interaction: when max_deadhead_distance 500m is set with deadhead_distance_penalty 50, overages are penalized per meter.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty applies to distance beyond max"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.deadhead_duration_penalty",
+    "summary": "Penalty per unit of deadhead (empty-leg) duration beyond max_deadhead_duration.",
+    "range": "Integer. Default 0.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Soft: discourages long empty first/last legs; pairs with max_deadhead_duration.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Behavioral: high penalty pushes vehicles to start/end nearer demand.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: penalty cost discourages idle time"
+      },
+      {
+        "text": "Positive: penalty 0 (default) applies no cost to deadhead time overruns.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: default 0 means no penalty"
+      },
+      {
+        "text": "Interaction: when max_deadhead_duration 600s is set with deadhead_duration_penalty 75, overages are penalized per second.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty applies to duration beyond max"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.fixed",
+    "summary": "Fixed cost of using the vehicle at all (added once if the vehicle is used).",
+    "range": "Integer. Default 0.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Discourages using an extra vehicle unless it reduces total cost enough.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Behavioral: high fixed cost (e.g., 1000) -> solver consolidates onto fewer vehicles.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: fixed cost incentivizes vehicle consolidation"
+      },
+      {
+        "text": "Boundary: fixed 0 (no usage penalty) applies no fixed surcharge.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: default is 0"
+      },
+      {
+        "text": "Positive: fixed 500 makes a vehicle economically viable only if demand justifies it.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: fixed cost added per vehicle usage"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.min_stop_load_fixed_penalty",
+    "summary": "Fixed penalty applied when any delivery stop's load is below min_stop_load.",
+    "range": "Integer.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Triggered per stop that falls short of vehicles.min_stop_load; soft — does not force unassignment.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Behavioral: a delivery below min_stop_load still served but incurs this fixed penalty.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: penalty applied to low-load stops"
+      },
+      {
+        "text": "Positive: min_stop_load_fixed_penalty 300 discourages inefficient low-load deliveries.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: fixed penalty per underutilized stop"
+      },
+      {
+        "text": "Interaction: when min_stop_load [20] is set with a delivery [5] and min_stop_load_fixed_penalty 100, the stop incurs a 100-unit penalty.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty triggered when delivery < min_stop_load"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.min_stop_load_unit_penalty",
+    "summary": "Per-unit shortfall penalty vs min_stop_load (per dimension).",
+    "range": "Array of integers, one per capacity dimension.",
+    "constraints": [
+      {
+        "text": "Same dimension count as min_stop_load / capacity.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Scales with how far below min_stop_load a delivery falls.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Behavioral: larger shortfall -> proportionally larger penalty (e.g., shortfall of 10 units at 5 per unit = 50 penalty).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: unit penalty scales with shortfall"
+      },
+      {
+        "text": "Positive: min_stop_load_unit_penalty [10] with a delivery [15] vs min_stop_load [20] incurs (20-15)*10=50 penalty.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: penalty = (min_stop_load - delivery) * unit_penalty"
+      },
+      {
+        "text": "Positive: multi-dimensional min_stop_load_unit_penalty [5, 2] with two dimensions; each dimension penalized independently.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: one penalty per dimension"
+      },
+      {
+        "text": "Interaction: min_stop_load [50, 100] with delivery [40, 80] and penalties [10, 5] incurs (50-40)*10 + (100-80)*5 = 100 + 100 = 200 total penalty.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty sums across dimensions"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.per_hour",
+    "summary": "Cost per hour of drive time; effective only when options.objective.travel_cost = duration.",
+    "range": "Integer. Default 3600. Mutually exclusive with per_km.",
+    "constraints": [
+      {
+        "text": "Effective only when travel_cost = duration.",
+        "origin": "kept"
+      },
+      {
+        "text": "Mutually exclusive with per_km.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "per_hour and per_km both set -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: per_hour cost 2000 with travel_cost = duration -> route cost based on hours driven.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: per_hour effective when travel_cost is duration"
+      },
+      {
+        "text": "Negative-validation: per_hour 2000 + per_km 10 both set -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: per_hour and per_km mutually exclusive"
+      },
+      {
+        "text": "Boundary: default per_hour 3600 (cost per 3600 seconds = 1 hour's worth).",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "spec: default is 3600"
+      },
+      {
+        "text": "Interaction: with travel_cost = distance, per_hour is ineffective; solver ignores it.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: per_hour effective only with travel_cost = duration"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.per_km",
+    "summary": "Cost per km of distance; effective only when options.objective.travel_cost = distance.",
+    "range": "Integer. Mutually exclusive with per_hour.",
+    "constraints": [
+      {
+        "text": "Effective only when travel_cost = distance.",
+        "origin": "kept"
+      },
+      {
+        "text": "Mutually exclusive with per_hour.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "per_km and per_hour both set -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: per_km cost 50 with travel_cost = distance -> route cost based on km traveled.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: per_km effective when travel_cost is distance"
+      },
+      {
+        "text": "Negative-validation: per_km 50 + per_hour 2000 both set -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: per_hour and per_km mutually exclusive"
+      },
+      {
+        "text": "Positive: per_km 30 makes a shorter route preferred over a longer one.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: per_km cost incentivizes shorter routes"
+      },
+      {
+        "text": "Interaction: with travel_cost = duration, per_km is ineffective; solver ignores it.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: per_km effective only with travel_cost = distance"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.costs.per_order",
+    "summary": "Cost per fulfilled order (job or shipment); always added to route cost.",
+    "range": "Integer.",
+    "constraints": [],
+    "businessRules": [],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Behavioral: per_order cost 50 applies 50 units per fulfilled job/shipment.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: per_order cost per fulfilled task"
+      },
+      {
+        "text": "Positive: per_order cost 30 with 10 jobs on a vehicle = 300 added to route cost.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: cost scales with number of orders"
+      },
+      {
+        "text": "Interaction: per_order cost interacts with other cost components (fixed, per_km, per_hour) to form total route cost.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: per_order always added to total"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.depot",
+    "summary": "DEPRECATED — use start_depot_ids / end_depot_ids instead. Legacy single depot reference.",
+    "range": "Integer. Deprecated legacy depot reference.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Deprecated: prefer start_depot_ids/end_depot_ids. Retained for backward compatibility.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Regression: confirm a legacy request using depot still behaves as expected; plan migration to start/end_depot_ids.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: deprecated but supported for backward compatibility"
+      },
+      {
+        "text": "Positive: depot 1 (legacy) works the same as start_depot_ids [1] + end_depot_ids [1].",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: legacy single depot maps to both start and end"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.end_depot_ids",
+    "summary": "Depots where the vehicle may end its trip (alternative to end_index). In multi-depot scenarios, solver picks the geographically closest.",
+    "range": "Array of depot id strings; each must match a defined depot.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Delivery-type jobs with depots configured cannot be served by a vehicle that has only end depots.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "A depot id not present in depots[] -> validation error.",
+        "origin": "new"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: end_depot_ids [\"depot_A\", \"depot_B\"] allows vehicle to return to either depot.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "multi-depot-reachability: vehicle can end at any listed depot"
+      },
+      {
+        "text": "Positive: relocation shift starting at depot A, ending at depot B via end_depot_ids [\"depot_B\"].",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: end depot provides return anchor"
+      },
+      {
+        "text": "Negative-infeasible: a job with delivery requiring end_depot_ids containing that depot must be served by vehicle with matching end depot.",
+        "origin": "new",
+        "category": "Negative-infeasible",
+        "rationale": "multi-depot-reachability: delivery-type jobs need vehicle end depots"
+      },
+      {
+        "text": "Interaction: when multiple end_depot_ids provided, solver picks the geographically nearest for load unloading.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "multi-depot-reachability: solver chooses nearest depot per cluster"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.end_index",
+    "summary": "Index into locations.location where the vehicle must end its route. If neither end_index nor end_depot_ids is given, the route is open (ends at last task).",
+    "range": "Integer in [0, len(location)). If neither end_index nor end_depot_ids is given, the vehicle ends the trip at the location of the last task on its route.",
+    "constraints": [
+      {
+        "text": "Range [0, len(location)); integer only.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "end_index >= len(location) -> HTTP 400 (out of range).",
+        "origin": "kept"
+      },
+      {
+        "text": "end_index < 0 -> HTTP 400 (below range).",
+        "origin": "kept"
+      },
+      {
+        "text": "Non-integer end_index (e.g., \"0\" string) -> HTTP 400 type error.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: end_index == start_index (closed route, return to origin).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: closed route returns to start"
+      },
+      {
+        "text": "Positive: end_index 0, start_index 5 (distinct end depot).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: different start/end allowed"
+      },
+      {
+        "text": "Boundary: end_index len(locations)-1 (last valid index).",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: max valid index is array length - 1"
+      },
+      {
+        "text": "Negative-validation: end_index == len(location) -> HTTP 400 (out of range).",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: index must be < array length"
+      },
+      {
+        "text": "Negative-validation: end_index -1 -> HTTP 400 (below range).",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: index must be >= 0"
+      },
+      {
+        "text": "Negative-validation: non-integer end_index (e.g., \"0\" string) -> HTTP 400 type error.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: must be integer"
+      },
+      {
+        "text": "Interaction: omit end_index and end_depot_ids -> open route ends at the last served task (no return leg).",
+        "origin": "kept",
+        "category": "Interaction",
+        "rationale": "spec: open-end route defaults to last task"
+      },
+      {
+        "text": "Interaction: if end_index also references a location with high demand/penalty, the solver avoids routing there unless necessary.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: end anchor affects routing decisions"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.layover_config",
+    "summary": "Continuous-driving limit plus a mandatory rest; alternative to breaks. Only one of breaks / layover_config allowed per vehicle.",
+    "range": "Object: { max_continuous_time (req), layover_duration (req), include_service_time? }. Only ONE of breaks / layover_config.",
+    "constraints": [
+      {
+        "text": "Requires max_continuous_time and layover_duration.",
+        "origin": "kept"
+      },
+      {
+        "text": "Cannot combine with breaks.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "Both layover_config and breaks set on the same vehicle -> HTTP 400.",
+        "origin": "kept"
+      },
+      {
+        "text": "Missing max_continuous_time or layover_duration -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: rest after each max_continuous_time of driving.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: mandatory rest after continuous driving"
+      },
+      {
+        "text": "Negative-validation: layover_config together with breaks -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: mutually exclusive"
+      },
+      {
+        "text": "Positive: max_continuous_time 14400, layover_duration 1800 -> 4-hour drives followed by 30-min rest.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: both fields required for layover"
+      },
+      {
+        "text": "Interaction: a long layover duration increases total working time; combined with max_working_time cap can breach limit.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: layover adds to working time"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.layover_config.include_service_time",
+    "summary": "Whether service time also counts toward continuous working time for layover scheduling. Default false (only driving counts).",
+    "range": "Boolean. Default false.",
+    "constraints": [],
+    "businessRules": [],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Boundary: default false (only driving counts toward continuous time).",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: default is false"
+      },
+      {
+        "text": "Positive: include_service_time true makes service count toward the continuous-time limit.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: adds service to continuous-time calc"
+      },
+      {
+        "text": "Positive: include_service_time false; only driving time triggers layover, not service at stops.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: service excluded when false"
+      },
+      {
+        "text": "Interaction: when include_service_time true, a route with 3 hours driving + 2 hours service = 5 hours toward continuous-time limit; crossing max_continuous_time triggers layover.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: service time added when flag is true"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.layover_config.layover_duration",
+    "summary": "Rest duration inserted after max_continuous_time. Required within layover_config. Added to total working time.",
+    "range": "Required non-negative integer seconds.",
+    "constraints": [
+      {
+        "text": "Required field within layover_config.",
+        "origin": "kept"
+      },
+      {
+        "text": "Non-negative integer seconds.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Adds to elapsed/working time and can push a route past the shift or max_working_time.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: layover_duration 2700 (45-min rest).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: rest duration in seconds"
+      },
+      {
+        "text": "Boundary: layover_duration 0 (no rest; minimal interruption).",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "spec: zero duration allowed"
+      },
+      {
+        "text": "Interaction: rest time can breach max_working_time on long routes (C6).",
+        "origin": "kept",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: layover counts toward max_working_time"
+      },
+      {
+        "text": "Interaction: with max_continuous_time 16200 and layover_duration 2700, a 5-hour drive triggers a 45-min rest; total working time jumps to 5h 45m.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: layover added after driving limit"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_deadhead_distance",
+    "summary": "Soft cap on empty-travel distance on the first/last leg (meters). Cannot combine with max_depot_runs.",
+    "range": "Integer meters. Cannot combine with max_depot_runs.",
+    "constraints": [
+      {
+        "text": "Cannot combine with max_depot_runs.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Soft: overruns are penalized via costs.deadhead_distance_penalty, not hard-rejected.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "max_deadhead_distance together with max_depot_runs -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: modest deadhead cap (e.g., 5000m) keeps vehicles near demand.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: soft cap on empty legs"
+      },
+      {
+        "text": "Negative-validation: combined with max_depot_runs -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: conflicting features"
+      },
+      {
+        "text": "Positive: max_deadhead_distance 2000 on a vehicle starting 1500m from first job -> no penalty (under cap).",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: deadhead within cap unpunished"
+      },
+      {
+        "text": "Interaction: when deadhead exceeds cap and deadhead_distance_penalty is set, cost increases per meter over.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty applies to distance beyond max"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_deadhead_duration",
+    "summary": "Soft cap on empty-travel duration on the first/last leg (seconds). Cannot combine with max_depot_runs.",
+    "range": "Integer seconds. Cannot combine with max_depot_runs.",
+    "constraints": [
+      {
+        "text": "Cannot combine with max_depot_runs.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Soft: overruns are penalized via costs.deadhead_duration_penalty.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "max_deadhead_duration together with max_depot_runs -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: deadhead-duration cap (e.g., 600 seconds = 10 min).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: soft cap on empty-leg time"
+      },
+      {
+        "text": "Negative-validation: combined with max_depot_runs -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: conflicting features"
+      },
+      {
+        "text": "Positive: max_deadhead_duration 300 on a vehicle with first leg 250s -> no penalty (under cap).",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: deadhead within cap unpunished"
+      },
+      {
+        "text": "Interaction: when deadhead duration exceeds cap and deadhead_duration_penalty is set, cost increases per second over.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty applies to duration beyond max"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_depot_runs",
+    "summary": "Maximum number of returns to depot to reload during a route. Allows small vehicles to reload and serve more demand. Default 1. Requires start_depot_ids.",
+    "range": "Integer, default 1. Requires start_depot_ids. Conflicts with relations, layover_config, deadhead constraints.",
+    "constraints": [
+      {
+        "text": "Requires a start depot (start_depot_ids or start_index).",
+        "origin": "kept"
+      },
+      {
+        "text": "Cannot combine with max_deadhead_distance/duration, layover_config, relations.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "max_depot_runs > 1 without a start depot -> HTTP 400.",
+        "origin": "kept"
+      },
+      {
+        "text": "Combined with a conflicting field (layover_config, max_deadhead_distance, etc.) -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: max_depot_runs 2 lets a small vehicle reload and serve more demand.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: multiple depot returns allowed"
+      },
+      {
+        "text": "Negative-validation: max_depot_runs 2 with layover_config also set -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: conflicts with layover_config"
+      },
+      {
+        "text": "Boundary: max_depot_runs 1 (default) -> vehicle does not reload.",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "spec: default is 1"
+      },
+      {
+        "text": "Positive: max_depot_runs 3 with start_depot_ids [\"depot_A\"] allows two reloads (up to 3 total legs including start).",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "multi-depot-reachability: multiple returns supported"
+      },
+      {
+        "text": "Interaction: with max_depot_runs > 1, vehicle can load more efficiently; solver schedules reloads when beneficial.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: reloading optimized by solver"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_distance",
+    "summary": "Hard cap on cumulative route distance (meters). Applies to distance_matrix values if provided.",
+    "range": "Non-negative integer meters. Route distance <= max_distance.",
+    "constraints": [
+      {
+        "text": "Non-negative integer meters; route distance <= max_distance.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: max_distance 100000 (100km) covers the plan.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "max-duration-distance-cap rule: distance cap"
+      },
+      {
+        "text": "Negative-infeasible: max_distance shorter than the leg to the nearest task -> vehicle serves nothing.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "max-duration-distance-cap rule: vehicle cannot reach any task"
+      },
+      {
+        "text": "Boundary: route distance exactly max_distance accepted.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: equality allowed"
+      },
+      {
+        "text": "Negative-infeasible: a task that would push route distance past max_distance -> task reassigned/unassigned.",
+        "origin": "new",
+        "category": "Negative-infeasible",
+        "rationale": "max-duration-distance-cap rule: breach rejects insertion"
+      },
+      {
+        "text": "Interaction: max_distance caps the route; combined with max_travel_time, either can be the binding constraint.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: both are hard caps"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_stops",
+    "summary": "Hard cap on the number of stops on the vehicle's route (breaks/layovers not counted).",
+    "range": "Non-negative integer. A shipment consumes TWO stops (pickup + delivery).",
+    "constraints": [
+      {
+        "text": "Non-negative integer.",
+        "origin": "kept"
+      },
+      {
+        "text": "Served stops on the route must be <= max_stops.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Tasks beyond the cap go to other vehicles or result.unassigned.",
+        "origin": "kept"
+      },
+      {
+        "text": "max_stops 0 makes the vehicle effectively unused.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: max_stops 8 with 8 eligible jobs — all served.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "max-stops-tasks-cap rule: within cap"
+      },
+      {
+        "text": "Boundary: 9th eligible job with max_stops 8 -> unassigned or reassigned.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "max-stops-tasks-cap rule: exceeds cap"
+      },
+      {
+        "text": "Negative-infeasible: fleet cap below total eligible demand forces unassigned.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "max-stops-tasks-cap rule: fleet-wide shortage"
+      },
+      {
+        "text": "Boundary: max_stops 0 -> vehicle serves no tasks.",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "max-stops-tasks-cap rule: zero cap = unused vehicle"
+      },
+      {
+        "text": "Positive: a shipment (pickup + delivery) consumes 2 stops; max_stops 4 allows 2 shipments.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: shipments count as 2 stops"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_tasks",
+    "summary": "Hard cap on the number of tasks assignable to the vehicle (jobs and shipments each count as 1 task).",
+    "range": "Positive integer; served tasks <= max_tasks.",
+    "constraints": [
+      {
+        "text": "Positive integer; served tasks <= max_tasks.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Excess tasks reassigned or unassigned. max_tasks 0 -> vehicle serves nothing.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: max_tasks 5, 5 jobs -> all served.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "max-stops-tasks-cap rule: within cap"
+      },
+      {
+        "text": "Boundary: 6th job with max_tasks 5 -> elsewhere/unassigned.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "max-stops-tasks-cap rule: exceeds cap"
+      },
+      {
+        "text": "Negative-infeasible: two vehicles each max_tasks 5, 12 jobs -> >=2 unassigned.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "max-stops-tasks-cap rule: fleet insufficient capacity"
+      },
+      {
+        "text": "Boundary: max_tasks 0 -> vehicle serves no tasks; effectively unused.",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "max-stops-tasks-cap rule: zero cap = no tasks"
+      },
+      {
+        "text": "Interaction: max_tasks and max_stops both constrain vehicle utilization; the tighter one becomes binding.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: both are hard caps"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_travel_cost",
+    "summary": "DEPRECATED — use max_distance / max_travel_time instead. Legacy cap on travel cost.",
+    "range": "Integer. Deprecated legacy cap.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Deprecated: prefer max_distance / max_travel_time.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Regression: legacy max_travel_cost still parsed; plan migration to modern caps.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: deprecated but supported for backward compatibility"
+      },
+      {
+        "text": "Positive: max_travel_cost 1800 interpreted as max_distance (if travel_cost=distance) or max_travel_time (if travel_cost=duration).",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: legacy behavior depends on travel_cost mode"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_travel_time",
+    "summary": "Hard cap on cumulative DRIVING time (excludes wait/service/setup).",
+    "range": "Non-negative integer seconds. Route driving time <= max_travel_time.",
+    "constraints": [
+      {
+        "text": "Non-negative integer seconds; route driving time <= max_travel_time.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "An insertion raising driving time past the cap is rejected (task routed elsewhere/unassigned).",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: max_travel_time 14400 (4h) with a 3h route.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "max-duration-distance-cap rule: within cap"
+      },
+      {
+        "text": "Negative-infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "max-duration-distance-cap rule: vehicle cannot reach any task"
+      },
+      {
+        "text": "Boundary: route driving time exactly max_travel_time accepted.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: equality allowed"
+      },
+      {
+        "text": "Interaction: long wait time for a late window does NOT count toward max_travel_time (only driving counts), but does count toward max_working_time.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: waiting excluded from max_travel_time"
+      },
+      {
+        "text": "Interaction: max_travel_time caps driving; combined with max_distance, either can be the binding constraint.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: both are hard caps"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.max_working_time",
+    "summary": "Hard cap on total working duration: service + waiting + setup + driving all count. Unlike max_travel_time, this includes wait and service.",
+    "range": "Non-negative integer seconds. Total working time <= max_working_time.",
+    "constraints": [
+      {
+        "text": "Non-negative integer seconds; total working time <= max_working_time.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Unlike max_travel_time, waiting and service count — a long wait for a late window can breach this.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: generous max_working_time 36000 (10h) covers driving+service+wait.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "max-duration-distance-cap rule: within cap"
+      },
+      {
+        "text": "Negative-infeasible: a late time window forces waiting that pushes working time past the cap -> unassigned.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "max-duration-distance-cap rule: working time breach"
+      },
+      {
+        "text": "Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: wait inflates working time"
+      },
+      {
+        "text": "Interaction: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: breaks count toward working time"
+      },
+      {
+        "text": "Positive: a job with service time 300s counts toward max_working_time even if driving time is under cap.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: service time included in working time"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.min_stop_load",
+    "summary": "Preferred minimum load per (delivery) stop; below it, penalties from costs apply. Soft — drives penalties, not infeasibility.",
+    "range": "Array of integers, same dimensions as capacity. Delivery jobs only. Soft — drives penalties, not infeasibility.",
+    "constraints": [
+      {
+        "text": "Same dimension count as capacity.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Soft constraint: shortfall triggers costs.min_stop_load_fixed_penalty / _unit_penalty, does not force unassignment.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: min_stop_load [5] with all deliveries >= 5 — no penalty.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: above threshold unpunished"
+      },
+      {
+        "text": "Behavioral: a delivery below min_stop_load still assigned but incurs penalty.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: soft constraint, does not block"
+      },
+      {
+        "text": "Positive: min_stop_load [20, 100] with capacity [100, 500] discourages underutilized stops.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: soft constraint on load utilization"
+      },
+      {
+        "text": "Interaction: when min_stop_load [50] with costs.min_stop_load_unit_penalty [10], a delivery [30] incurs (50-30)*10 = 200 penalty.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: penalty = (min - delivery) * unit_penalty"
+      },
+      {
+        "text": "Positive: min_stop_load [5] with a single delivery [3] at 1 location + multiple grouped at another; effective load for min_stop_load is sum of grouped loads.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: grouped tasks sum for min_stop_load calc"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.profile",
+    "summary": "Routing profile the vehicle uses; must be defined in options.routing.profiles. Defaults to the default profile if omitted.",
+    "range": "String profile name. Defaults to the default profile if omitted.",
+    "constraints": [
+      {
+        "text": "If set, must match a profile defined under options.routing.profiles.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "A profile name not defined in options.routing.profiles -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: profile 'truck' defined in options.routing.profiles.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: profiles from options.routing"
+      },
+      {
+        "text": "Negative-validation: an undefined profile name -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: profile must be defined"
+      },
+      {
+        "text": "Positive: profile 'car' with truck-specific constraints (truck_size) works if both exist.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: profiles are user-defined"
+      },
+      {
+        "text": "Interaction: different vehicles with different profiles (car vs truck) can be routed via their respective networks.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: profiles affect routing decisions"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.restricted_zones",
+    "summary": "Zones the vehicle may NOT serve tasks in (it may still route through them).",
+    "range": "Array of integer zone IDs.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "A task in a restricted zone cannot be assigned to this vehicle, though the vehicle may transit the zone.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: restricted_zones [3] — vehicle avoids serving zone-3 tasks but can drive through.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "zone-eligibility: vehicle can transit, not serve"
+      },
+      {
+        "text": "Negative-infeasible: every vehicle restricts the only zone a job is in -> unassigned.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "zone-eligibility: no eligible vehicle"
+      },
+      {
+        "text": "Positive: restricted_zones [5, 6, 7] with allowed_zones omitted -> vehicle can serve anywhere except zones 5-7.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "zone-eligibility: restriction complements allowed"
+      },
+      {
+        "text": "Interaction: a vehicle with restricted_zones [2] and allowed_zones [1, 2, 3]; it can serve zones 1 and 3 but not 2.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "zone-eligibility: both sets checked"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.skills",
+    "summary": "Capability tags the vehicle provides; must be a superset of any task it serves. Empty vehicle skills can only serve tasks with empty skills.",
+    "range": "Array of non-negative integers; may be empty (then it can only serve tasks with empty skills).",
+    "constraints": [
+      {
+        "text": "Non-negative integers.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "A task is assignable to this vehicle iff task.skills is a subset of vehicle.skills.",
+        "origin": "kept"
+      },
+      {
+        "text": "A single high-skill vehicle can become a bottleneck under load.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: vehicle skills [1, 2] serves a job needing [2].",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "skills-superset rule: job skills subset of vehicle"
+      },
+      {
+        "text": "Negative-infeasible: job needs skill 3, no vehicle has 3 -> unassigned (skill reason).",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "skills-superset rule: no vehicle with required skill"
+      },
+      {
+        "text": "Boundary: empty vehicle skills can serve only empty-skill jobs.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "skills-superset rule: empty is subset of nothing"
+      },
+      {
+        "text": "Positive: vehicle skills [1, 2, 3] serves jobs needing [1], [2], [1, 2], [3] — all subsets.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "skills-superset rule: vehicle is superset"
+      },
+      {
+        "text": "Negative-infeasible: job needs [1, 4] but vehicle only has [1, 2, 3] -> unassigned; skill 4 missing.",
+        "origin": "new",
+        "category": "Negative-infeasible",
+        "rationale": "skills-superset rule: job skill 4 not in vehicle"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.speed_factor",
+    "summary": "Multiplier on travel speed; affects arrival times and duration-based cost. Greater than 1 means faster.",
+    "range": "Number > 0 up to 5.0, two-decimal precision. Default 1. >1 = faster.",
+    "constraints": [
+      {
+        "text": "Range (0, 5.0]; two decimals.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "speed_factor 0 or negative -> HTTP 400.",
+        "origin": "kept"
+      },
+      {
+        "text": "speed_factor > 5.0 -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Boundary: 0.01 (slowest) and 5.0 (fastest) accepted; 5.01 -> HTTP 400.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: range limit"
+      },
+      {
+        "text": "Behavioral: speed_factor 2 halves travel times, easing time-window/duration feasibility.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: factor multiplies speed"
+      },
+      {
+        "text": "Positive: speed_factor 1.5 increases speed by 50%; 1-hour drive becomes 40 minutes.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: factor > 1 reduces time"
+      },
+      {
+        "text": "Positive: speed_factor 0.5 halves speed; 1-hour drive becomes 2 hours.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: factor < 1 increases time"
+      },
+      {
+        "text": "Negative-validation: speed_factor 0 -> HTTP 400 (invalid).",
+        "origin": "new",
+        "category": "Negative-validation",
+        "rationale": "spec: must be > 0"
+      },
+      {
+        "text": "Negative-validation: speed_factor 5.01 -> HTTP 400 (exceeds max).",
+        "origin": "new",
+        "category": "Negative-validation",
+        "rationale": "spec: max is 5.0"
+      },
+      {
+        "text": "Interaction: speed_factor 2 with per_hour cost 2000 means effective hourly cost halves (40-min drive = 20-min at 2x speed = reduced cost).",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: speed affects duration-based costs"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.start_depot_ids",
+    "summary": "Depots the vehicle may start from (alternative to start_index). In multi-depot scenarios, solver picks the geographically closest.",
+    "range": "Array of depot id strings; each must match a defined depot.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "Pickup-type jobs with depots configured cannot be served by a vehicle that has only start depots.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "A depot id not present in depots[] -> validation error.",
+        "origin": "new"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: vehicle starts from one of two depots nearest its cluster.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "multi-depot-reachability: solver chooses nearest depot"
+      },
+      {
+        "text": "Negative-validation: start_depot_ids referencing an undefined depot -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: depot must exist"
+      },
+      {
+        "text": "Positive: start_depot_ids [\"depot_A\", \"depot_B\"] allows vehicle to start from either.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "multi-depot-reachability: multiple start options"
+      },
+      {
+        "text": "Negative-infeasible: a pickup job with depot_ids [\"depot_C\"] but no vehicle has start_depot_ids containing depot_C -> unassigned.",
+        "origin": "new",
+        "category": "Negative-infeasible",
+        "rationale": "multi-depot-reachability: pickup-type job needs vehicle start depot"
+      },
+      {
+        "text": "Interaction: when multiple start_depot_ids provided, solver picks the geographically nearest for load pickup.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "multi-depot-reachability: solver selects nearest depot per cluster"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.start_index",
+    "summary": "Index into locations.location where the vehicle begins its route. If neither start_index nor start_depot_ids is given, the vehicle starts at its first task.",
+    "range": "Integer in [0, len(location)). If neither start_index nor start_depot_ids is given, the vehicle starts at its first task.",
+    "constraints": [
+      {
+        "text": "Range [0, len(location)); integer only.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "start_index >= len(location) -> HTTP 400 (out of range).",
+        "origin": "kept"
+      },
+      {
+        "text": "start_index < 0 -> HTTP 400 (below range).",
+        "origin": "kept"
+      },
+      {
+        "text": "Non-integer start_index (e.g., \"0\") -> HTTP 400 type error.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: start_index 0 (nominal anchor at first location).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: index 0 is first location"
+      },
+      {
+        "text": "Boundary: start_index len(locations)-1 (last valid index).",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: max valid index is array length - 1"
+      },
+      {
+        "text": "Negative-validation: start_index == len(location) -> HTTP 400 (out of range).",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: index must be < array length"
+      },
+      {
+        "text": "Negative-validation: start_index -1 -> HTTP 400 (below range).",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: index must be >= 0"
+      },
+      {
+        "text": "Negative-validation: non-integer start_index like \"0\" -> HTTP 400 type error.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: must be integer type"
+      },
+      {
+        "text": "Interaction: omit both start_index and start_depot_ids -> vehicle starts at its first task (open start).",
+        "origin": "kept",
+        "category": "Interaction",
+        "rationale": "spec: open start defaults to first task"
+      },
+      {
+        "text": "Positive: start_index 5, end_index 5 (closed route, return to origin).",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: closed route to same location"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.time_window",
+    "summary": "The vehicle's single shift window; the whole route (incl. service + waiting) must fit within it.",
+    "range": "A single [start, end] pair of Unix seconds (singular — unlike task time_windows which is a 2-D array). start <= end.",
+    "constraints": [
+      {
+        "text": "start <= end; non-negative Unix seconds.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Route end (last arrival + service) must be <= time_window[1].",
+        "origin": "kept"
+      },
+      {
+        "text": "Waiting for a late task window counts toward elapsed shift time.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [
+      {
+        "text": "start > end -> HTTP 400.",
+        "origin": "kept"
+      },
+      {
+        "text": "A 2-D array (task-style) here -> HTTP 400 (vehicle uses a single pair).",
+        "origin": "kept"
+      },
+      {
+        "text": "Negative Unix seconds -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: shift [32400, 61200] (09:00–17:00) comfortably fits the route.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: 8-hour shift"
+      },
+      {
+        "text": "Positive: feasible route inside a tight shift, e.g. [32400, 36000] with one nearby job.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: tight shift still feasible if route is short"
+      },
+      {
+        "text": "Boundary: route ending exactly at time_window[1] accepted.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: equality allowed"
+      },
+      {
+        "text": "Negative-validation: time_window start > end (e.g. [61200, 32400]) -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: start must be <= end"
+      },
+      {
+        "text": "Negative-validation: a 2-D task-style array here -> HTTP 400.",
+        "origin": "kept",
+        "category": "Negative-validation",
+        "rationale": "spec: vehicle uses single [start, end] pair"
+      },
+      {
+        "text": "Negative-infeasible: a job forcing route end past time_window[1] -> unassigned (couples with max-duration-distance-cap).",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "time-window-feasibility and max-duration-distance-cap rules"
+      },
+      {
+        "text": "Interaction: a long wait for a late task window pushes route end past the shift -> unassigned.",
+        "origin": "kept",
+        "category": "Interaction",
+        "rationale": "time-window-feasibility: wait counts toward shift"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.volume",
+    "summary": "Loading-compartment dimensions of the vehicle; required for it to carry tasks that specify volume.",
+    "range": "Object: { width, depth, height } in meters.",
+    "constraints": [],
+    "businessRules": [
+      {
+        "text": "A vehicle WITHOUT volume cannot serve tasks that specify volume.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: vehicle volume covers a job's volume.",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: vehicle must have volume if job specifies it"
+      },
+      {
+        "text": "Negative-infeasible: a job with volume but every vehicle lacks volume -> unassigned.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "spec: volume required for volume-specified jobs"
+      },
+      {
+        "text": "Positive: vehicle volume {width: 2.5, depth: 3.0, height: 0.6} meters can accommodate cargo within those bounds.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: volume dimensions define compartment"
+      },
+      {
+        "text": "Interaction: jobs without specified volume can be assigned to vehicles with or without volume.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "spec: volume required only if job specifies it"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.volume.depth",
+    "summary": "Vehicle compartment depth (meters).",
+    "range": "Number, meters.",
+    "constraints": [
+      {
+        "text": "Non-negative number.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Boundary: depth just fitting the deepest cargo.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: capacity dimension"
+      },
+      {
+        "text": "Positive: depth 3.5 meters accommodates goods up to 3.5m long.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: depth is length in meters"
+      },
+      {
+        "text": "Positive: depth 0.0 is valid (empty compartment) but likely unintended.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: non-negative allows zero"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.volume.height",
+    "summary": "Vehicle compartment height (meters).",
+    "range": "Number, meters.",
+    "constraints": [
+      {
+        "text": "Non-negative number.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Boundary: height just fitting the tallest cargo.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: capacity dimension"
+      },
+      {
+        "text": "Positive: height 2.1 meters accommodates goods up to 2.1m tall.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: height in meters"
+      },
+      {
+        "text": "Positive: height 0.5 meters (low-profile vehicle) accommodates flat cargo.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: flexible height specification"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.volume.width",
+    "summary": "Vehicle compartment width (meters).",
+    "range": "Number, meters.",
+    "constraints": [
+      {
+        "text": "Non-negative number.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Boundary: width just fitting the widest cargo.",
+        "origin": "kept",
+        "category": "Boundary",
+        "rationale": "spec: capacity dimension"
+      },
+      {
+        "text": "Positive: width 2.5 meters accommodates goods up to 2.5m wide.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: width in meters"
+      },
+      {
+        "text": "Positive: width 1.8 meters (narrow aisle vehicle) for tight-access deliveries.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: flexible width specification"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.breaks.service",
+    "summary": "Duration of a driver break (seconds). Default 0. Break duration adds to elapsed/working time.",
+    "range": "Non-negative integer seconds. Default 0.",
+    "constraints": [
+      {
+        "text": "Non-negative integer seconds.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [
+      {
+        "text": "Break duration adds to elapsed/working time and can push the route past the shift or max_working_time.",
+        "origin": "kept"
+      }
+    ],
+    "validationRules": [],
+    "testingGuidance": [
+      {
+        "text": "Positive: service 1800 (30-min break).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: standard break duration"
+      },
+      {
+        "text": "Interaction: a long break inflates working time and can breach max_working_time (C6).",
+        "origin": "kept",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: break counts toward working time"
+      },
+      {
+        "text": "Boundary: service 0 (no break, or instantaneous break).",
+        "origin": "new",
+        "category": "Boundary",
+        "rationale": "spec: default is 0"
+      },
+      {
+        "text": "Positive: service 900 (15-min break) contributes to working time.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: break duration accumulates"
+      },
+      {
+        "text": "Interaction: vehicle with max_working_time 480 and a 30-min break (1800s) leaves only 300s for driving and service combined.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "max-duration-distance-cap rule: break consumes working time capacity"
+      }
+    ]
+  },
+  {
+    "path": "vehicles.breaks.time_windows",
+    "summary": "Allowed start slots for a driver break; must sit inside the vehicle's shift. Required on a break. Non-overlapping windows.",
+    "range": "Required array of [start, end] Unix-second pairs; non-overlapping; each within the vehicle's time_window.",
+    "constraints": [
+      {
+        "text": "Required on each break.",
+        "origin": "kept"
+      },
+      {
+        "text": "Non-overlapping; each window within vehicles.time_window.",
+        "origin": "kept"
+      }
+    ],
+    "businessRules": [],
+    "validationRules": [
+      {
+        "text": "A break window outside the shift -> unschedulable / infeasible.",
+        "origin": "kept"
+      },
+      {
+        "text": "Overlapping break windows -> HTTP 400.",
+        "origin": "kept"
+      }
+    ],
+    "testingGuidance": [
+      {
+        "text": "Positive: break window [43200, 46800] inside a 09:00–17:00 shift (12:00–13:00 within 09:00–17:00).",
+        "origin": "kept",
+        "category": "Positive",
+        "rationale": "spec: break within shift"
+      },
+      {
+        "text": "Negative-infeasible: break window entirely outside the shift.",
+        "origin": "kept",
+        "category": "Negative-infeasible",
+        "rationale": "spec: break must fit within shift"
+      },
+      {
+        "text": "Positive: two breaks each with non-overlapping time_windows, both inside the shift.",
+        "origin": "new",
+        "category": "Positive",
+        "rationale": "spec: multiple non-overlapping breaks allowed"
+      },
+      {
+        "text": "Negative-validation: overlapping break windows [[43200, 46800], [45000, 48000]] -> HTTP 400.",
+        "origin": "new",
+        "category": "Negative-validation",
+        "rationale": "spec: windows must not overlap"
+      },
+      {
+        "text": "Interaction: break window [43200, 46800] inside vehicle shift [32400, 61200] is feasible.",
+        "origin": "new",
+        "category": "Interaction",
+        "rationale": "time-window-feasibility rule: break window within shift"
+      }
+    ]
+  }
+]

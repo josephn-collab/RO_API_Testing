@@ -1,0 +1,32 @@
+{
+  "path": "vehicles.max_deadhead_duration",
+  "summary": "Soft cap on empty-travel duration on the first/last leg (seconds).",
+  "range": "Integer seconds. Cannot combine with max_depot_runs.",
+  "constraints": [
+    "Cannot combine with max_depot_runs."
+  ],
+  "businessRules": [
+    "Soft: overruns penalized via costs.deadhead_duration_penalty.",
+    "max_deadhead_duration defines: Specify the maximum duration, in seconds, that the vehicle can accumulate as deadhead travel on a route. The scope for deadhead travel calculations is limited to only the first leg (start location …",
+    "Must stay consistent with: vehicles.costs.deadhead_duration_penalty, vehicles.max_depot_runs. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "max_deadhead_duration together with max_depot_runs -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: deadhead-duration cap.",
+    "Negative: combined with max_depot_runs -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_deadhead_duration"
+  ],
+  "related": [
+    "vehicles.costs.deadhead_duration_penalty",
+    "vehicles.max_depot_runs"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

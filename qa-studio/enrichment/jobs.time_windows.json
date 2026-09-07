@@ -1,0 +1,46 @@
+{
+  "path": "jobs.time_windows",
+  "summary": "Allowed arrival intervals for starting the job; early arrival waits, lateness beyond max_visit_lateness is infeasible.",
+  "range": "Array of [start,end] Unix-second pairs; each start <= end. Overlapping windows are allowed (solver may use any).",
+  "constraints": [
+    "Each [start,end] with start <= end; non-negative Unix seconds (C2)."
+  ],
+  "businessRules": [
+    "Arrival must land in a window (or within max_visit_lateness); early arrival waits and inflates duration (C2).",
+    "Overlapping windows on a job are permitted — the solver may use any; feasible arrival is in their union (C2 edge case).",
+    "time_windows defines: Define time periods within which this job should be started. The time periods should be expressed as a UNIX timestamp in seconds. Please note that the time periods should not overlap with each othe…",
+    "Each element in time_windows must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.time_window, jobs.max_visit_lateness, jobs.service. Changes here may require validation of those fields.",
+    "Rule: Higher priority jobs are serviced first; ties break by job ID order.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A window with end < start -> 400 input validation failed (C2: start <= end; API Facts §4)."
+  ],
+  "testingGuidance": [
+    "Positive: window [36000,43200]; vehicle can arrive 09:40 -> waits to 10:00 then services (C2 example 1).",
+    "Positive: a job with overlapping windows -> solver may use any; feasible arrival in the union (C2 edge case).",
+    "Boundary: instant window [t,t] -> must arrive exactly at t (or within max_visit_lateness) (C2 edge case).",
+    "Negative-validation: a window with end < start -> 400 (C2).",
+    "Negative-infeasible: window ends before the earliest possible arrival with max_visit_lateness 0 -> unassigned (time-window reason) (C2 example 2).",
+    "Interaction: a long wait for a late window inflates elapsed time and can breach the shift / max_travel_time -> unassigned (C2+C6).",
+    "Positive: omit optional field time_windows",
+    "Interaction: Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+    "Interaction: Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+    "Interaction: Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first.",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "vehicles.time_window",
+    "jobs.max_visit_lateness",
+    "jobs.service"
+  ],
+  "rules": [
+    "time-window-feasibility"
+  ],
+  "_source": "OptimizationConstraints.md#C2 + API Facts §4"
+}

@@ -1,0 +1,24 @@
+{
+  "path": "options.grouping.route_grouping",
+  "summary": "Bias routes to respect zones (system or custom).",
+  "range": "Object: { zone_source, zone_ids?, zone_diameter?, penalty_factor? }.",
+  "constraints": [
+    "zone_source=custom_definition requires zones[] to be defined."
+  ],
+  "businessRules": [
+    "route_grouping defines: Specifies the criteria for preferring routes in a given zone over routes that are part of another zone. As a result, more often than not, the tasks falling in a zone will be fulfilled before tasks …",
+    "Must stay consistent with: options.grouping.route_grouping.zone_source, zones. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: route_grouping with system_generated zones.",
+    "Positive: omit optional field route_grouping"
+  ],
+  "related": [
+    "options.grouping.route_grouping.zone_source",
+    "zones"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

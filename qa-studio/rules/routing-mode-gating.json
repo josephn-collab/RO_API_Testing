@@ -1,0 +1,17 @@
+{
+  "id": "routing-mode-gating",
+  "summary": "Mode-specific routing attributes are only valid for their mode (truck attrs need mode=truck; allow=taxi needs mode=car).",
+  "applies_to": [
+    "options.routing.mode",
+    "options.routing.truck_size",
+    "options.routing.truck_weight",
+    "options.routing.hazmat_type",
+    "options.routing.truck_axle_load",
+    "options.routing.allow"
+  ],
+  "rule": "truck_size, truck_weight, hazmat_type, and truck_axle_load require options.routing.mode=truck; allow=[taxi] requires mode=car. Supplying a mode-specific attribute under the wrong mode is a validation error (400).",
+  "testingGuidance": [
+    "Negative: truck_weight with mode=car -> 400.",
+    "Negative: allow=[taxi] with mode=truck -> 400."
+  ]
+}

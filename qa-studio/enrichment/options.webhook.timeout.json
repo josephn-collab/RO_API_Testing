@@ -1,0 +1,26 @@
+{
+  "path": "options.webhook.timeout",
+  "summary": "Webhook request timeout (seconds); up to 3 retries.",
+  "range": "Integer seconds. Default 10. Range [1,60].",
+  "constraints": [
+    "Range [1,60]."
+  ],
+  "businessRules": [
+    "timeout defines: Specify a timeout period, in seconds. The timeout specified here will be used for retries - repeat event notifications - if a successful acknowledgement from the webhook URL is not received within …",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "timeout outside [1,60] -> 400."
+  ],
+  "testingGuidance": [
+    "Boundary: 1 and 60 valid; 0 / 61 -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field timeout"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

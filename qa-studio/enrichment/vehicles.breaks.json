@@ -1,0 +1,31 @@
+{
+  "path": "vehicles.breaks",
+  "summary": "Mandatory driver breaks scheduled within permitted windows; appear as break steps in the route.",
+  "range": "Array of break objects. Only ONE of breaks / layover_config allowed per vehicle.",
+  "constraints": [
+    "Cannot be combined with layover_config on the same vehicle."
+  ],
+  "businessRules": [
+    "Each break must be scheduled inside one of its time_windows, which must lie within the vehicle's shift.",
+    "breaks defines: The breaks attribute is used to provide details of breaks that a driver can take during their route. For each break, multiple time windows can be provided during which the break can actually be tak…",
+    "Each element in breaks must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.breaks.time_windows, vehicles.time_window, vehicles.layover_config. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Both breaks and layover_config set -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: one lunch break inside the shift.",
+    "Negative: breaks + layover_config together -> 400.",
+    "Infeasible: a break window outside the vehicle's time_window -> unschedulable.",
+    "Positive: omit optional field breaks"
+  ],
+  "related": [
+    "vehicles.breaks.time_windows",
+    "vehicles.time_window",
+    "vehicles.layover_config"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

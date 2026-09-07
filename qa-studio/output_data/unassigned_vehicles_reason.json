@@ -1,0 +1,557 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Option disabled (regression): unused_vehicles absent when flag is false or unset",
+    "description": "When report_unused_vehicle_reason is false or omitted, result.unused_vehicles must not be present, even with unassigned tasks.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [40]},
+        {"id": "J2", "location_index": 2, "delivery": [50]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": false
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; unused_vehicles field must not be present in result",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Incapable idle vehicle: capacity cannot fit any unassigned task",
+    "description": "Vehicle with insufficient capacity across all dimensions is idle; feasible_unassigned is false; reasons contain capacity reason.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [10], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [200], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [50]},
+        {"id": "J2", "location_index": 2, "delivery": [60]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V1 in unused_vehicles; feasible_unassigned==false; reasons includes capacity reason",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Feasible but not selected: cost-driven vehicle idle with feasible unassigned tasks",
+    "description": "Vehicle could serve unassigned tasks but solver omits it due to cost objective; feasible_unassigned==true, reasons empty.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544",
+          "17.402700024640154, 78.4623202260498",
+          "17.41012879880268, 78.443909123574"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]},
+        {"id": "V3", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]},
+        {"id": "V4", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [30]},
+        {"id": "J2", "location_index": 2, "delivery": [30]},
+        {"id": "J3", "location_index": 3, "delivery": [30]},
+        {"id": "J4", "location_index": 4, "delivery": [30]},
+        {"id": "J5", "location_index": 5, "delivery": [40]},
+        {"id": "J6", "location_index": 6, "delivery": [40]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V4 in unused_vehicles; feasible_unassigned==true; reasons==[]",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "All-feasible idle vehicle: could serve every unassigned unit",
+    "description": "Vehicle is idle; all unassigned tasks are feasible on it (capacity, time, skills match); feasible_unassigned==true, reasons==[].",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [50], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [500], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [30]},
+        {"id": "J2", "location_index": 2, "delivery": [25]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V2 in unused_vehicles; feasible_unassigned==true; reasons==[]",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "No idle vehicles: unassigned tasks but all vehicles in use",
+    "description": "All vehicles are assigned; unassigned tasks exist; unused_vehicles present but empty array.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544",
+          "17.402700024640154, 78.4623202260498",
+          "17.41012879880268, 78.443909123574",
+          "17.394485067267105, 78.48486771644527",
+          "17.413586122234875, 78.45692367771716"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [40]},
+        {"id": "J2", "location_index": 2, "delivery": [40]},
+        {"id": "J3", "location_index": 3, "delivery": [50]},
+        {"id": "J4", "location_index": 4, "delivery": [50]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; unused_vehicles==[] (present but empty); all vehicles assigned",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "No unassigned tasks: flag on, full assignment, unused_vehicles absent",
+    "description": "All jobs assigned; no unassigned tasks; unused_vehicles not present in result when full assignment achieved.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [40]},
+        {"id": "J2", "location_index": 2, "delivery": [50]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; result.unassigned empty; unused_vehicles not present",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Time-window block: idle vehicle cannot reach any unassigned task within shift",
+    "description": "Idle vehicle's time_window cannot accommodate service to any unassigned task; feasible_unassigned==false; reasons includes time_window requirement.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785829200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [30], "time_windows": [[1785854400, 1785858000]]},
+        {"id": "J2", "location_index": 2, "delivery": [25]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V1 in unused_vehicles; feasible_unassigned==false; reasons includes time_window requirement",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-008",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Skills block: idle vehicle lacks required skills for all unassigned tasks",
+    "description": "Vehicle has no skills; all unassigned tasks require skills; feasible_unassigned==false; reasons includes skill requirement.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "skills": [], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "skills": [1, 2], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [30], "skills": [1]},
+        {"id": "J2", "location_index": 2, "delivery": [25], "skills": [2]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V1 in unused_vehicles; feasible_unassigned==false; reasons includes skill requirement",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-009",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Medium scale: multiple unassigned tasks with mixed capacity constraints on idle vehicles",
+    "description": "Medium scenario (2 vehicles, 12 jobs); some vehicles idle with capacity reasons; feasible_unassigned correctly reflects each vehicle's feasibility.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544",
+          "17.402700024640154, 78.4623202260498",
+          "17.41012879880268, 78.443909123574",
+          "17.394485067267105, 78.48486771644527",
+          "17.413586122234875, 78.45692367771716",
+          "17.326774174198803, 78.58748664819716",
+          "17.31373194288023, 78.58100937754885"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [20], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [500], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [30]},
+        {"id": "J2", "location_index": 2, "delivery": [35]},
+        {"id": "J3", "location_index": 3, "delivery": [30]},
+        {"id": "J4", "location_index": 4, "delivery": [25]},
+        {"id": "J5", "location_index": 5, "delivery": [20]},
+        {"id": "J6", "location_index": 6, "delivery": [15]},
+        {"id": "J7", "location_index": 7, "delivery": [10]},
+        {"id": "J8", "location_index": 8, "delivery": [5]},
+        {"id": "J9", "location_index": 9, "delivery": [40]},
+        {"id": "J10", "location_index": 10, "delivery": [50]},
+        {"id": "J11", "location_index": 11, "delivery": [45]},
+        {"id": "J12", "location_index": 1, "delivery": [28]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V1 in unused_vehicles; feasible_unassigned==false; V1 reasons includes capacity reason",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-010",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Large scale: diverse constraints on idle vehicles (capacity, skills, time)",
+    "description": "Large scenario (5 vehicles, 30 jobs); multiple idle vehicles with varied blocking reasons; unused_vehicles populated with realistic constraints.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544",
+          "17.402700024640154, 78.4623202260498",
+          "17.41012879880268, 78.443909123574",
+          "17.394485067267105, 78.48486771644527",
+          "17.413586122234875, 78.45692367771716",
+          "17.326774174198803, 78.58748664819716",
+          "17.31373194288023, 78.58100937754885",
+          "17.31643295589265, 78.5749625087064",
+          "17.333160086010203, 78.57929356417965",
+          "17.488614763145797, 78.35873298427242",
+          "17.485527614492018, 78.37269122633617",
+          "17.40123318230746, 78.47540614538671",
+          "17.314652276705186, 78.59381615724509",
+          "17.502777896574212, 78.38708671419693",
+          "17.41716159211455, 78.43853670574819",
+          "17.48642817428921, 78.37680281878235",
+          "17.324317429980386, 78.60010895709469",
+          "17.408824511453737, 78.42824948861357",
+          "17.51487958613065, 78.57910989699094",
+          "17.499042972141588, 78.38792448192567",
+          "17.317608993765532, 78.57212950573967",
+          "17.49852233219101, 78.3785389818064"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [50], "skills": [], "time_window": [1785825600, 1785829200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [100], "skills": [1], "time_window": [1785825600, 1785865200]},
+        {"id": "V3", "start_index": 0, "end_index": 0, "capacity": [500], "skills": [1, 2], "time_window": [1785825600, 1785865200]},
+        {"id": "V4", "start_index": 0, "end_index": 0, "capacity": [200], "skills": [2], "time_window": [1785825600, 1785865200]},
+        {"id": "V5", "start_index": 0, "end_index": 0, "capacity": [500], "skills": [1, 2], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [40], "skills": [1]},
+        {"id": "J2", "location_index": 2, "delivery": [35], "skills": [1]},
+        {"id": "J3", "location_index": 3, "delivery": [30]},
+        {"id": "J4", "location_index": 4, "delivery": [25]},
+        {"id": "J5", "location_index": 5, "delivery": [20], "skills": [2]},
+        {"id": "J6", "location_index": 6, "delivery": [15], "skills": [2]},
+        {"id": "J7", "location_index": 7, "delivery": [10]},
+        {"id": "J8", "location_index": 8, "delivery": [5]},
+        {"id": "J9", "location_index": 9, "delivery": [40], "skills": [1]},
+        {"id": "J10", "location_index": 10, "delivery": [50], "skills": [1]},
+        {"id": "J11", "location_index": 11, "delivery": [45], "skills": [2]},
+        {"id": "J12", "location_index": 12, "delivery": [28]},
+        {"id": "J13", "location_index": 13, "delivery": [32], "skills": [1]},
+        {"id": "J14", "location_index": 14, "delivery": [38], "skills": [2]},
+        {"id": "J15", "location_index": 15, "delivery": [22]},
+        {"id": "J16", "location_index": 16, "delivery": [18], "skills": [1]},
+        {"id": "J17", "location_index": 17, "delivery": [25], "skills": [2]},
+        {"id": "J18", "location_index": 18, "delivery": [35]},
+        {"id": "J19", "location_index": 19, "delivery": [42], "skills": [1]},
+        {"id": "J20", "location_index": 20, "delivery": [30]},
+        {"id": "J21", "location_index": 21, "delivery": [28], "skills": [2]},
+        {"id": "J22", "location_index": 22, "delivery": [15], "skills": [1]},
+        {"id": "J23", "location_index": 23, "delivery": [20]},
+        {"id": "J24", "location_index": 24, "delivery": [35], "skills": [1]},
+        {"id": "J25", "location_index": 25, "delivery": [40], "skills": [2]},
+        {"id": "J26", "location_index": 26, "delivery": [25]},
+        {"id": "J27", "location_index": 1, "delivery": [30], "skills": [1]},
+        {"id": "J28", "location_index": 2, "delivery": [32], "skills": [2]},
+        {"id": "J29", "location_index": 3, "delivery": [28]},
+        {"id": "J30", "location_index": 4, "delivery": [38], "skills": [1]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V1 in unused_vehicles; feasible_unassigned==false; reasons includes capacity and time_window and skill reasons",
+    "priority": "P1",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-011",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Mixed aggregate: idle vehicle blocked by multiple constraint types (skills + capacity)",
+    "description": "Vehicle has partial skills and low capacity; cannot serve any unassigned task; reasons deduplicated and includes both skill and capacity reasons.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576",
+          "17.31968710608582, 78.59258159846544"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [30], "skills": [1], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [500], "skills": [1, 2], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [50], "skills": [1]},
+        {"id": "J2", "location_index": 2, "delivery": [60], "skills": [2]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; V1 in unused_vehicles; feasible_unassigned==false; reasons includes both capacity and skill reasons (deduplicated)",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-POS-012",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Fast engine (jsprit): report_unused_vehicle_reason ignored, no unused_vehicles in response",
+    "description": "With engine set to jsprit (fast), report_unused_vehicle_reason=true is silently ignored; unused_vehicles absent; no error returned.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286",
+          "17.48289435342982, 78.59553394476931",
+          "17.493623860767304, 78.35567233615696",
+          "17.500887651591093, 78.58875886923576"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [50], "time_window": [1785825600, 1785865200]},
+        {"id": "V2", "start_index": 0, "end_index": 0, "capacity": [50], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [100]},
+        {"id": "J2", "location_index": 2, "delivery": [100]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": true,
+        "engine": "jsprit"
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; unused_vehicles not present (engine is jsprit); no error raised",
+    "priority": "P2",
+    "type": "Positive",
+    "draft": true
+  },
+  {
+    "testCaseId": "TC-RO-NEGATIVE-001",
+    "feature": "Report Unused Vehicle Reason",
+    "title": "Non-boolean report_unused_vehicle_reason rejected with HTTP 400",
+    "description": "Passing a string or integer for report_unused_vehicle_reason instead of boolean triggers input validation error.",
+    "testData": {
+      "locations": {
+        "location": [
+          "17.542688621652715, 78.48238524451742",
+          "17.50003960866327, 78.35676430991286"
+        ]
+      },
+      "vehicles": [
+        {"id": "V1", "start_index": 0, "end_index": 0, "capacity": [100], "time_window": [1785825600, 1785865200]}
+      ],
+      "jobs": [
+        {"id": "J1", "location_index": 1, "delivery": [40]}
+      ],
+      "options": {
+        "report_unused_vehicle_reason": "true"
+      }
+    },
+    "details": {
+      "features": ["options.report_unused_vehicle_reason"],
+      "archetype": "negative"
+    },
+    "expectedResult": "400; input validation failed; error names report_unused_vehicle_reason; no id returned",
+    "priority": "P2",
+    "type": "Negative",
+    "draft": true
+  }
+]

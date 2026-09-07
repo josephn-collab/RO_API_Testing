@@ -1,0 +1,24 @@
+{
+  "path": "options",
+  "summary": "Solver configuration container: objective, constraint, routing, grouping, webhook. All optional.",
+  "range": "Object with optional sub-objects. Omitting options uses solver defaults.",
+  "constraints": [],
+  "businessRules": [
+    "options defines: It represents the set of options that can be used to configure optimization algorithms so that the solver provides a solution that meets the desired business objectives.",
+    "Must stay consistent with: options.objective, options.constraint, options.routing. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: omit options entirely -> defaults (travel_cost=duration, mode=car).",
+    "Positive: omit optional field options"
+  ],
+  "related": [
+    "options.objective",
+    "options.constraint",
+    "options.routing",
+    "options.grouping"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

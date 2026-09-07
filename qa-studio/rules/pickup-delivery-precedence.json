@@ -1,0 +1,23 @@
+{
+  "id": "pickup-delivery-precedence",
+  "summary": "A shipment's pickup and delivery must be served by the same vehicle, pickup before delivery, with carried amount respected as load and max_time_in_vehicle honored.",
+  "applies_to": [
+    "shipments.pickup.location_index",
+    "shipments.delivery.location_index",
+    "shipments.amount",
+    "shipments.max_time_in_vehicle",
+    "shipments.pickup.sequence_order",
+    "shipments.delivery.sequence_order",
+    "shipments.pickup.time_windows",
+    "shipments.delivery.time_windows",
+    "shipments",
+    "shipments.pickup",
+    "shipments.delivery"
+  ],
+  "rule": "Both steps are mandatory and co-assigned to one vehicle; the delivery step occurs after the pickup step. Load is added at pickup and removed at delivery, honoring capacity cumulatively (couples with capacity-dimension-consistency). If the pair cannot be co-scheduled feasibly (window precedence, capacity, or max_time_in_vehicle), BOTH steps go to result.unassigned. Delivery must occur after pickup in time and sequence order.",
+  "testingGuidance": [
+    "Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ]
+}

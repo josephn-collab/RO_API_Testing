@@ -1,0 +1,29 @@
+{
+  "path": "vehicles.end_depot_ids",
+  "summary": "Depots where the vehicle may end (alternative to end_index).",
+  "range": "Array of depot id strings; each must match a defined depot.",
+  "constraints": [],
+  "businessRules": [
+    "Delivery-type jobs with depots configured cannot be served by a vehicle that has only end depots.",
+    "end_depot_ids defines: Specify the depots where the vehicle should end its trip. It is assumed that the vehicles will unload the goods, which were picked-up during the trip, upon arriving the given depot. If certain pick…",
+    "Each element in end_depot_ids must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.end_index, jobs.depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: relocation shift starting at depot A, ending at depot B.",
+    "Positive: omit optional field end_depot_ids",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Interaction: Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ],
+  "related": [
+    "vehicles.end_index",
+    "jobs.depot_ids"
+  ],
+  "rules": [
+    "multi-depot-reachability"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

@@ -1,0 +1,49 @@
+{
+  "path": "vehicles.time_window",
+  "summary": "The vehicle's single shift window; the whole route (incl. service + waiting) must fit within it.",
+  "range": "A single [start, end] pair of Unix seconds (singular — unlike task time_windows which is a 2-D array). start <= end.",
+  "constraints": [
+    "start <= end; non-negative Unix seconds."
+  ],
+  "businessRules": [
+    "Route end (last arrival + service) must be <= time_window[1].",
+    "Waiting for a late task window counts toward elapsed shift time.",
+    "time_window defines: time_window field is used to describe the time period during which a vehicle is available to perform assigned tasks. The time\\_window should be specified in the format of \\[start\\_timestamp,end\\_ti…",
+    "Each element in time_window must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.time_windows, vehicles.max_working_time. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "start > end -> 400.",
+    "A 2-D array (task-style) here -> 400 (vehicle uses a single pair).",
+    "Negative Unix seconds -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: shift [32400,61200] (09:00–17:00) comfortably fits the route.",
+    "Positive: feasible route inside a tight shift, e.g. [32400,36000] with one nearby job.",
+    "Boundary: route ending exactly at time_window[1] accepted.",
+    "Negative-validation: time_window start > end (e.g. [61200,32400]) -> 400.",
+    "Negative-validation: a 2-D task-style array here -> 400.",
+    "Negative-infeasible: a job forcing route end past time_window[1] -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: a long wait for a late task window pushes route end past the shift -> unassigned.",
+    "Positive: omit optional field time_window",
+    "Interaction: Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Interaction: Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Interaction: Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Interaction: Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480.",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "jobs.time_windows",
+    "vehicles.max_working_time"
+  ],
+  "rules": [
+    "time-window-feasibility",
+    "max-duration-distance-cap"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

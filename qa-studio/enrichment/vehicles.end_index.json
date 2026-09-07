@@ -1,0 +1,48 @@
+{
+  "path": "vehicles.end_index",
+  "summary": "Index into locations.location where the vehicle must end its route.",
+  "range": "Integer in [0, len(location)). If neither end_index nor end_depot_ids is given, the route is open (ends at last task, no return leg).",
+  "constraints": [
+    "Range [0, len(location)).",
+    "Integer only."
+  ],
+  "businessRules": [
+    "end_index defines: Specify the index of the vehicle’s final stop point in the location array. The valid value range is \\[0, length of locations). Please note that if either of the end_index or end_depot_ids is not pr…",
+    "Must stay consistent with: locations.location, vehicles.start_index, vehicles.end_depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "end_index >= len(location) -> 400.",
+    "end_index < 0 -> 400.",
+    "Non-integer end_index -> 400 type error."
+  ],
+  "testingGuidance": [
+    "Positive: end_index == start_index (closed route, return to origin).",
+    "Positive: end_index differs from start_index (distinct end depot).",
+    "Boundary: end_index len-1 (last valid index).",
+    "Negative-validation: end_index == len(location) -> 400 (out of range).",
+    "Negative-validation: end_index -1 -> 400 (below range).",
+    "Negative-validation: non-integer end_index -> 400 type error.",
+    "Interaction: omit end_index -> open route ends at the last served task (no return leg).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field end_index",
+    "Interaction: Negative: a job location_index equal to len(location) -> 400.",
+    "Interaction: Negative: a non-integer index like \"first\" -> 400 type error.",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Interaction: Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ],
+  "related": [
+    "locations.location",
+    "vehicles.start_index",
+    "vehicles.end_depot_ids"
+  ],
+  "rules": [
+    "location-index-range",
+    "multi-depot-reachability"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

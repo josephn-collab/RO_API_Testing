@@ -1,0 +1,27 @@
+{
+  "path": "zones.geometry.type",
+  "summary": "GeoJSON geometry type for a zone polygon.",
+  "range": "Enum: Polygon | MultiPolygon.",
+  "constraints": [],
+  "businessRules": [
+    "type defines: Type of the geoJSON geometry. Should always be Polygon or MultiPolygon.",
+    "Valid options: Polygon, MultiPolygon. Each affects solver behavior differently.",
+    "Must stay consistent with: zones.geometry.coordinates. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A type outside {Polygon, MultiPolygon} -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: type 'Polygon' with valid coordinates.",
+    "Negative: type 'Point' -> 400.",
+    "Positive: test with type set to \"Polygon\"",
+    "Positive: test with type set to \"MultiPolygon\"",
+    "Positive: omit optional field type"
+  ],
+  "related": [
+    "zones.geometry.coordinates"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

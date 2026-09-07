@@ -1,0 +1,32 @@
+{
+  "path": "shipments.skills",
+  "summary": "Skills required to perform BOTH steps of the shipment; the vehicle's skills must be a superset.",
+  "range": "Array of positive integers.",
+  "constraints": [
+    "Each skill > 0."
+  ],
+  "businessRules": [
+    "Both pickup and delivery served by one vehicle whose skills superset these.",
+    "skills defines: Define the skills needed to complete the shipment. This attribute supports multidimensional skills allowing users to add multiple skills for a shipment. Read more about the behavior of this attribu…",
+    "Each element in skills must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.skills. Changes here may require validation of those fields.",
+    "Rule: Vehicle must have all skills required by the job (exact match, case-sensitive).",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Skills matching is case-sensitive and exact. Vehicle must have ALL skills required by job."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: shipment skills [1] served by vehicle skills [1,4].",
+    "Infeasible: no vehicle has the required skill -> both steps unassigned.",
+    "Positive: omit optional field skills",
+    "Interaction: Infeasible: job needs skill 3, no vehicle has 3 -> unassigned.",
+    "Interaction: Positive: job needs [2]; only the vehicle whose skills include 2 serves it."
+  ],
+  "related": [
+    "vehicles.skills"
+  ],
+  "rules": [
+    "skills-superset"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

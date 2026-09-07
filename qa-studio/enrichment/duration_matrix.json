@@ -1,0 +1,32 @@
+{
+  "path": "duration_matrix",
+  "summary": "Custom N×N durations (seconds) overriding real travel times.",
+  "range": "Array of integer arrays, N×N (seconds).",
+  "constraints": [
+    "Square N×N over locations.location."
+  ],
+  "businessRules": [
+    "duration_matrix defines: An array of arrays to denote the user-defined durations, in seconds, for travelling between each pair of geographic coordinates mentioned in the location array. When this input is provided, actual …",
+    "Each element in duration_matrix must be valid and consistent with related fields.",
+    "Must stay consistent with: distance_matrix. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Non-square / wrong-N matrix -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: duration_matrix overrides computed times.",
+    "Boundary: matrix dimension must equal len(locations.location).",
+    "Positive: omit optional field duration_matrix",
+    "Interaction: Negative: distance_matrix supplied alone -> 400.",
+    "Interaction: Negative: an N×(N-1) matrix -> 400."
+  ],
+  "related": [
+    "distance_matrix"
+  ],
+  "rules": [
+    "matrix-pairing"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

@@ -1,0 +1,35 @@
+{
+  "path": "zones",
+  "summary": "Array of geographic zone definitions; tasks/vehicles reference zones by integer id for eligibility.",
+  "range": "Array of zone objects. Each requires id + (geometry OR geofence_id).",
+  "constraints": [
+    "Each zone requires id and exactly one of geometry / geofence_id."
+  ],
+  "businessRules": [
+    "zones defines: An array of objects to specify geometry of all the zones involved. Each object corresponds to a single zone. A valid zone can be a [geoJSON](https://datatracker.ietf.org/doc/html/rfc7946#page-9) po…",
+    "Each element in zones must be valid and consistent with related fields.",
+    "Must stay consistent with: zones.geometry, zones.geofence_id, jobs.zones. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [
+    "A zone with neither geometry nor geofence_id -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: a Polygon zone referenced by a job's zones.",
+    "Negative: a zone missing both geometry and geofence_id -> 400.",
+    "Positive: omit optional field zones",
+    "Interaction: Infeasible: job in zone 2 with every vehicle restricting or not allowing zone 2 -> unassigned.",
+    "Interaction: Positive: job zones [1], vehicle allowed_zones [1] -> served."
+  ],
+  "related": [
+    "zones.geometry",
+    "zones.geofence_id",
+    "jobs.zones"
+  ],
+  "rules": [
+    "zone-eligibility"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

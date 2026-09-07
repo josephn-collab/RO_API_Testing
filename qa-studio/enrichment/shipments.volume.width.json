@@ -1,0 +1,27 @@
+{
+  "path": "shipments.volume.width",
+  "summary": "Shipment cargo width (meters).",
+  "range": "Number, meters.",
+  "constraints": [
+    "Non-negative number."
+  ],
+  "businessRules": [
+    "width defines: Cargo width, in meters.",
+    "Must stay consistent with: shipments.volume. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Boundary: width equal to vehicle width fits.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field width"
+  ],
+  "related": [
+    "shipments.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

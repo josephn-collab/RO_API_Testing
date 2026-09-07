@@ -1,0 +1,22 @@
+{
+  "path": "vehicles.layover_config.include_service_time",
+  "summary": "Whether service time also counts toward continuous working time for layover.",
+  "range": "Boolean. Default false.",
+  "constraints": [],
+  "businessRules": [
+    "include_service_time defines: Choose if the optimizer should count the service_time spent while fulfilling tasks towards continuous working time of the driver. If set to false (default setting), only the driving time is conside…",
+    "Must stay consistent with: vehicles.layover_config.max_continuous_time. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Boundary: default false (only driving counts).",
+    "Positive: true makes service count toward the continuous-time limit.",
+    "Positive: omit optional field include_service_time"
+  ],
+  "related": [
+    "vehicles.layover_config.max_continuous_time"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

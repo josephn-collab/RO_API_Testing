@@ -1,0 +1,35 @@
+{
+  "path": "vehicles.costs.per_hour",
+  "summary": "Cost per hour of drive time; effective only when options.objective.travel_cost = duration.",
+  "range": "Integer. Default 3600. Mutually exclusive with per_km.",
+  "constraints": [
+    "Effective only when travel_cost = duration.",
+    "Mutually exclusive with per_km."
+  ],
+  "businessRules": [
+    "per_hour defines: Define the cost for one hour of drive time of the vehicle. When per_hour cost is used, the final vehicle cost is determined based on the given value, instead of travel duration of the route. Please…",
+    "Must stay consistent with: vehicles.costs.per_km, options.objective. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "per_hour and per_km both set -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: per_hour cost with travel_cost=duration.",
+    "Negative: per_hour + per_km together -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field per_hour",
+    "Interaction: Negative: travel_cost=customized without cost_matrix -> 400.",
+    "Interaction: Behavioral: per_km cost ignored unless travel_cost=distance."
+  ],
+  "related": [
+    "vehicles.costs.per_km",
+    "options.objective"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

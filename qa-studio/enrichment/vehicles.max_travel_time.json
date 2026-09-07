@@ -1,0 +1,37 @@
+{
+  "path": "vehicles.max_travel_time",
+  "summary": "Hard cap on cumulative DRIVING time (excludes wait/service/setup).",
+  "range": "Non-negative integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds; route driving time <= max_travel_time."
+  ],
+  "businessRules": [
+    "An insertion raising driving time past the cap is rejected (task routed elsewhere/unassigned).",
+    "max_travel_time defines: Specify the total duration, in seconds, that the vehicle can be driven for. This is a constraint on the driving duration of the vehicle only and any wait, service or setup times spent towards the j…",
+    "Must stay consistent with: vehicles.max_distance, vehicles.max_working_time, vehicles.time_window. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: max_travel_time 14400 (4h) with a 3h route.",
+    "Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Boundary: route driving time exactly max_travel_time accepted.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_travel_time",
+    "Interaction: Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Interaction: Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Interaction: Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480."
+  ],
+  "related": [
+    "vehicles.max_distance",
+    "vehicles.max_working_time",
+    "vehicles.time_window"
+  ],
+  "rules": [
+    "max-duration-distance-cap"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

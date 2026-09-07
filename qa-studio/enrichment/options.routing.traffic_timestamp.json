@@ -1,0 +1,25 @@
+{
+  "path": "options.routing.traffic_timestamp",
+  "summary": "Unix time whose traffic conditions the solver should use.",
+  "range": "Integer Unix seconds.",
+  "constraints": [
+    "Non-negative Unix seconds."
+  ],
+  "businessRules": [
+    "traffic_timestamp defines: Specify the general time when the job needs to be carried out. The time should be expressed as an UNIX timestamp in seconds format. The solver will take into account the general traffic conditions …",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: a rush-hour timestamp yields slower travel times.",
+    "Behavioral: differing timestamps change ETAs.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field traffic_timestamp"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

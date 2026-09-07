@@ -1,0 +1,23 @@
+{
+  "path": "options.grouping.route_grouping.zone_ids",
+  "summary": "Restrict route grouping to specific zone IDs.",
+  "range": "Array of integer zone IDs.",
+  "constraints": [],
+  "businessRules": [
+    "zone_ids defines: An array of IDs associated with custom defined zones to be used for route grouping. Please note: * This parameter is effective only when \"zone_source\": \"custom_definition\" * Use the zones attribute…",
+    "Each element in zone_ids must be valid and consistent with related fields.",
+    "Must stay consistent with: zones. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: limit grouping to zones [1,2].",
+    "Positive: omit optional field zone_ids"
+  ],
+  "related": [
+    "zones"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

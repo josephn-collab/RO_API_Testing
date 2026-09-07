@@ -1,0 +1,734 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle begins route at start_index 0",
+    "description": "A vehicle anchored at start_index 0 serves a single job at another index.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.start_index"], "archetype": "positive" },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle starts at the last valid location index (boundary)",
+    "description": "start_index set to len(location)-1 is accepted as the last valid anchor.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 2 }],
+      "jobs": [{ "id": "J1", "location_index": 0 }]
+    },
+    "details": { "features": ["vehicles.start_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Vehicle End Index",
+    "title": "Closed route returns to its origin depot",
+    "description": "end_index equal to start_index forces the vehicle back to its origin.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.end_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; route ends at location_index 0 (== start_index)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Vehicle End Index",
+    "title": "Open route with end_index omitted finishes at the last task",
+    "description": "Omitting end_index yields an open route that ends at its last served task.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.end_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; open route (no fixed end) ends at last task",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Capacity Constraint",
+    "title": "Onboard load within a single-dimension capacity is served",
+    "description": "A pickup quantity below capacity keeps onboard load within the bound.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [100] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "pickup": [40] }]
+    },
+    "details": { "features": ["vehicles.capacity", "jobs.pickup"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; onboard load <= 100 at every step",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Capacity Constraint",
+    "title": "Demand exactly equal to capacity is feasible (boundary)",
+    "description": "A pickup quantity equal to capacity is at-the-limit and still assignable.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "pickup": [50] }]
+    },
+    "details": { "features": ["vehicles.capacity", "jobs.pickup"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; onboard load == 50 (<= capacity) at the pickup step",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Vehicle Time Window",
+    "title": "Route completes within the vehicle shift window",
+    "description": "A 09:00-17:00 shift comfortably contains the route for one job.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.time_window"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; route end <= 61200",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-008",
+    "feature": "Vehicle Time Window",
+    "title": "Feasible route inside a tight shift window",
+    "description": "A short 09:00-10:00 shift still contains a single nearby job.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.0195, -118.4912"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 36000] }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.time_window"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; route end <= 36000",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-009",
+    "feature": "Job Location Index",
+    "title": "Job served at a valid location index",
+    "description": "A job referencing an in-range location_index is served.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-010",
+    "feature": "Job Location Index",
+    "title": "Job at the last valid location index (boundary)",
+    "description": "location_index == len(location)-1 is the last valid reference.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 2 }]
+    },
+    "details": { "features": ["jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-011",
+    "feature": "Job Pickup",
+    "title": "Pickup quantity carried onward within capacity",
+    "description": "A single pickup below capacity is carried without breaching the bound.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [5] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "pickup": [2] }]
+    },
+    "details": { "features": ["jobs.pickup", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; onboard load <= 5 at every step",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-012",
+    "feature": "Job Pickup",
+    "title": "Two pickups stack within capacity",
+    "description": "Two pickups whose combined load fits capacity are both carried.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "pickup": [4] },
+        { "id": "J2", "location_index": 2, "pickup": [5] }
+      ]
+    },
+    "details": { "features": ["jobs.pickup", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; cumulative onboard load <= 10 at every step",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-013",
+    "feature": "Job Time Windows",
+    "title": "Arrival falls within the job time window (early arrival waits)",
+    "description": "A job window inside the shift is honored; early arrival waits to window start.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[36000, 43200]] }]
+    },
+    "details": { "features": ["jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; job start within [36000, 43200]",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-014",
+    "feature": "Job Time Windows",
+    "title": "Job with multiple allowed windows is served in one of them",
+    "description": "Two non-overlapping windows are offered; the job is served in one.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[36000, 39600], [46800, 50400]] }]
+    },
+    "details": { "features": ["jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; job start within one of [36000,39600] or [46800,50400]",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-015",
+    "feature": "Shipment Pickup",
+    "title": "Shipment pickup and delivery on one vehicle, pickup first",
+    "description": "A shipment with distinct pickup and delivery indices is co-assigned to one vehicle.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [1] }]
+    },
+    "details": { "features": ["shipments.pickup.location_index", "shipments.delivery.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; pickup served before delivery on the same vehicle",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-016",
+    "feature": "Shipment Pickup",
+    "title": "Pickup step starts within its time window",
+    "description": "A pickup constrained to a window is served within that window.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10], "time_window": [32400, 61200] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1, "time_windows": [[36000, 43200]] }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [1] }]
+    },
+    "details": { "features": ["shipments.pickup.time_windows", "shipments.pickup.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; pickup step starts within [36000, 43200]",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-017",
+    "feature": "Shipment Delivery",
+    "title": "Delivery step served after pickup at its index",
+    "description": "The delivery step at a distinct index is served after the pickup.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [1] }]
+    },
+    "details": { "features": ["shipments.delivery.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; delivery served after pickup",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-018",
+    "feature": "Shipment Delivery",
+    "title": "Delivery index equal to pickup index is valid (boundary, zero-distance)",
+    "description": "A shipment whose delivery index equals its pickup index is accepted.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 1 }, "amount": [1] }]
+    },
+    "details": { "features": ["shipments.delivery.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; delivery index == pickup index accepted",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-019",
+    "feature": "Shipment Amount",
+    "title": "Carried amount stays within capacity between the two steps",
+    "description": "A shipment amount below capacity is carried from pickup to delivery.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [5] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [3] }]
+    },
+    "details": { "features": ["shipments.amount", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; onboard load <= 5 between pickup and delivery",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-020",
+    "feature": "Shipment Amount",
+    "title": "Multi-dimension shipment amount consistent with capacity",
+    "description": "A 2-D amount matches a 2-D capacity and stays within both bounds.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10, 10] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [2, 3] }]
+    },
+    "details": { "features": ["shipments.amount", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; onboard load <= [10,10] on both dimensions",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-021",
+    "feature": "Max Visit Lateness",
+    "title": "Global lateness tolerance permits a slightly late arrival",
+    "description": "A 600s global tolerance lets a job be served just after its window closes.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[36000, 39600]] }],
+      "options": { "constraint": { "max_visit_lateness": 600 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; arrival within window end + 600s tolerance",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-022",
+    "feature": "Max Visit Lateness",
+    "title": "Zero global tolerance with on-time arrival",
+    "description": "With max_visit_lateness 0 a job reachable inside its window is still served.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.0195, -118.4912"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[36000, 43200]] }],
+      "options": { "constraint": { "max_visit_lateness": 0 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; arrival within [36000,43200] (no lateness used)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-023",
+    "feature": "Max Visit Lateness",
+    "title": "Global tolerance applied across multiple jobs",
+    "description": "A shared 1800s tolerance covers small lateness on two windowed jobs.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445", "34.0195, -118.4912"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "time_windows": [[36000, 39600]] },
+        { "id": "J2", "location_index": 2, "time_windows": [[39600, 43200]] }
+      ],
+      "options": { "constraint": { "max_visit_lateness": 1800 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; each arrival within its window end + 1800s",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-024",
+    "feature": "Max Visit Lateness",
+    "title": "Generous tolerance enables an otherwise-tight assignment",
+    "description": "A large global tolerance rescues a job whose window ends just before arrival.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[32400, 33000]] }],
+      "options": { "constraint": { "max_visit_lateness": 7200 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; served within window end + 7200s tolerance",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-025",
+    "feature": "Relations (in_sequence)",
+    "title": "in_sequence relation orders two jobs on one vehicle",
+    "description": "An in_sequence relation with two job steps enforces their served order.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }, { "id": "J2", "location_index": 2 }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "job", "id": "J1" }, { "type": "job", "id": "J2" }] }]
+    },
+    "details": { "features": ["relations.type=in_sequence", "relations.steps.type=job", "relations.steps.id"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; J1 served before J2 on the same vehicle (as the relation mandates)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-026",
+    "feature": "Relations (in_sequence)",
+    "title": "in_sequence relation begins at the vehicle start step",
+    "description": "A start step precedes a job step within an in_sequence relation.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "start", "id": "V1" }, { "type": "job", "id": "J1" }] }]
+    },
+    "details": { "features": ["relations.steps.type=start", "relations.steps.id", "relations.type=in_sequence"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; vehicle start step precedes J1 (as the relation mandates)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-027",
+    "feature": "Relations (in_sequence)",
+    "title": "in_sequence relation ends at the vehicle end step",
+    "description": "A job step precedes an end step within an in_sequence relation.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "job", "id": "J1" }, { "type": "end", "id": "V1" }] }]
+    },
+    "details": { "features": ["relations.steps.type=end", "relations.steps.id", "relations.type=in_sequence"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; vehicle end step follows J1 (as the relation mandates)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-028",
+    "feature": "Relations (in_sequence)",
+    "title": "in_sequence relation with a shipment pickup step",
+    "description": "A pickup step referencing a shipment precedes a job step in an in_sequence relation.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "jobs": [{ "id": "J1", "location_index": 2 }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [1] }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "pickup", "id": "S1P" }, { "type": "job", "id": "J1" }] }]
+    },
+    "details": { "features": ["relations.steps.type=pickup", "relations.steps.id", "relations.type=in_sequence"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 and J1 assigned; shipment pickup step precedes J1 (as the relation mandates)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-029",
+    "feature": "Relations (in_sequence)",
+    "title": "in_sequence relation with a shipment delivery step",
+    "description": "A pickup step precedes its delivery step within an in_sequence relation.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [1] }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "pickup", "id": "S1P" }, { "type": "delivery", "id": "S1D" }] }]
+    },
+    "details": { "features": ["relations.steps.type=delivery", "relations.steps.id", "relations.type=in_sequence"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; shipment S1 assigned; delivery step follows pickup step (as the relation mandates)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-030",
+    "feature": "Relations (in_sequence)",
+    "title": "in_sequence relation chains start, jobs, and end",
+    "description": "A full ordered chain (start -> J1 -> J2 -> end) is enforced by one in_sequence relation.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }, { "id": "J2", "location_index": 2 }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "start", "id": "V1" }, { "type": "job", "id": "J1" }, { "type": "job", "id": "J2" }, { "type": "end", "id": "V1" }] }]
+    },
+    "details": { "features": ["relations.type=in_sequence", "relations.steps.type", "relations.steps.id"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; steps served in listed order start->J1->J2->end (as the relation mandates)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-031",
+    "feature": "Capacity + Time Windows (combination)",
+    "title": "Capacity and time windows satisfied together on two vehicles",
+    "description": "Windowed, capacitated jobs are served across two vehicles within all bounds.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143"] },
+      "vehicles": [
+        { "id": "V1", "start_index": 0, "capacity": [10], "time_window": [32400, 61200] },
+        { "id": "V2", "start_index": 0, "capacity": [10], "time_window": [32400, 61200] }
+      ],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "pickup": [4], "time_windows": [[36000, 43200]] },
+        { "id": "J2", "location_index": 2, "pickup": [5], "time_windows": [[36000, 43200]] },
+        { "id": "J3", "location_index": 3, "pickup": [6], "time_windows": [[39600, 46800]] }
+      ]
+    },
+    "details": { "features": ["vehicles.capacity", "vehicles.time_window", "jobs.pickup", "jobs.time_windows", "jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; every job assigned XOR unassigned; for any assigned job onboard load <= capacity on every dimension at every step and job start within its window",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-032",
+    "feature": "Shipments Precedence + Amount + Windows (combination)",
+    "title": "Two shipments respect precedence, capacity, and windows together",
+    "description": "Two windowed shipments are co-scheduled within capacity, each pickup before its delivery.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143", "37.8044, -122.2712"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10], "time_window": [32400, 61200] }],
+      "shipments": [
+        { "pickup": { "id": "S1P", "location_index": 1, "time_windows": [[36000, 43200]] }, "delivery": { "id": "S1D", "location_index": 2, "time_windows": [[39600, 50400]] }, "amount": [3] },
+        { "pickup": { "id": "S2P", "location_index": 3, "time_windows": [[36000, 43200]] }, "delivery": { "id": "S2D", "location_index": 4, "time_windows": [[39600, 50400]] }, "amount": [4] }
+      ]
+    },
+    "details": { "features": ["shipments.pickup.location_index", "shipments.delivery.location_index", "shipments.amount", "shipments.pickup.time_windows", "shipments.delivery.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; for any assigned shipment its pickup precedes its delivery on the same vehicle and onboard load <= 10 at every step",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-001",
+    "feature": "Vehicle Start Index",
+    "title": "start_index equal to len(location) is rejected",
+    "description": "A start_index equal to the array length is out of range at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 2 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.start_index"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; error names start_index out of range",
+    "priority": "P1",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-002",
+    "feature": "Vehicle End Index",
+    "title": "end_index out of range is rejected",
+    "description": "An end_index beyond the array length is out of range at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 5 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.end_index"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; error names end_index out of range",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-003",
+    "feature": "Capacity Constraint",
+    "title": "Pickup exceeding every vehicle's capacity is unassigned",
+    "description": "A single pickup larger than all capacity is accepted but cannot be served.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "pickup": [80] }]
+    },
+    "details": { "features": ["vehicles.capacity", "jobs.pickup"], "archetype": "negative" },
+    "expectedResult": "200; result.code==0; J1 in result.unassigned with a capacity reason",
+    "priority": "P1",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-004",
+    "feature": "Vehicle Time Window",
+    "title": "Vehicle time_window with start greater than end is rejected",
+    "description": "A shift whose start exceeds its end is a malformed window at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [61200, 32400] }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.time_window"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; error names time_window start > end",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-005",
+    "feature": "Job Location Index",
+    "title": "Job location_index equal to len(location) is rejected",
+    "description": "A job index equal to the array length is out of range at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 2 }]
+    },
+    "details": { "features": ["jobs.location_index"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; error names the out-of-range location_index",
+    "priority": "P1",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-006",
+    "feature": "Job Pickup",
+    "title": "Two pickups that cannot be carried together leave one unassigned",
+    "description": "Two pickups whose combined load exceeds the single vehicle's capacity cannot both be onboard.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [5] }],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "pickup": [3] },
+        { "id": "J2", "location_index": 2, "pickup": [4] }
+      ]
+    },
+    "details": { "features": ["jobs.pickup", "vehicles.capacity"], "archetype": "negative" },
+    "expectedResult": "200; result.code==0; the two pickups cannot be onboard together; at least one of J1/J2 in result.unassigned with a capacity reason",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-007",
+    "feature": "Job Time Windows",
+    "title": "Unreachable window with zero lateness leaves the job unassigned",
+    "description": "A window that closes before the earliest possible arrival, with no lateness tolerance, is infeasible.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "40.7128, -74.006"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[32400, 32460]] }],
+      "options": { "constraint": { "max_visit_lateness": 0 } }
+    },
+    "details": { "features": ["jobs.time_windows"], "archetype": "negative" },
+    "expectedResult": "200; result.code==0; J1 in result.unassigned with a time-window reason",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-008",
+    "feature": "Shipment Pickup",
+    "title": "Shipment pickup location_index out of range is rejected",
+    "description": "A pickup index beyond the array length is out of range at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 5 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [1] }]
+    },
+    "details": { "features": ["shipments.pickup.location_index"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; error names the out-of-range pickup location_index",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-009",
+    "feature": "Shipment Delivery",
+    "title": "Delivery window earlier than pickup window makes the pair infeasible",
+    "description": "A delivery window that precedes the pickup window violates precedence, so both steps go unassigned.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10], "time_window": [32400, 61200] }],
+      "shipments": [{ "pickup": { "id": "S1P", "location_index": 1, "time_windows": [[43200, 46800]] }, "delivery": { "id": "S1D", "location_index": 2, "time_windows": [[36000, 39600]] }, "amount": [1] }]
+    },
+    "details": { "features": ["shipments.delivery.time_windows", "shipments.pickup.time_windows"], "archetype": "negative" },
+    "expectedResult": "200; result.code==0; both shipment steps (S1P and S1D) in result.unassigned (precedence infeasible)",
+    "priority": "P1",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-010",
+    "feature": "Shipment Amount",
+    "title": "Two shipments that cannot be onboard together defer one",
+    "description": "Two shipment amounts whose sum exceeds capacity cannot be carried simultaneously.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143", "37.8044, -122.2712"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [5] }],
+      "shipments": [
+        { "pickup": { "id": "S1P", "location_index": 1 }, "delivery": { "id": "S1D", "location_index": 2 }, "amount": [3] },
+        { "pickup": { "id": "S2P", "location_index": 3 }, "delivery": { "id": "S2D", "location_index": 4 }, "amount": [3] }
+      ]
+    },
+    "details": { "features": ["shipments.amount", "vehicles.capacity"], "archetype": "negative" },
+    "expectedResult": "200; result.code==0; the two shipments cannot be onboard together; at least one shipment in result.unassigned with a capacity reason",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-011",
+    "feature": "Max Visit Lateness",
+    "title": "Negative max_visit_lateness is rejected",
+    "description": "max_visit_lateness must be a non-negative integer; a negative value is malformed at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [32400, 61200] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[36000, 43200]] }],
+      "options": { "constraint": { "max_visit_lateness": -100 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; negative max_visit_lateness rejected (violates non-negative integer constraint)",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-012",
+    "feature": "Relations (in_sequence)",
+    "title": "Relation step with an unknown step type is rejected",
+    "description": "A relation step whose type is outside the allowed set is a malformed value at submit.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }],
+      "relations": [{ "type": "in_sequence", "steps": [{ "type": "teleport", "id": "J1" }] }]
+    },
+    "details": { "features": ["relations.steps.type"], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; unknown relation step type rejected",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-013",
+    "feature": "Authentication",
+    "title": "Request without the key query parameter is unauthorized",
+    "description": "The API key is a query parameter; omitting it rejects the request before any solve.",
+    "testData": "POST /optimization/v2  (the 'key' query parameter is omitted; body is otherwise valid)",
+    "details": { "features": [], "archetype": "negative" },
+    "expectedResult": "401 key missing/invalid; no id returned; request rejected at submit before solving",
+    "priority": "P1",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-014",
+    "feature": "Malformed Request",
+    "title": "Malformed JSON body is rejected",
+    "description": "A syntactically invalid JSON payload is rejected as an input validation failure.",
+    "testData": "POST /optimization/v2 body: { \"locations\": { \"location\": [\"34.0522, -118.2437\" }  <-- unbalanced braces / malformed JSON",
+    "details": { "features": [], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; malformed JSON rejected at submit",
+    "priority": "P2",
+    "type": "Negative"
+  },
+  {
+    "testCaseId": "TC-RO-NEG-015",
+    "feature": "Required Fields",
+    "title": "Missing required top-level vehicles is rejected",
+    "description": "A request omitting the required vehicles array is an input validation failure.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": [], "archetype": "negative" },
+    "expectedResult": "400 input validation failed; no id returned; missing required top-level 'vehicles' rejected",
+    "priority": "P1",
+    "type": "Negative"
+  }
+]

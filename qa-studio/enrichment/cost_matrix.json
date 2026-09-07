@@ -1,0 +1,37 @@
+{
+  "path": "cost_matrix",
+  "summary": "Custom N×N travel-cost matrix over the location array; used only when travel_cost=customized.",
+  "range": "Array of integer arrays, N×N where N = len(locations.location). Effective only with options.objective.travel_cost=customized.",
+  "constraints": [
+    "Square N×N over locations.location.",
+    "Effective only when travel_cost=customized."
+  ],
+  "businessRules": [
+    "cost_matrix defines: An array of arrays to denote the user-defined costs of traveling between each pair of geographic coordinates mentioned in the location array. The number of arrays should be equal to the number of c…",
+    "Each element in cost_matrix must be valid and consistent with related fields.",
+    "Must stay consistent with: options.objective.travel_cost. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Non-square / wrong-N matrix -> 400.",
+    "cost_matrix without travel_cost=customized is ignored."
+  ],
+  "testingGuidance": [
+    "Positive: N×N cost_matrix with travel_cost=customized.",
+    "Negative: N×(N-1) matrix -> 400.",
+    "Positive: omit optional field cost_matrix",
+    "Interaction: Negative: distance_matrix supplied alone -> 400.",
+    "Interaction: Negative: an N×(N-1) matrix -> 400.",
+    "Interaction: Negative: travel_cost=customized without cost_matrix -> 400.",
+    "Interaction: Behavioral: per_km cost ignored unless travel_cost=distance."
+  ],
+  "related": [
+    "options.objective.travel_cost"
+  ],
+  "rules": [
+    "objective-cost-mode-consistency"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

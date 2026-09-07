@@ -1,0 +1,32 @@
+{
+  "path": "vehicles.start_depot_ids",
+  "summary": "Depots the vehicle may start from (alternative to start_index).",
+  "range": "Array of depot id strings; each must match a defined depot.",
+  "constraints": [],
+  "businessRules": [
+    "Pickup-type jobs with depots configured cannot be served by a vehicle that has only start depots.",
+    "start_depot_ids defines: Specify the depots from which the vehicle can start. It is assumed that the vehicles can load the goods, which are to be delivered during the trip, when starting from the given depot. If certain de…",
+    "Each element in start_depot_ids must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.start_index, jobs.depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A depot id not present in depots[] -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: vehicle starts from one of two depots nearest its cluster.",
+    "Negative: start_depot_ids referencing an undefined depot -> 400.",
+    "Positive: omit optional field start_depot_ids",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Interaction: Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ],
+  "related": [
+    "vehicles.start_index",
+    "jobs.depot_ids"
+  ],
+  "rules": [
+    "multi-depot-reachability"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

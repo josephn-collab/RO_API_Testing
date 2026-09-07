@@ -1,0 +1,29 @@
+{
+  "path": "depots.service",
+  "summary": "Load/unload time incurred each time a vehicle starts or arrives at the depot.",
+  "range": "Non-negative integer seconds. Default 0.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Adds to route time on each depot visit; interacts with duration/shift caps on reloads.",
+    "service defines: Specify the time duration, in seconds, needed to load or unload the vehicle each time it starts or arrives at a depot, respectively. Please note that: * The default value is 0. * If throughput.hand…",
+    "Must stay consistent with: vehicles.max_depot_runs. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: depot service 600.",
+    "Interaction: with max_depot_runs, service accrues per run.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field service"
+  ],
+  "related": [
+    "vehicles.max_depot_runs"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

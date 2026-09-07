@@ -1,0 +1,545 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle begins route at start_index 0",
+    "description": "A vehicle anchored at start_index 0 begins its route at that coordinate and serves a feasible job.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.start_index", "jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; V1 route starts at location_index 0; J1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle starts at the last valid location index",
+    "description": "start_index at len(location)-1 is accepted (upper boundary of the valid index range).",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 2 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.start_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; V1 route starts at location_index 2; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Vehicle End Index",
+    "title": "Closed route returns to its origin depot",
+    "description": "end_index equal to start_index forces the route to finish where it began.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.start_index", "vehicles.end_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; V1 route starts and ends at location_index 0; J1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Vehicle End Index",
+    "title": "Route ends at a distinct end depot",
+    "description": "end_index different from start_index forces the route to finish at the specified index.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "end_index": 2 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["vehicles.end_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; V1 route ends at location_index 2; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Capacity Constraint",
+    "title": "Delivery within a single-dimension capacity",
+    "description": "A delivery demand below capacity is served with onboard load never exceeding the bound.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [100] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "delivery": [40] }]
+    },
+    "details": { "features": ["vehicles.capacity", "jobs.delivery"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; onboard load <= 100 on every dimension at every step; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Capacity Constraint",
+    "title": "Total demand exactly equals capacity is feasible",
+    "description": "Two deliveries summing to exactly the capacity are all assignable (at-the-limit valid boundary).",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [100] }],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "delivery": [60] },
+        { "id": "J2", "location_index": 2, "delivery": [40] }
+      ]
+    },
+    "details": { "features": ["vehicles.capacity", "jobs.delivery"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; peak onboard load == 100 and never exceeds capacity; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Vehicle Time Window",
+    "title": "Route completes within the vehicle shift",
+    "description": "A job serviceable inside the vehicle's single shift window is assigned and the route ends within the shift.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "service": 300 }]
+    },
+    "details": { "features": ["vehicles.time_window"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; route end (last arrival + service) <= 1752624000; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-008",
+    "feature": "Vehicle Time Window",
+    "title": "Feasible route inside a tight shift window",
+    "description": "A short service fits inside a one-hour shift; the whole route stays within time_window.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752600000, 1752603600] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "service": 300 }]
+    },
+    "details": { "features": ["vehicles.time_window"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; route end <= 1752603600; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-009",
+    "feature": "Job Location Index",
+    "title": "Job served at a valid location index",
+    "description": "A job referencing a valid index into locations.location is served at that coordinate.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 1 }]
+    },
+    "details": { "features": ["jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned and served at location_index 1; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-010",
+    "feature": "Job Location Index",
+    "title": "Job at the last valid location index",
+    "description": "location_index equal to len(location)-1 is accepted (upper boundary of the valid range).",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0 }],
+      "jobs": [{ "id": "J1", "location_index": 2 }]
+    },
+    "details": { "features": ["jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned and served at location_index 2; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-011",
+    "feature": "Job Delivery",
+    "title": "Single-dimension delivery quantity is served",
+    "description": "A delivery quantity below capacity is dropped at the job location.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "delivery": [10] }]
+    },
+    "details": { "features": ["jobs.delivery", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; delivered load 10 <= capacity 50; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-012",
+    "feature": "Job Delivery",
+    "title": "Multi-dimension delivery consistent with capacity",
+    "description": "A two-dimension delivery fits a two-dimension capacity on every dimension.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10, 100] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "delivery": [2, 60] }]
+    },
+    "details": { "features": ["jobs.delivery", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; each dimension of onboard load <= [10,100]; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-013",
+    "feature": "Job Pickup",
+    "title": "Pickup quantity carried onward within capacity",
+    "description": "A pickup adds onboard load that stays within capacity for the remainder of the route.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "pickup": [20] }]
+    },
+    "details": { "features": ["jobs.pickup", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; onboard load after pickup 20 <= capacity 50; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-014",
+    "feature": "Job Pickup",
+    "title": "Two pickups stack within capacity",
+    "description": "Two pickups carried simultaneously keep cumulative onboard load within capacity.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "pickup": [20] },
+        { "id": "J2", "location_index": 2, "pickup": [20] }
+      ]
+    },
+    "details": { "features": ["jobs.pickup", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; peak onboard load 40 <= capacity 50; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-015",
+    "feature": "Job Time Windows",
+    "title": "Arrival falls within the job time window (early arrival waits)",
+    "description": "A job with a single time window is served within it; early arrival waits until the window opens.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[1752604800, 1752608400]], "service": 600 }]
+    },
+    "details": { "features": ["jobs.time_windows", "vehicles.time_window"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; arrival within [1752604800,1752608400]; late_by == 0",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-016",
+    "feature": "Job Time Windows",
+    "title": "Job with multiple allowed windows is served in one of them",
+    "description": "A job offering two non-overlapping windows is served within one of them.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[1752601200, 1752602400], [1752604800, 1752606000]], "service": 300 }]
+    },
+    "details": { "features": ["jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; arrival within one of the listed windows; late_by == 0",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-017",
+    "feature": "Shipment Pickup",
+    "title": "Shipment pickup and delivery on one vehicle, pickup first",
+    "description": "A shipment's pickup and delivery are co-assigned to one vehicle with pickup sequenced before delivery.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "shipments": [{ "pickup": { "id": "P1", "location_index": 1 }, "delivery": { "id": "D1", "location_index": 2 }, "amount": [10] }]
+    },
+    "details": { "features": ["shipments.pickup.location_index", "shipments.delivery.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; pickup and delivery on the same vehicle; pickup step index < delivery step index; both steps assigned",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-018",
+    "feature": "Shipment Pickup",
+    "title": "Pickup step starts within its time window",
+    "description": "A shipment pickup with a time window is started inside that window, delivery following after.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50], "time_window": [1752598800, 1752624000] }],
+      "shipments": [{ "pickup": { "id": "P1", "location_index": 1, "time_windows": [[1752603600, 1752607200]] }, "delivery": { "id": "D1", "location_index": 2 }, "amount": [5] }]
+    },
+    "details": { "features": ["shipments.pickup.time_windows", "shipments.pickup.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; pickup starts within [1752603600,1752607200]; delivery served after pickup on same vehicle; both steps assigned",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-019",
+    "feature": "Shipment Delivery",
+    "title": "Delivery step served after pickup at its index",
+    "description": "The delivery step is served at its location index, after the pickup, on the same vehicle.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "shipments": [{ "pickup": { "id": "P1", "location_index": 1 }, "delivery": { "id": "D1", "location_index": 2 }, "amount": [8] }]
+    },
+    "details": { "features": ["shipments.delivery.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; delivery served at location_index 2 after pickup on the same vehicle; both steps assigned",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-020",
+    "feature": "Shipment Delivery",
+    "title": "Delivery step starts within its reachable window",
+    "description": "A delivery window reachable after the pickup is honored; the pair is served feasibly.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50], "time_window": [1752598800, 1752624000] }],
+      "shipments": [{ "pickup": { "id": "P1", "location_index": 1, "time_windows": [[1752601200, 1752604800]] }, "delivery": { "id": "D1", "location_index": 2, "time_windows": [[1752606000, 1752612000]] }, "amount": [8] }]
+    },
+    "details": { "features": ["shipments.delivery.time_windows", "shipments.delivery.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; delivery starts within [1752606000,1752612000]; pickup precedes delivery on same vehicle; both steps assigned",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-021",
+    "feature": "Shipment Amount",
+    "title": "Carried amount stays within capacity between the two steps",
+    "description": "A single-dimension shipment amount is onboard only between pickup and delivery and stays within capacity.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50] }],
+      "shipments": [{ "pickup": { "id": "P1", "location_index": 1 }, "delivery": { "id": "D1", "location_index": 2 }, "amount": [30] }]
+    },
+    "details": { "features": ["shipments.amount"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; onboard load between pickup and delivery == 30 <= capacity 50; both steps assigned",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-022",
+    "feature": "Shipment Amount",
+    "title": "Multi-dimension shipment amount consistent with capacity",
+    "description": "A two-dimension shipment amount fits a two-dimension capacity on every dimension while onboard.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [10, 100] }],
+      "shipments": [{ "pickup": { "id": "P1", "location_index": 1 }, "delivery": { "id": "D1", "location_index": 2 }, "amount": [3, 60] }]
+    },
+    "details": { "features": ["shipments.amount", "vehicles.capacity"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; each dimension of onboard load <= [10,100] between the steps; both steps assigned",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-023",
+    "feature": "Max Visit Lateness",
+    "title": "Job served within the global lateness tolerance",
+    "description": "With a global max_visit_lateness, a job arriving just after its window is still assigned within tolerance.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[1752601200, 1752601800]], "service": 300 }],
+      "options": { "constraint": { "max_visit_lateness": 600 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; lateness after window end <= 600s; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-024",
+    "feature": "Max Visit Lateness",
+    "title": "Zero global lateness with on-time arrival",
+    "description": "A global max_visit_lateness of 0 still assigns a job that can be reached within its window.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[1752604800, 1752608400]], "service": 300 }],
+      "options": { "constraint": { "max_visit_lateness": 0 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; arrival within [1752604800,1752608400]; late_by == 0",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-025",
+    "feature": "Max Visit Lateness",
+    "title": "Global tolerance applied across multiple jobs",
+    "description": "A global max_visit_lateness applies to every job; two jobs near their window edges are both assigned within tolerance.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "time_windows": [[1752601200, 1752602400]], "service": 300 },
+        { "id": "J2", "location_index": 2, "time_windows": [[1752602400, 1752603600]], "service": 300 }
+      ],
+      "options": { "constraint": { "max_visit_lateness": 300 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 and J2 assigned; each job's lateness <= 300s; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-026",
+    "feature": "Max Visit Lateness",
+    "title": "Generous tolerance enables an otherwise-tight assignment",
+    "description": "A larger global max_visit_lateness lets a job just past its window remain assigned within tolerance.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "time_window": [1752598800, 1752624000] }],
+      "jobs": [{ "id": "J1", "location_index": 1, "time_windows": [[1752601200, 1752601500]], "service": 300 }],
+      "options": { "constraint": { "max_visit_lateness": 1800 } }
+    },
+    "details": { "features": ["options.constraint.max_visit_lateness", "jobs.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; J1 assigned; lateness after window end <= 1800s; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-027",
+    "feature": "Capacity + Time Windows (combination)",
+    "title": "Capacity and time windows satisfied together on two vehicles",
+    "description": "Two capacitated vehicles serve time-windowed deliveries; capacity and windows both hold.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143", "37.8044, -122.2712"] },
+      "vehicles": [
+        { "id": "V1", "start_index": 0, "capacity": [100], "time_window": [1752598800, 1752624000] },
+        { "id": "V2", "start_index": 0, "capacity": [100], "time_window": [1752598800, 1752624000] }
+      ],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "delivery": [30], "time_windows": [[1752604800, 1752610200]], "service": 300 },
+        { "id": "J2", "location_index": 2, "delivery": [40], "time_windows": [[1752604800, 1752610200]], "service": 300 },
+        { "id": "J3", "location_index": 3, "delivery": [30], "time_windows": [[1752610200, 1752615600]], "service": 300 },
+        { "id": "J4", "location_index": 4, "delivery": [50], "time_windows": [[1752610200, 1752615600]], "service": 300 }
+      ]
+    },
+    "details": { "features": ["vehicles.capacity", "vehicles.time_window", "jobs.delivery", "jobs.time_windows", "jobs.location_index"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; all four jobs assigned; each route's onboard load <= 100; every arrival within its window; each route ends within its shift; result.unassigned empty",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-028",
+    "feature": "Multi-Depot + Capacity (combination)",
+    "title": "Two vehicles with distinct depots serve capacitated deliveries",
+    "description": "Vehicles anchored to different start/end depots each serve their nearby capacitated jobs.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "34.1478, -118.1445", "34.0195, -118.4912", "30.2672, -97.7431", "32.7767, -96.797"] },
+      "vehicles": [
+        { "id": "V1", "start_index": 0, "end_index": 0, "capacity": [100] },
+        { "id": "V2", "start_index": 3, "end_index": 3, "capacity": [100] }
+      ],
+      "jobs": [
+        { "id": "W1", "location_index": 1, "delivery": [30] },
+        { "id": "W2", "location_index": 2, "delivery": [30] },
+        { "id": "T1", "location_index": 4, "delivery": [40] }
+      ]
+    },
+    "details": { "features": ["vehicles.start_index", "vehicles.end_index", "vehicles.capacity", "jobs.delivery"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; all jobs assigned; V1 starts/ends at index 0 and V2 at index 3; each route's onboard load <= 100; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-029",
+    "feature": "Shipments Precedence + Amount + Windows (combination)",
+    "title": "Two shipments respect precedence, capacity, and windows",
+    "description": "Two shipments are each co-assigned to a vehicle with pickup before delivery, amounts within capacity, and windows honored.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143", "37.8044, -122.2712"] },
+      "vehicles": [{ "id": "V1", "start_index": 0, "capacity": [50], "time_window": [1752598800, 1752624000] }],
+      "shipments": [
+        { "pickup": { "id": "P1", "location_index": 1, "time_windows": [[1752601200, 1752604800]] }, "delivery": { "id": "D1", "location_index": 2, "time_windows": [[1752606000, 1752612000]] }, "amount": [20] },
+        { "pickup": { "id": "P2", "location_index": 3, "time_windows": [[1752601200, 1752604800]] }, "delivery": { "id": "D2", "location_index": 4, "time_windows": [[1752606000, 1752612000]] }, "amount": [20] }
+      ]
+    },
+    "details": { "features": ["shipments.pickup.location_index", "shipments.delivery.location_index", "shipments.amount", "shipments.pickup.time_windows", "shipments.delivery.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; both shipments assigned; for each, pickup precedes delivery on the same vehicle; peak onboard load <= 50; every step within its window",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-030",
+    "feature": "Mixed Delivery/Pickup + Lateness (combination)",
+    "title": "Delivery and pickup jobs with lateness tolerance on two vehicles",
+    "description": "A mix of delivery and pickup jobs with time windows is served within a global lateness tolerance across two vehicles.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143"] },
+      "vehicles": [
+        { "id": "V1", "start_index": 0, "capacity": [60], "time_window": [1752598800, 1752624000] },
+        { "id": "V2", "start_index": 0, "capacity": [60], "time_window": [1752598800, 1752624000] }
+      ],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "delivery": [30], "time_windows": [[1752604800, 1752608400]], "service": 300 },
+        { "id": "J2", "location_index": 2, "pickup": [20], "time_windows": [[1752604800, 1752608400]], "service": 300 },
+        { "id": "J3", "location_index": 3, "delivery": [25], "time_windows": [[1752608400, 1752612000]], "service": 300 }
+      ],
+      "options": { "constraint": { "max_visit_lateness": 600 } }
+    },
+    "details": { "features": ["jobs.delivery", "jobs.pickup", "jobs.time_windows", "options.constraint.max_visit_lateness"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; all jobs assigned; each route's onboard load <= 60; each job's lateness <= 600s; result.unassigned empty",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-031",
+    "feature": "Full Scenario (combination)",
+    "title": "Two vehicles serve ten capacitated, time-windowed jobs",
+    "description": "A realistic two-vehicle, ten-job problem with capacity, shifts, time windows, and a global lateness tolerance is fully solved.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143", "37.8044, -122.2712", "40.6782, -73.9442", "34.1478, -118.1445", "30.2672, -97.7431", "33.4484, -112.074", "37.7749, -122.4194", "34.0195, -118.4912", "32.7767, -96.797"] },
+      "vehicles": [
+        { "id": "V1", "start_index": 0, "end_index": 0, "capacity": [150], "time_window": [1752598800, 1752624000] },
+        { "id": "V2", "start_index": 1, "end_index": 1, "capacity": [150], "time_window": [1752598800, 1752624000] }
+      ],
+      "jobs": [
+        { "id": "J1", "location_index": 2, "delivery": [20], "time_windows": [[1752604800, 1752612000]], "service": 300 },
+        { "id": "J2", "location_index": 3, "delivery": [20], "time_windows": [[1752604800, 1752612000]], "service": 300 },
+        { "id": "J3", "location_index": 4, "delivery": [20], "time_windows": [[1752604800, 1752612000]], "service": 300 },
+        { "id": "J4", "location_index": 5, "delivery": [20], "time_windows": [[1752604800, 1752612000]], "service": 300 },
+        { "id": "J5", "location_index": 6, "delivery": [20], "time_windows": [[1752612000, 1752619200]], "service": 300 },
+        { "id": "J6", "location_index": 7, "delivery": [20], "time_windows": [[1752612000, 1752619200]], "service": 300 },
+        { "id": "J7", "location_index": 8, "delivery": [20], "time_windows": [[1752612000, 1752619200]], "service": 300 },
+        { "id": "J8", "location_index": 9, "delivery": [20], "time_windows": [[1752612000, 1752619200]], "service": 300 },
+        { "id": "J9", "location_index": 10, "delivery": [20], "time_windows": [[1752612000, 1752619200]], "service": 300 },
+        { "id": "J10", "location_index": 11, "delivery": [20], "time_windows": [[1752612000, 1752619200]], "service": 300 }
+      ],
+      "options": { "constraint": { "max_visit_lateness": 600 } }
+    },
+    "details": { "features": ["vehicles.start_index", "vehicles.end_index", "vehicles.capacity", "vehicles.time_window", "jobs.location_index", "jobs.delivery", "jobs.time_windows", "options.constraint.max_visit_lateness"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; all 10 jobs assigned; each vehicle's onboard load <= 150; every arrival within its window (lateness <= 600s); each route starts/ends at its own depot and ends within the shift; result.unassigned empty",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-032",
+    "feature": "Jobs + Shipments Mixed (combination)",
+    "title": "One request mixing capacitated jobs and a shipment on two vehicles",
+    "description": "A request combining delivery jobs and a pickup-delivery shipment is solved with capacity, precedence, and windows all respected.",
+    "testData": {
+      "locations": { "location": ["34.0522, -118.2437", "37.3382, -121.8863", "47.6062, -122.3321", "33.8358, -117.9143", "37.8044, -122.2712"] },
+      "vehicles": [
+        { "id": "V1", "start_index": 0, "capacity": [80], "time_window": [1752598800, 1752624000] },
+        { "id": "V2", "start_index": 0, "capacity": [80], "time_window": [1752598800, 1752624000] }
+      ],
+      "jobs": [
+        { "id": "J1", "location_index": 1, "delivery": [30], "time_windows": [[1752604800, 1752610200]], "service": 300 },
+        { "id": "J2", "location_index": 2, "delivery": [30], "time_windows": [[1752604800, 1752610200]], "service": 300 }
+      ],
+      "shipments": [
+        { "pickup": { "id": "P1", "location_index": 3, "time_windows": [[1752601200, 1752604800]] }, "delivery": { "id": "D1", "location_index": 4, "time_windows": [[1752606000, 1752612000]] }, "amount": [25] }
+      ]
+    },
+    "details": { "features": ["jobs.delivery", "jobs.time_windows", "shipments.pickup.location_index", "shipments.delivery.location_index", "shipments.amount", "shipments.pickup.time_windows", "shipments.delivery.time_windows"], "archetype": "positive" },
+    "expectedResult": "200; result.code==0; both jobs and the shipment assigned; shipment pickup precedes delivery on the same vehicle; every route's onboard load <= 80; all windows honored; result.unassigned empty",
+    "priority": "P1",
+    "type": "Positive"
+  }
+]

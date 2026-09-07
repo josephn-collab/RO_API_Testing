@@ -1,0 +1,26 @@
+{
+  "path": "options.webhook.url",
+  "summary": "HTTP(S) endpoint the solver POSTs status events to.",
+  "range": "String URL (HTTP or HTTPS).",
+  "constraints": [
+    "Must be a valid HTTP(S) URL."
+  ],
+  "businessRules": [
+    "url defines: Specify your webhook URL. Please note only HTTP(s) are supported. The URL provided here will be called by the optimization service using a HTTP POST method along with event payload.",
+    "Must stay consistent with: options.webhook.events. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A malformed URL -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: https callback URL.",
+    "Negative: not-a-url -> 400.",
+    "Positive: omit optional field url"
+  ],
+  "related": [
+    "options.webhook.events"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

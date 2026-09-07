@@ -1,0 +1,18 @@
+{
+  "id": "multi-depot-reachability",
+  "summary": "Vehicles may start/end at different depots (by index or depot IDs); tasks restricted by depot_ids need a vehicle whose depots match.",
+  "applies_to": [
+    "vehicles.start_index",
+    "vehicles.end_index",
+    "vehicles.start_depot_ids",
+    "vehicles.end_depot_ids",
+    "jobs.depot_ids",
+    "vehicles.max_depot_runs",
+    "depots"
+  ],
+  "rule": "With no start/end anchor a vehicle starts at its first task and ends at its last (open route). With multiple depots the solver picks the geographically closest per cluster. A job's depot_ids must intersect an available vehicle's depots, else it is unassigned. Pickup-type jobs need a vehicle with start depots; delivery-type jobs need end depots. max_depot_runs allows reloads but conflicts with layover_config/relations/deadhead caps.",
+  "testingGuidance": [
+    "Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ]
+}

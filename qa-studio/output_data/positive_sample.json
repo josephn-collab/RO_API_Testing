@@ -1,0 +1,872 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Feasible pickup plan",
+    "title": "Two vehicles complete seven pickup jobs within capacity and shift windows",
+    "description": "Baseline positive: a fully valid submission with 2 vehicles and 7 pickup jobs should be accepted and fully solved with every job assigned.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Cargo Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Cargo Van B",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            100
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Pickup at San Jose",
+          "location_index": 1,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Pickup at Seattle",
+          "location_index": 2,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Pickup at Anaheim",
+          "location_index": 3,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Pickup at Brooklyn",
+          "location_index": 5,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Pickup at Pasadena",
+          "location_index": 6,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Pickup at Austin",
+          "location_index": 7,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Pickup at Phoenix",
+          "location_index": 8,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        }
+      ]
+    },
+    "expectedResult": "200; status:'Ok' with an id; result.code==0; all 7 jobs assigned across routes; result.summary.unassigned==0 and result.unassigned empty; each route cumulative pickup load never exceeds capacity [100].",
+    "priority": "P1",
+    "severity": "Critical (S1)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.location_index",
+        "jobs.pickup",
+        "jobs.service",
+        "jobs.time_windows"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Capacity sufficiency",
+    "title": "Pickup load fits within a constrained two-vehicle fleet",
+    "description": "Positive capacity check: total pickup demand (70) is within combined capacity (80) and splittable per vehicle.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Small Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            40
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Small Van B",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            40
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Pickup 1",
+          "location_index": 1,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Pickup 2",
+          "location_index": 2,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Pickup 3",
+          "location_index": 3,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Pickup 4",
+          "location_index": 5,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Pickup 5",
+          "location_index": 6,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Pickup 6",
+          "location_index": 7,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Pickup 7",
+          "location_index": 8,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        }
+      ]
+    },
+    "expectedResult": "200; result.code==0; all 7 jobs assigned; result.unassigned empty; no route cumulative load exceeds its capacity [40]; sum of assigned pickups equals 70.",
+    "priority": "P1",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.location_index",
+        "jobs.pickup",
+        "jobs.service",
+        "jobs.time_windows"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Time windows",
+    "title": "Each pickup is scheduled inside its job time window and the vehicle shift",
+    "description": "Positive scheduling: California-clustered jobs with day-long windows are all served within their time_windows and within each vehicle time_window.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "SoCal Van",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            50
+          ],
+          "time_window": [
+            1752570000,
+            1752606000
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "NorCal Van",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            50
+          ],
+          "time_window": [
+            1752570000,
+            1752606000
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Anaheim pickup",
+          "location_index": 3,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Pasadena pickup",
+          "location_index": 6,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "LA pickup",
+          "location_index": 0,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "San Jose pickup",
+          "location_index": 1,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Oakland pickup",
+          "location_index": 4,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Anaheim pickup 2",
+          "location_index": 3,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Pasadena pickup 2",
+          "location_index": 6,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752573600,
+              1752602400
+            ]
+          ]
+        }
+      ]
+    },
+    "expectedResult": "200; result.code==0; every assigned job step arrival falls within [1752573600,1752602400] and within the vehicle time_window; steps[].late_by==0; result.summary.num_late_visits==0.",
+    "priority": "P1",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.location_index",
+        "jobs.pickup",
+        "jobs.service",
+        "jobs.time_windows"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Distinct start/end depots",
+    "title": "Vehicles start and finish at different indices (relocation shift)",
+    "description": "Positive routing: with start_index != end_index, each route must begin at its start_index location and terminate at its end_index location.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "LA to Pasadena",
+          "start_index": 0,
+          "end_index": 6,
+          "capacity": [
+            100
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Oakland to San Jose",
+          "start_index": 4,
+          "end_index": 1,
+          "capacity": [
+            100
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Pickup 1",
+          "location_index": 2,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Pickup 2",
+          "location_index": 3,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Pickup 3",
+          "location_index": 5,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Pickup 4",
+          "location_index": 6,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Pickup 5",
+          "location_index": 7,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Pickup 6",
+          "location_index": 8,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Pickup 7",
+          "location_index": 1,
+          "pickup": [
+            10
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        }
+      ]
+    },
+    "expectedResult": "200; result.code==0; veh_1 route starts at location_index 0 and ends at 6; veh_2 route starts at 4 and ends at 1; all 7 jobs assigned; result.unassigned empty.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.location_index",
+        "jobs.pickup",
+        "jobs.service",
+        "jobs.time_windows"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Service time",
+    "title": "Per-job service durations are honored and aggregated in the summary",
+    "description": "Positive: jobs carry varied service times; the solution must assign all jobs and reflect total service time in result.summary.service.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Service Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Service Van B",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            100
+          ],
+          "time_window": [
+            1752570000,
+            1753174800
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Short stop",
+          "location_index": 1,
+          "pickup": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Medium stop",
+          "location_index": 2,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Long stop",
+          "location_index": 3,
+          "pickup": [
+            5
+          ],
+          "service": 600,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Short stop",
+          "location_index": 5,
+          "pickup": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Medium stop",
+          "location_index": 6,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Long stop",
+          "location_index": 7,
+          "pickup": [
+            5
+          ],
+          "service": 600,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Medium stop",
+          "location_index": 8,
+          "pickup": [
+            5
+          ],
+          "service": 300,
+          "time_windows": [
+            [
+              1752570000,
+              1753174800
+            ]
+          ]
+        }
+      ]
+    },
+    "expectedResult": "200; result.code==0; all 7 jobs assigned; result.unassigned empty; result.summary.service equals the sum of assigned job service times (2340 seconds); each step service matches its job.",
+    "priority": "P2",
+    "severity": "Medium (S3)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.location_index",
+        "jobs.pickup",
+        "jobs.service",
+        "jobs.time_windows"
+      ]
+    }
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "path": "shipments.delivery.time_windows",
+  "summary": "Allowed start windows for the shipment's delivery step.",
+  "range": "Array of [start,end] Unix-second pairs; each start <= end. Overlapping windows allowed (shared time-window model, C2).",
+  "constraints": [
+    "Each start <= end; non-negative Unix seconds (C2)."
+  ],
+  "businessRules": [
+    "Delivery window must be reachable AFTER the pickup for the pair to be feasible (C4).",
+    "time_windows defines: Describe time periods within which the shipment delivery should start. The time periods should be expressed as a UNIX timestamp in seconds. Please note that the time periods should not overlap with…",
+    "Each element in time_windows must be valid and consistent with related fields.",
+    "Must stay consistent with: shipments.pickup.time_windows. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A window with end < start -> 400 input validation failed (C2 shared model; API Facts §4)."
+  ],
+  "testingGuidance": [
+    "Positive: delivery step served within a reachable window after the pickup (C4).",
+    "Boundary: instant delivery window [t,t] reachable after pickup+travel (C2 edge case).",
+    "Negative-validation: a delivery window with end < start -> 400 (C2).",
+    "Negative-infeasible: delivery window unreachable after pickup+travel -> whole pair unassigned (C4 edge case).",
+    "Negative-infeasible: delivery window earlier than the pickup window -> precedence infeasible -> both steps unassigned (C4 edge case).",
+    "Positive: omit optional field time_windows",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned.",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "shipments.pickup.time_windows"
+  ],
+  "rules": [
+    "pickup-delivery-precedence",
+    "time-window-feasibility"
+  ],
+  "_source": "OptimizationConstraints.md#C2/#C4 + API Facts §4"
+}

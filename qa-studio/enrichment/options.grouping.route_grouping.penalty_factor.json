@@ -1,0 +1,23 @@
+{
+  "path": "options.grouping.route_grouping.penalty_factor",
+  "summary": "Penalty weight for crossing zone boundaries.",
+  "range": "Number. Default 0.",
+  "constraints": [],
+  "businessRules": [
+    "penalty_factor defines: Specify a non-negative value which indicates the penalty of crossing zones on the same route. Default penalty value is 0. A higher value, for example 30.0, will place a higher penalty on zone viola…",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: higher penalty_factor keeps routes inside their zone.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field penalty_factor"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

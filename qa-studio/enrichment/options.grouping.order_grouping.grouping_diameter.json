@@ -1,0 +1,25 @@
+{
+  "path": "options.grouping.order_grouping.grouping_diameter",
+  "summary": "Radius (meters) within which tasks are grouped into one stop.",
+  "range": "Number, meters. Default null (no grouping).",
+  "constraints": [
+    "Non-negative number (meters)."
+  ],
+  "businessRules": [
+    "grouping_diameter defines: Specify the straight line distance, in meters, which will be used to identify the tasks that should be grouped together. The default value is null.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: grouping_diameter 50 merges same-building tasks.",
+    "Boundary: null/absent -> no grouping.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field grouping_diameter"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

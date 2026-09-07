@@ -1,0 +1,37 @@
+{
+  "path": "relations",
+  "summary": "Hard ordering/grouping relations between tasks; disable soft constraints and can force unassignment.",
+  "range": "Array of relation objects. type + steps required. An unsatisfiable relation flags all its tasks unassigned.",
+  "constraints": [
+    "Each relation requires type and steps.",
+    "A vehicle can't be reused across relations."
+  ],
+  "businessRules": [
+    "When relations are present, options.constraint soft penalties are ineffective.",
+    "If a relation cannot be satisfied, ALL its tasks go to result.unassigned.",
+    "relations defines: relations attribute is an array of individual relation objects. type parameter and steps object are mandatory when using this attribute. Please note: * The soft constraints are **not** effective wh…",
+    "Each element in relations must be valid and consistent with related fields.",
+    "Must stay consistent with: relations.type, relations.steps, options.constraint. Changes here may require validation of those fields.",
+    "Rule: Relations define hard sequencing: job pairs, duration bounds, vehicle affinity.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A relation missing type or steps -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: in_sequence relation over three jobs.",
+    "Infeasible: a precedence relation whose order can't be met -> all its tasks unassigned.",
+    "Positive: omit optional field relations",
+    "Interaction: Interaction: with a relation set, raising visit_lateness_penalty has no effect.",
+    "Interaction: Infeasible: an in_direct_sequence relation whose ordering is impossible -> all its tasks unassigned."
+  ],
+  "related": [
+    "relations.type",
+    "relations.steps",
+    "options.constraint"
+  ],
+  "rules": [
+    "relations-supersede-soft"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

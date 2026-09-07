@@ -1,0 +1,12 @@
+{
+  "id": "capacity-dimension-consistency",
+  "summary": "Load-dimension count must be consistent across capacity and every quantity field in the request.",
+  "applies_to": ["vehicles.capacity", "jobs.delivery", "jobs.pickup", "shipments.amount", "vehicles.alternative_capacities", "vehicles.min_stop_load"],
+  "rule": "The array length of vehicles[].capacity (and each alternative in vehicles[].alternative_capacities) must equal the array length of every jobs[].delivery, jobs[].pickup, and shipments[].amount in the same request. vehicles[].min_stop_load must also have the same dimension count. A dimension mismatch is a validation error (HTTP 400).",
+  "testingGuidance": [
+    "Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+    "Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+    "Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+    "Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400."
+  ]
+}

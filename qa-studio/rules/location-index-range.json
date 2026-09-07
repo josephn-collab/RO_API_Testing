@@ -1,0 +1,18 @@
+{
+  "id": "location-index-range",
+  "summary": "Every location_index / start_index / end_index must resolve within the request's own locations.location array.",
+  "applies_to": [
+    "locations.location",
+    "jobs.location_index",
+    "vehicles.start_index",
+    "vehicles.end_index",
+    "shipments.pickup.location_index",
+    "shipments.delivery.location_index",
+    "depots.location_index"
+  ],
+  "rule": "All index references must be integers in [0, len(locations.location)). An index >= len or < 0, or a non-integer index, is an input validation error (HTTP 400) at submit — distinct from an infeasible-but-valid request.",
+  "testingGuidance": [
+    "Negative: a job location_index equal to len(location) -> 400.",
+    "Negative: a non-integer index like \"first\" -> 400 type error."
+  ]
+}

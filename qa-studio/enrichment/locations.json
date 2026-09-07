@@ -1,0 +1,24 @@
+{
+  "path": "locations",
+  "summary": "The container object holding the coordinate array (and optional per-location approaches). Required.",
+  "range": "Object: { id?, location (required), approaches? }.",
+  "constraints": [
+    "Required.",
+    "Must contain a non-empty location array."
+  ],
+  "businessRules": [],
+  "validationRules": [
+    "Missing locations -> 400.",
+    "Empty location array -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: locations with a valid location array.",
+    "Negative: request without locations -> 400."
+  ],
+  "related": [
+    "locations.location",
+    "locations.approaches"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

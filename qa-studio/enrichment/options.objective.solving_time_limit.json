@@ -1,0 +1,26 @@
+{
+  "path": "options.objective.solving_time_limit",
+  "summary": "Target solve time budget (seconds); the solver may exceed it to find any solution.",
+  "range": "Integer seconds. >= 300–420s recommended for large inputs.",
+  "constraints": [
+    "Positive integer seconds."
+  ],
+  "businessRules": [
+    "Soft target — solver can run longer to return a feasible solution for large problems.",
+    "solving_time_limit defines: Specify the number of seconds within which the optimizer should ideally solve the optimization request. Please note that: * In case the specified time limit is not enough to generate a solution for…",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: solving_time_limit 420 for a 500-job problem.",
+    "Boundary: very small limit may yield a lower-quality but valid solution.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field solving_time_limit"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

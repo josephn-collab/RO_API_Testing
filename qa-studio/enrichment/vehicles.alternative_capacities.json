@@ -1,0 +1,34 @@
+{
+  "path": "vehicles.alternative_capacities",
+  "summary": "Alternate capacity configurations the vehicle can adopt (the solver picks one).",
+  "range": "Array of integer arrays; each inner array has the SAME dimension count as capacity. Cannot be shared/merged across vehicles.",
+  "constraints": [
+    "Each inner array's length must equal capacity's dimension count."
+  ],
+  "businessRules": [
+    "alternative_capacities defines: An array of alternate capacity configurations for the vehicle. Each array should have same number of dimensions as those configured when specifying task loads/quantities. Multiple arrays can also b…",
+    "Each element in alternative_capacities must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.capacity. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Dimension mismatch vs capacity -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: two alt configs [[10],[20]] — solver adopts the one that fits demand.",
+    "Negative: an alt config with a different dimension count than capacity -> 400.",
+    "Positive: omit optional field alternative_capacities",
+    "Interaction: Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+    "Interaction: Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+    "Interaction: Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+    "Interaction: Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400."
+  ],
+  "related": [
+    "vehicles.capacity"
+  ],
+  "rules": [
+    "capacity-dimension-consistency"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

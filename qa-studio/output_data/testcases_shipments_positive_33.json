@@ -1,0 +1,2111 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle begins route at start_index 0",
+    "description": "A vehicle anchored at start_index 0 serves one shipment.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle starts at the last valid location index (boundary)",
+    "description": "start_index set to len(location)-1 is accepted as the last valid anchor.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 2
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 0
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Vehicle End Index",
+    "title": "Closed route returns to its origin depot",
+    "description": "end_index equal to start_index forces the vehicle back to its origin.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.end_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; route ends at location_index 0 (== start_index)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Vehicle End Index",
+    "title": "Route ends at a distinct end depot",
+    "description": "end_index differing from start_index terminates the route at another location.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 3
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.end_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; route ends at location_index 3",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Vehicle End Index",
+    "title": "Route ends at the last valid location index (boundary)",
+    "description": "end_index set to len(location)-1 is accepted as the last valid endpoint.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 2
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 0
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.end_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; route ends at location_index 2",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Capacity Constraint",
+    "title": "Onboard load within a single-dimension capacity",
+    "description": "A shipment amount below capacity keeps onboard load within the bound.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            40
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= 100 at every step",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Capacity Constraint",
+    "title": "Demand exactly equal to capacity is feasible (boundary)",
+    "description": "A shipment amount equal to capacity is at-the-limit and still assignable.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            50
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            50
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load == 50 (<= capacity) between the steps",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-008",
+    "feature": "Capacity Constraint",
+    "title": "Multi-dimension capacity within both bounds",
+    "description": "A 2-D capacity with a 2-D amount within both dimensions is accepted.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10,
+            100
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            2,
+            50
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= [10,100] on both dimensions",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-009",
+    "feature": "Vehicle Time Window",
+    "title": "Route completes within a comfortable shift",
+    "description": "A 09:00-17:00 shift comfortably contains the route for one shipment.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "34.1478, -118.1445"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 0
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; route end <= 61200",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-010",
+    "feature": "Vehicle Time Window",
+    "title": "Feasible route inside a tight shift window",
+    "description": "A short 09:00-10:00 shift still contains a single nearby shipment.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "34.0195, -118.4912"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            36000
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 0
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; route end <= 36000",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-011",
+    "feature": "Vehicle Time Window",
+    "title": "Route end bounded by the shift end (boundary)",
+    "description": "The whole route (arrival + service) must finish no later than time_window[1].",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "34.1478, -118.1445"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            43200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 0
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; route end <= 43200",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-012",
+    "feature": "Shipment Pickup",
+    "title": "Pickup at a valid in-range index",
+    "description": "A shipment pickup at a valid index distinct from delivery is served.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.pickup.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup served before delivery on the same vehicle",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-013",
+    "feature": "Shipment Pickup",
+    "title": "Pickup at the last valid index (boundary)",
+    "description": "A pickup index equal to len(location)-1 is the last valid reference.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 2
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.pickup.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup at location_index 2 served",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-014",
+    "feature": "Shipment Pickup",
+    "title": "Pickup step starts within its time window",
+    "description": "A pickup constrained to a window is served within that window.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                43200
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.pickup.time_windows",
+        "shipments.pickup.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup starts within [36000,43200]",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-015",
+    "feature": "Shipment Pickup",
+    "title": "Pickup with an instant window (boundary)",
+    "description": "A pickup with an instant window [t,t] must start exactly at t.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                36000
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.pickup.time_windows"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup starts exactly at 36000",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-016",
+    "feature": "Shipment Delivery",
+    "title": "Delivery served after pickup at a distinct index",
+    "description": "The delivery step at a distinct index is served after the pickup.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.delivery.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; delivery served after pickup",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-017",
+    "feature": "Shipment Delivery",
+    "title": "Delivery index equal to pickup index (boundary, zero-distance)",
+    "description": "A shipment whose delivery index equals its pickup index is accepted.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 1
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.delivery.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; delivery index == pickup index accepted (zero-distance leg)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-018",
+    "feature": "Shipment Delivery",
+    "title": "Delivery step served within a reachable window after pickup",
+    "description": "A delivery window reachable after the pickup is honored.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                39600
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                43200,
+                50400
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.delivery.time_windows",
+        "shipments.delivery.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; delivery starts within [43200,50400] after the pickup",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-019",
+    "feature": "Shipment Delivery",
+    "title": "Delivery with an instant window (boundary)",
+    "description": "A delivery with an instant window [t,t] reachable after pickup is served exactly at t.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                39600
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                46800,
+                46800
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.delivery.time_windows"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; delivery starts exactly at 46800",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-020",
+    "feature": "Shipment Amount",
+    "title": "Carried amount within capacity between the steps",
+    "description": "A shipment amount below capacity is carried from pickup to delivery.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            5
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            3
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.amount",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= 5 between pickup and delivery",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-021",
+    "feature": "Shipment Amount",
+    "title": "Amount equal to capacity is feasible (boundary)",
+    "description": "A shipment amount equal to capacity is at-the-limit and carried.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            5
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            5
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.amount",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load == 5 (<= capacity) between the steps",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-022",
+    "feature": "Shipment Amount",
+    "title": "Multi-dimension amount within capacity",
+    "description": "A 2-D amount matches a 2-D capacity and stays within both bounds.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10,
+            10
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.amount",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= [10,10] on both dimensions",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-023",
+    "feature": "Capacity + Closed Route (combination)",
+    "title": "Closed-route vehicle serves a capacitated shipment",
+    "description": "A vehicle with start_index==end_index serves a shipment within capacity.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            10
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            4
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= 10 at every step; route ends at start_index",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-024",
+    "feature": "Capacity + Amount + Indices (combination)",
+    "title": "Shipment within capacity across distinct indices",
+    "description": "Distinct pickup/delivery indices with an amount within capacity are served.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            8
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 3
+          },
+          "amount": [
+            6
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.pickup.location_index",
+        "shipments.delivery.location_index",
+        "shipments.amount",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= 8 between pickup and delivery",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-025",
+    "feature": "Windows: vehicle + pickup + delivery (combination)",
+    "title": "All time windows satisfied together",
+    "description": "Vehicle shift plus pickup and delivery windows are jointly satisfied.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                43200
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                43200,
+                50400
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup within [36000,43200], delivery within [43200,50400], route end <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-026",
+    "feature": "Multi-dimension capacity + amount (combination)",
+    "title": "2-D capacity carries a 2-D shipment across indices",
+    "description": "A 2-D capacity with a 2-D amount within both bounds over distinct indices.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "37.8044, -122.2712"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            10,
+            100
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 3
+          },
+          "amount": [
+            3,
+            60
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "shipments.amount",
+        "vehicles.end_index",
+        "shipments.delivery.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= [10,100] on both dimensions",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-027",
+    "feature": "Two shipments on one vehicle (combination)",
+    "title": "Two shipments within capacity and windows",
+    "description": "Two shipments are co-served by one vehicle within capacity and their windows.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                43200
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                43200,
+                50400
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S2P",
+            "location_index": 3,
+            "time_windows": [
+              [
+                36000,
+                43200
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S2D",
+            "location_index": 4,
+            "time_windows": [
+              [
+                43200,
+                50400
+              ]
+            ]
+          },
+          "amount": [
+            4
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.amount",
+        "vehicles.capacity",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; both shipments assigned; each pickup precedes its delivery; onboard load <= 10 at every step",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-028",
+    "feature": "Two vehicles, distinct depots (combination)",
+    "title": "Two vehicles serve two shipments within capacity",
+    "description": "Two vehicles with distinct start/end depots each serve a capacitated shipment.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            10
+          ]
+        },
+        {
+          "id": "V2",
+          "start_index": 5,
+          "end_index": 5,
+          "capacity": [
+            10
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            5
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S2P",
+            "location_index": 3
+          },
+          "delivery": {
+            "id": "S2D",
+            "location_index": 4
+          },
+          "amount": [
+            5
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; both shipments assigned; for each vehicle onboard load <= 10 at every step",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-029",
+    "feature": "Windows + amount (combination)",
+    "title": "Windowed shipment carried within capacity",
+    "description": "A shipment with pickup/delivery windows and an amount within capacity is served.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                43200
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                46800,
+                54000
+              ]
+            ]
+          },
+          "amount": [
+            7
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows",
+        "shipments.amount",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup within [36000,43200], delivery within [46800,54000]; onboard load <= 10",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-030",
+    "feature": "Tight shift + shipment windows (combination)",
+    "title": "Tight shift still contains a windowed shipment",
+    "description": "A tight vehicle shift contains a shipment whose windows fall inside it.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "34.0195, -118.4912"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "time_window": [
+            32400,
+            43200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                34200,
+                36000
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                36000,
+                39600
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window",
+        "vehicles.end_index",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; pickup and delivery within their windows; route end <= 43200",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-031",
+    "feature": "Multi-dimension capacity + two shipments (combination)",
+    "title": "Two 2-D shipments stack within a 2-D capacity",
+    "description": "Two shipments with 2-D amounts are carried within a 2-D capacity and their windows.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10,
+            100
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2
+          },
+          "amount": [
+            3,
+            40
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S2P",
+            "location_index": 3
+          },
+          "delivery": {
+            "id": "S2D",
+            "location_index": 4
+          },
+          "amount": [
+            4,
+            50
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "shipments.amount",
+        "shipments.pickup.location_index",
+        "shipments.delivery.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; both shipments assigned; onboard load <= [10,100] on both dimensions at every step",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-032",
+    "feature": "Broad combination",
+    "title": "Vehicle shift + end depot + windowed, capacitated shipment",
+    "description": "A single vehicle exercises shift, end depot, capacity, and both shipment windows together.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 3,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                43200
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                43200,
+                50400
+              ]
+            ]
+          },
+          "amount": [
+            6
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; shipment S1 assigned; onboard load <= 10; windows honored; route ends at location_index 3 <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-033",
+    "feature": "Full Scenario (combination)",
+    "title": "Five vehicles serve twelve windowed, capacitated shipments",
+    "description": "A realistic full-scale request: 5 vehicles with shifts and capacities serve 12 windowed shipments; assert only invariants.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            20
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V2",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            20
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V3",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            20
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V4",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            20
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V5",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            20
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "shipments": [
+        {
+          "pickup": {
+            "id": "S1P",
+            "location_index": 1,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S1D",
+            "location_index": 2,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S2P",
+            "location_index": 2,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S2D",
+            "location_index": 3,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S3P",
+            "location_index": 3,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S3D",
+            "location_index": 4,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S4P",
+            "location_index": 4,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S4D",
+            "location_index": 5,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S5P",
+            "location_index": 5,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S5D",
+            "location_index": 6,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S6P",
+            "location_index": 6,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S6D",
+            "location_index": 7,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S7P",
+            "location_index": 7,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S7D",
+            "location_index": 8,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S8P",
+            "location_index": 8,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S8D",
+            "location_index": 9,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S9P",
+            "location_index": 9,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S9D",
+            "location_index": 10,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S10P",
+            "location_index": 10,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S10D",
+            "location_index": 11,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S11P",
+            "location_index": 11,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S11D",
+            "location_index": 12,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        },
+        {
+          "pickup": {
+            "id": "S12P",
+            "location_index": 12,
+            "time_windows": [
+              [
+                36000,
+                50400
+              ]
+            ]
+          },
+          "delivery": {
+            "id": "S12D",
+            "location_index": 13,
+            "time_windows": [
+              [
+                39600,
+                57600
+              ]
+            ]
+          },
+          "amount": [
+            3
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "shipments.pickup.location_index",
+        "shipments.delivery.location_index",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows",
+        "shipments.amount"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; every shipment assigned XOR in result.unassigned with a reason; for each vehicle onboard load <= 20 on every dimension at every step; each pickup precedes its delivery; every route end <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  }
+]

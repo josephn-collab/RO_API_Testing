@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Studio — Route Optimization Test Case Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* thin scrollbars + monospace for JSON cells */
+    pre { white-space: pre-wrap; word-break: break-word; }
+    .tree-scroll { max-height: 460px; overflow-y: auto; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+  <div class="max-w-7xl mx-auto p-6">
+
+    <header class="mb-6">
+      <h1 class="text-2xl font-bold">Nextbillion.ai QA Studio</h1>
+      <p class="text-sm text-slate-500">
+        NextBillion.ai Route Optimization — click a scenario, generate a Claude prompt, paste the result back, validate against the OpenAPI spec.
+      </p>
+    </header>
+
+    <!-- Load banner (shown if openapi.json can't be fetched, e.g. opened via file://) -->
+    <div id="load-banner" class="hidden mb-4 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- ===================== STEP 1: SCENARIO ===================== -->
+      <section class="bg-white rounded-lg shadow-sm p-5">
+        <h2 class="font-semibold text-lg mb-3">1 · Scenario</h2>
+
+        <label class="block text-sm font-medium mb-1">Region</label>
+        <select id="region" class="w-full border rounded px-2 py-1 mb-3 text-sm"></select>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="block text-sm font-medium mb-1">Vehicles</label>
+            <input id="vehicles" type="number" min="1" value="5" class="w-full border rounded px-2 py-1 text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Jobs</label>
+            <input id="jobs" type="number" min="1" value="25" class="w-full border rounded px-2 py-1 text-sm" />
+          </div>
+        </div>
+
+        <label class="block text-sm font-medium mb-1">Test types</label>
+        <div class="flex flex-wrap gap-3 text-sm">
+          <label class="inline-flex items-center gap-1"><input type="checkbox" class="testtype" value="Positive" checked /> Positive</label>
+          <label class="inline-flex items-center gap-1"><input type="checkbox" class="testtype" value="Negative" checked /> Negative</label>
+        </div>
+
+        <div class="mt-4 border-t pt-3">
+          <label for="total-cases" class="block text-sm font-medium mb-1">Number of test cases</label>
+          <input id="total-cases" type="number" min="1" value="40" class="w-full border rounded px-2 py-1 text-sm" />
+          <p class="text-xs text-slate-400 mt-1">
+            A <b>maximum</b>, not a target. The suite is 90% Positive / 10% Negative, split across your
+            test subjects by each field's authored coverage aspects. Narrow selections yield fewer than
+            this number — nothing is invented to reach it.
+          </p>
+          <div id="plan-readout" class="mt-3 text-xs bg-slate-50 border rounded p-2 leading-5"></div>
+        </div>
+
+        <p id="loc-count" class="text-xs text-slate-400 mt-3"></p>
+      </section>
+
+      <!-- ===================== STEP 2: FEATURE TREE ===================== -->
+      <section class="bg-white rounded-lg shadow-sm p-5 lg:col-span-2">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-semibold text-lg">2 · Features
+            <span class="text-xs font-normal text-slate-400">(live from openapi.json — auto-syncs)</span>
+          </h2>
+          <div class="flex gap-2 text-xs">
+            <button id="load-tree" class="px-2 py-1 rounded border bg-slate-800 text-white hover:bg-slate-700">Load</button>
+            <button id="refresh-tree" class="px-2 py-1 rounded border hover:bg-slate-50">Refresh</button>
+            <button id="expand-all" class="px-2 py-1 rounded border hover:bg-slate-50">Expand all</button>
+            <button id="collapse-all" class="px-2 py-1 rounded border hover:bg-slate-50">Collapse all</button>
+            <button id="clear-all" class="px-2 py-1 rounded border hover:bg-slate-50">Clear</button>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mb-2">
+          Every selected field carries a role pill:
+          <span class="bg-indigo-50 text-indigo-700 border border-indigo-300 rounded px-1 text-[10px]">target</span>
+          gets its own test cases ·
+          <span class="bg-slate-100 text-slate-500 border border-slate-300 rounded px-1 text-[10px]">support</span>
+          is injected into request bodies for realism. Click a pill to flip it.
+        </p>
+        <div id="tree" class="tree-scroll text-sm border rounded p-3 bg-slate-50">
+          <span class="text-slate-400">Loading feature tree…</span>
+        </div>
+        <p id="feature-count" class="text-xs text-slate-400 mt-2">0 fields selected</p>
+      </section>
+    </div>
+
+    <!-- ===================== STEP 3: GENERATE & VALIDATE ===================== -->
+    <section class="bg-white rounded-lg shadow-sm p-5 mt-6">
+      <h2 class="font-semibold text-lg mb-3">3 · Generate &amp; Validate</h2>
+
+      <div class="flex flex-wrap gap-3 mb-4">
+        <button id="copy-prompt" class="px-4 py-2 rounded bg-slate-800 text-white text-sm hover:bg-slate-700">
+          Copy Claude prompt
+        </button>
+        <button id="show-prompt" class="px-4 py-2 rounded border text-sm hover:bg-slate-50">
+          Preview prompt
+        </button>
+        <button id="maximize-prompt" class="px-4 py-2 rounded border text-sm hover:bg-slate-50">
+          Maximize ⛶
+        </button>
+        <span id="copy-status" class="text-sm text-green-600 self-center"></span>
+      </div>
+
+      <!-- Output destination: Claude writes the JSON here instead of printing the long array. -->
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+        <label for="save-path" class="text-sm font-medium">Save output to</label>
+        <input id="save-path" type="text" value="output data/testcases.json"
+          class="flex-1 min-w-[16rem] border rounded px-2 py-1 text-sm font-mono" />
+        <span class="text-xs text-slate-400">Claude saves the JSON to this file instead of printing it — edit to your local path.</span>
+      </div>
+
+      <p id="kb-status" class="text-xs text-slate-400 mt-3"></p>
+      <p id="skill-status" class="text-xs text-slate-400 mt-1"></p>
+
+      <details id="prompt-preview" class="mb-4">
+        <summary class="text-sm text-slate-500 cursor-pointer">Prompt preview</summary>
+        <pre id="prompt-text" class="mt-2 text-xs bg-slate-900 text-slate-100 rounded p-3 max-h-72 overflow-auto"></pre>
+      </details>
+
+      <!-- Suite hand-off: (left) optional input to extend · (right) Claude's returned output.
+           Both are peer panels at the same level so the "feed in / bring back" pair reads together. -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+        <!-- INPUT: extend an existing suite (affects the generated prompt) -->
+        <div class="rounded border border-indigo-200 bg-indigo-50 p-3">
+          <label class="block text-sm font-medium mb-1">Add more to an existing suite <span class="text-slate-500 font-normal">(optional)</span></label>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="existing-load" type="file" multiple accept=".json,application/json" class="text-sm border rounded px-2 py-1 bg-white" />
+            <button id="existing-clear" class="px-2 py-1 text-xs rounded border hover:bg-white">Clear</button>
+          </div>
+          <span id="existing-status" class="block text-xs text-slate-500 mt-1">No existing suite loaded — the prompt generates a fresh suite.</span>
+          <p class="text-xs text-slate-400 mt-1">Load one or more previously generated <code>.json</code> suites to make the prompt generate only NEW, non-duplicate cases (IDs continue from where they left off).</p>
+        </div>
+
+        <!-- OUTPUT: load Claude's returned result for validation -->
+        <div class="rounded border border-emerald-200 bg-emerald-50 p-3">
+          <label class="block text-sm font-medium mb-1">Load Claude's result <span class="text-slate-500 font-normal">(recommended: a <code>.json</code> file)</span></label>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="file-load" type="file" accept=".json,application/json" class="text-sm border rounded px-2 py-1 bg-white" />
+            <span class="text-xs text-slate-400">or paste below</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Loading a <code>.json</code> file avoids copy/paste corruption — it fills the box below and validates automatically.</p>
+        </div>
+
+      </div>
+
+      <label class="block text-sm font-medium mb-1">Paste Claude's JSON result here</label>
+      <textarea id="paste" rows="8" placeholder='Paste the JSON array of test cases returned by Claude…'
+        class="w-full border rounded px-3 py-2 text-xs font-mono mb-3"></textarea>
+
+      <div class="flex gap-3 mb-4">
+        <button id="validate" class="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-500">
+          Validate &amp; Render
+        </button>
+        <button id="download-csv" disabled
+          class="px-4 py-2 rounded border text-sm hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
+          ⬇ Download CSV
+        </button>
+        <span id="validate-status" class="text-sm self-center"></span>
+      </div>
+
+      <div id="results"></div>
+    </section>
+
+    <!-- ===================== COVERAGE MATRIX ===================== -->
+    <section class="bg-white rounded-lg shadow-sm p-5 mt-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold text-lg">4 · Coverage
+          <span class="text-xs font-normal text-slate-400">(features × scenario kinds — updates as you select / load / render)</span>
+        </h2>
+        <span class="text-xs text-slate-400">gaps feed into the next prompt</span>
+      </div>
+      <div id="coverage" class="text-sm"></div>
+    </section>
+
+    <footer class="text-xs text-slate-400 mt-8">
+      Static page · no server code · openapi.json read live for the feature tree and AJV validation.
+      Launch via <code>start.command</code>. Generation is manual (copy prompt → paste result); execution is handled separately.
+    </footer>
+  </div>
+
+  <!-- Floating maximized prompt window -->
+  <div id="prompt-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between px-5 py-3 border-b">
+        <h3 class="font-semibold text-sm">Generated Claude Prompt</h3>
+        <div class="flex gap-2">
+          <button id="modal-copy" class="px-3 py-1 text-sm rounded border hover:bg-slate-50">Copy</button>
+          <button id="modal-close" class="px-3 py-1 text-sm rounded bg-slate-800 text-white hover:bg-slate-700">Close ✕</button>
+        </div>
+      </div>
+      <pre id="modal-prompt" class="flex-1 overflow-auto m-0 p-5 text-xs bg-slate-900 text-slate-100 leading-5"></pre>
+    </div>
+  </div>
+
+  <!-- import with a cache-bust so editing app.js takes effect on a plain reload (no hard-refresh needed),
+       matching the ?_=Date.now() pattern app.js already uses for its own fetches. -->
+  <script type="module">import("./app.js?_=" + Date.now());</script>
+</body>
+</html>

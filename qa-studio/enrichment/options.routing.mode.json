@@ -1,0 +1,37 @@
+{
+  "path": "options.routing.mode",
+  "summary": "Travel mode determining the road network and which routing attributes apply.",
+  "range": "Enum: car (default) | truck | motorcycle | bike | walk. Non-car may be region-limited.",
+  "constraints": [],
+  "businessRules": [
+    "truck_size/truck_weight/hazmat_type/truck_axle_load require mode=truck; allow=taxi requires mode=car.",
+    "mode defines: Define the traveling mode to be used for determining the optimized routes. Only the car profile is enabled by default. Please note that other profiles might not be available for all regions. Please…",
+    "Valid options: car, truck, motorcycle, bike, walk. Each affects solver behavior differently.",
+    "mode=truck enables truck_size/truck_weight/hazmat attributes; other modes restrict them.",
+    "Must stay consistent with: options.routing.truck_size, options.routing.hazmat_type. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A value outside the enum -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: each mode value.",
+    "Negative: truck_weight set with mode=car -> 400 (truck-only attribute).",
+    "Positive: test with mode set to \"car\"",
+    "Positive: test with mode set to \"truck\"",
+    "Positive: test with mode set to \"motorcycle\"",
+    "Positive: test with mode set to \"bike\"",
+    "Positive: test with mode set to \"walk\"",
+    "Positive: omit optional field mode",
+    "Interaction: Negative: truck_weight with mode=car -> 400.",
+    "Interaction: Negative: allow=[taxi] with mode=truck -> 400."
+  ],
+  "related": [
+    "options.routing.truck_size",
+    "options.routing.hazmat_type"
+  ],
+  "rules": [
+    "routing-mode-gating"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

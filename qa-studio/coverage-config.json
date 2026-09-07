@@ -1,0 +1,100 @@
+{
+  "_comment": "Coverage Engine config. perFeatureArchetypes uses the canonical archetype vocabulary shared with the coverage matrix: positive | negative. globalSuites are request-wide obligations emitted once. interactionLevel/scenario* are consumed by the graph-interaction pass; curated = graph-curated edges + rule hyperedges + bounded cluster scenarios (no generic pairwise).",
+  "perFeatureArchetypes": [
+    "positive",
+    "negative"
+  ],
+  "_globalSuitesComment": "Request-wide negative obligations (not tied to any one field). NOT currently generated — the 10% negative budget is fully consumed by per-feature negatives. Retained for a future dedicated global-negative pass.",
+  "globalSuites": [
+    "auth",
+    "schema",
+    "error",
+    "constraint"
+  ],
+  "interactionLevel": "curated",
+  "scenarioPerCluster": 1,
+  "clusterSizeCap": 5,
+  "batchSize": 6,
+
+  "_fieldRolesComment": "Default role for a SELECTED field. target = the field is a test subject and receives dedicated cases sized by its compiled coverage obligations. support = the field is injected into generated request bodies as realistic context but never becomes a dedicated test subject on its own. Supporting fields' negative obligations are still funded by the per-feature planner — the role toggle only affects positive dedicated cases. Resolution order in app.js: user toggle in the feature tree > supportPaths prefix match > supportLeaves leaf-name match > target. Keep this list CONSERVATIVE — marking a constraint-bearing field as support removes its dedicated positive coverage. This list lives here as data so it can later migrate into enrichment/ as an authored `role` field without touching code.",
+  "fieldRoles": {
+    "supportLeaves": [
+      "id",
+      "description"
+    ],
+    "supportPaths": [
+      "locations",
+      "vehicles.id",
+      "vehicles.description",
+      "vehicles.start_index",
+      "vehicles.end_index",
+      "vehicles.capacity",
+      "vehicles.time_window",
+      "vehicles.skills",
+      "jobs.id",
+      "jobs.description",
+      "jobs.location_index",
+      "jobs.delivery",
+      "jobs.pickup",
+      "jobs.service",
+      "jobs.time_windows",
+      "jobs.skills",
+      "jobs.priority",
+      "jobs.setup",
+      "shipments.pickup.id",
+      "shipments.pickup.description",
+      "shipments.pickup.location_index",
+      "shipments.pickup.service",
+      "shipments.pickup.time_windows",
+      "shipments.pickup.setup",
+      "shipments.delivery.id",
+      "shipments.delivery.description",
+      "shipments.delivery.location_index",
+      "shipments.delivery.service",
+      "shipments.delivery.time_windows",
+      "shipments.delivery.setup",
+      "shipments.delivery.location_index",
+      "shipments.skills",
+      "shipments.priority",
+      "depots.id",
+      "depots.location_index",
+      "depots.description",
+      "depots.time_windows",
+      "depots.service",
+      "coordinate_jobs.id",
+      "coordinate_jobs.location_index",
+      "coordinate_jobs.skills",
+      "coordinate_jobs.service",
+      "coordinate_jobs.setup",
+      "coordinate_jobs.time_windows"
+    ]
+  },
+
+  "_ratioComment": "The suite-level allocation rule. positiveShare is a GLOBAL ratio applied to the whole suite (0.9 = 90% Positive / 10% Negative) — per-feature obligation ratios no longer decide the split. combinationShare is the slice of the suite spent on multi-feature interaction cases, funded from INSIDE the positive share (so N=40 -> 36 Positive = 30 per-feature + 6 combination, and 4 Negative). The requested count N is a CEILING, not a target: the planner produces the largest suite <= N whose positive and negative halves are both fully backed by authored coverage aspects, and generating fewer than N is normal. Because the knowledge base is ~63% positive while this rule demands 90%, POSITIVE aspects are usually the binding constraint — a narrow selection yields a smaller suite. Nothing is ever invented to reach N.",
+  "ratio": {
+    "positiveShare": 0.9,
+    "combinationShare": 0.15
+  },
+
+  "_countsComment": "Retained only as a floor for target features whose enrichment authored no obligations at all. The planner is obligation-driven; these are not user-facing knobs.",
+  "counts": {
+    "positive": 2,
+    "negative": 2
+  },
+
+  "_scaleComment": "Scale-tier mix for cases that are scale-meaningful (e.g. multi-vehicle/job interactions, combination cases). small = 1 vehicle / 1-2 jobs; medium ≈ 40% of the UI's requested counts (rounded, with sensible floors); large = the full UI counts. The scaleSensitiveRules list identifies which cross-field rules involve scenario scale (e.g. multi-depot reachability needs >1 vehicle to demonstrate). Cases tied to features with interaction obligations or any of these rules get split 40/40/20 across tiers; everything else stays small. Tier sizes auto-scale with the Scenario UI's vehicle/job inputs — no fixed numbers here.",
+  "scaleMix": {
+    "small": 0.4,
+    "medium": 0.4,
+    "large": 0.2
+  },
+  "scaleSensitiveRules": [
+    "multi-depot-reachability",
+    "max-stops-tasks-cap",
+    "max-duration-distance-cap",
+    "matrix-pairing",
+    "load-type-compatibility",
+    "priority-tiebreaker",
+    "relations-supersede-soft"
+  ]
+}

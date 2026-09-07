@@ -1,0 +1,27 @@
+{
+  "path": "vehicles.costs.deadhead_distance_penalty",
+  "summary": "Penalty per unit of deadhead (empty-leg) distance beyond max_deadhead_distance.",
+  "range": "Integer. Default 0.",
+  "constraints": [],
+  "businessRules": [
+    "Soft: discourages long empty first/last legs; pairs with max_deadhead_distance.",
+    "deadhead_distance_penalty defines: Specify a penalty to be applied for each unit of deadhead distance exceeding the specified max_deadhead_distance for the vehicle. Default value is 0. Please note that this is ineffective when a max…",
+    "Must stay consistent with: vehicles.max_deadhead_distance. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: high penalty reduces empty-travel distance.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field deadhead_distance_penalty"
+  ],
+  "related": [
+    "vehicles.max_deadhead_distance"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

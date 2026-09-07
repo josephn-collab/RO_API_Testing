@@ -1,0 +1,39 @@
+{
+  "path": "options.routing.exclude",
+  "summary": "HARD road features to exclude; if no feasible route remains, the request fails.",
+  "range": "Array enum: toll | highway | ferry | service_road | uturn | sharp_turn | left_turn | right_turn | none. ferry excluded by default.",
+  "constraints": [
+    "Values from the enum set."
+  ],
+  "businessRules": [
+    "Hard filter: unlike avoid, a route MUST honor it. If none exists -> 4xx.",
+    "exclude defines: Specify the type of objects/maneuvers that the route should exclude. This is a hard-constraint. The optimizer would exclude the given objects/maneuvers and return feasible, alternative routes. If n…",
+    "Each element in exclude must be valid and consistent with related fields.",
+    "Valid options: toll, highway, ferry, service_road, uturn, .... Each affects solver behavior differently.",
+    "Must stay consistent with: options.routing.avoid. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A value outside the enum -> 400.",
+    "No feasible route under the exclusions -> 4xx."
+  ],
+  "testingGuidance": [
+    "Positive: exclude [\"toll\"].",
+    "Negative: exclusions that leave no route -> 4xx.",
+    "Positive: test with exclude set to \"toll\"",
+    "Positive: test with exclude set to \"highway\"",
+    "Positive: test with exclude set to \"ferry\"",
+    "Positive: test with exclude set to \"service_road\"",
+    "Positive: test with exclude set to \"uturn\"",
+    "Positive: test with exclude set to \"sharp_turn\"",
+    "Positive: test with exclude set to \"left_turn\"",
+    "Positive: test with exclude set to \"right_turn\"",
+    "Positive: test with exclude set to \"none\"",
+    "Positive: omit optional field exclude"
+  ],
+  "related": [
+    "options.routing.avoid"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

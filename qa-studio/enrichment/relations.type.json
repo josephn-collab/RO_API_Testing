@@ -1,0 +1,55 @@
+{
+  "path": "relations.type",
+  "summary": "The kind of relation constraint. Required (with steps).",
+  "range": "Required enum: in_same_route | in_sequence | in_direct_sequence | precedence (exactly 2 steps) | pinned (requires vehicle).",
+  "constraints": [
+    "Required; steps is also mandatory.",
+    "precedence needs exactly 2 steps.",
+    "pinned requires a vehicle.",
+    "The same vehicle cannot be reused across relations."
+  ],
+  "businessRules": [
+    "type and steps are mandatory on every relation (§3.8).",
+    "An unsatisfiable relation flags ALL of its tasks unassigned (§3.8).",
+    "Soft constraints (options.constraint) are ineffective when relations is used (§3.8).",
+    "type defines: Specifies the type of relation constraint. The following types are supported: * in_same_route: Ensures that all steps are covered in the same route in solution. * in_sequence: Ensures that all step…",
+    "Valid options: in_same_route, in_sequence, in_direct_sequence, precedence, pinned. Each affects solver behavior differently.",
+    "Must stay consistent with: relations.steps, relations.steps.id, relations.vehicle. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A type value outside the enum -> 400 input validation failed (API Facts §4).",
+    "precedence with a step count != 2 -> 400 (§3.8).",
+    "pinned without a vehicle -> 400 (§3.8)."
+  ],
+  "testingGuidance": [
+    "Positive: in_same_route relation keeps its steps on a single vehicle (§3.8).",
+    "Positive: in_sequence relation with 2+ ordered steps served in the listed order (§3.8).",
+    "Positive: precedence with exactly 2 steps (first precedes second) (§3.8).",
+    "Positive: pinned with a vehicle assigned (§3.8).",
+    "Negative-validation: a type value outside the enum -> 400 (API Facts §4).",
+    "Negative-validation: precedence with a step count != 2 -> 400 (§3.8).",
+    "Negative-validation: pinned without a vehicle -> 400 (§3.8).",
+    "Negative-infeasible: an unsatisfiable relation (ordering that cannot be met) -> all its tasks unassigned (§3.8).",
+    "Positive: test with type set to \"in_same_route\"",
+    "Positive: test with type set to \"in_sequence\"",
+    "Positive: test with type set to \"in_direct_sequence\"",
+    "Positive: test with type set to \"precedence\"",
+    "Positive: test with type set to \"pinned\"",
+    "Positive: omit optional field type",
+    "Interaction: Negative: relation type 'sequence' with steps=[{type: 'job', id: 'J999'}] but J999 does not exist in jobs -> HTTP 400.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V999' but V999 not in vehicles -> HTTP 400.",
+    "Interaction: Positive: relation type 'sequence' with steps=[{type: 'job', id: 'J1'}, {type: 'delivery', id: 'S1'}] where both ids exist -> accepted.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V1' appears twice (two different relations) -> HTTP 400 (duplicate pinning)."
+  ],
+  "related": [
+    "relations.steps",
+    "relations.steps.id",
+    "relations.vehicle"
+  ],
+  "rules": [
+    "relations-reference-integrity"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.8 + API Facts §4"
+}

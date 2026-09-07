@@ -1,0 +1,25 @@
+{
+  "path": "vehicles.costs.per_order",
+  "summary": "Cost per fulfilled order (job or shipment); always added to route cost.",
+  "range": "Integer.",
+  "constraints": [],
+  "businessRules": [
+    "per_order defines: Define the cost incurred by the vehicle for fulfilling one order. A job or a shipment, both are considered as a single order. When per_order cost is defined, the final vehicle cost is calculated as…",
+    "Must stay consistent with: vehicles.costs. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: per_order cost balances serving more orders against the extra cost.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field per_order"
+  ],
+  "related": [
+    "vehicles.costs"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

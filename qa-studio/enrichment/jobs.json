@@ -1,0 +1,30 @@
+{
+  "path": "jobs",
+  "summary": "Array of single-location tasks. Provide jobs and/or shipments (at least one of the two required).",
+  "range": "Array of job objects. Each requires id + location_index.",
+  "constraints": [
+    "At least one of jobs / shipments must be present.",
+    "Each job requires id and location_index."
+  ],
+  "businessRules": [
+    "jobs defines: jobs object is used to collect the details of a particular job or task that needs to be completed as part of the optimization process. Each job can have either a pickup or delivery step, but not bo…",
+    "Each element in jobs must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.location_index, shipments. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Neither jobs nor shipments present -> 400.",
+    "A job without location_index -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: a few feasible jobs.",
+    "Negative: request with neither jobs nor shipments -> 400.",
+    "Positive: omit optional field jobs"
+  ],
+  "related": [
+    "jobs.location_index",
+    "shipments"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,23 @@
+{
+  "path": "options.grouping",
+  "summary": "Task/route grouping: cluster nearby tasks or bias routes by zone/proximity.",
+  "range": "Object: { order_grouping?, route_grouping?, proximity_factor? }.",
+  "constraints": [],
+  "businessRules": [
+    "grouping defines: Set grouping rules for the tasks and routes. * Use order_grouping to group nearby tasks * Use route_grouping to control route sequencing.",
+    "Must stay consistent with: options.grouping.order_grouping, options.grouping.route_grouping, options.grouping.proximity_factor. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: proximity_factor 0.5 for tighter routes.",
+    "Positive: omit optional field grouping"
+  ],
+  "related": [
+    "options.grouping.order_grouping",
+    "options.grouping.route_grouping",
+    "options.grouping.proximity_factor"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

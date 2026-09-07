@@ -1,0 +1,27 @@
+{
+  "path": "depots.throughput.max_vehicles",
+  "summary": "Soft cap on concurrent vehicles at the depot; needs vehicle_penalty.",
+  "range": "Integer. Soft — requires vehicle_penalty to take effect.",
+  "constraints": [
+    "Requires vehicle_penalty to be effective."
+  ],
+  "businessRules": [
+    "max_vehicles defines: Specify the maximum number of vehicles that the depot can service simultaneously. This is a soft constraint and requires vehicle_penalty to be provided along with it.",
+    "Must stay consistent with: depots.throughput.vehicle_penalty. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: exceeding max_vehicles incurs vehicle_penalty, not rejection.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_vehicles"
+  ],
+  "related": [
+    "depots.throughput.vehicle_penalty"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

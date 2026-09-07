@@ -1,0 +1,37 @@
+{
+  "path": "vehicles.max_depot_runs",
+  "summary": "Max number of returns to depot to reload during a route.",
+  "range": "Integer, default 1. Requires start_depot_ids. Conflicts with relations, layover_config, deadhead constraints.",
+  "constraints": [
+    "Requires a start depot.",
+    "Cannot combine with max_deadhead_distance/duration, layover_config, relations."
+  ],
+  "businessRules": [
+    "max_depot_runs defines: Specify the maximum number of times the vehicle can return to the designated depot in order to reload items/cargo for completing additional tasks. Please note that: * start_depot_id is required for…",
+    "Must stay consistent with: vehicles.start_depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "max_depot_runs > 1 without a start depot -> 400.",
+    "Combined with a conflicting field -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: max_depot_runs 2 lets a small vehicle reload and serve more demand.",
+    "Negative: max_depot_runs with layover_config also set -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_depot_runs",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Interaction: Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ],
+  "related": [
+    "vehicles.start_depot_ids"
+  ],
+  "rules": [
+    "multi-depot-reachability"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

@@ -1,0 +1,43 @@
+{
+  "path": "options.routing.hazmat_type",
+  "summary": "Hazardous-material categories for truck routing restrictions. mode=truck only.",
+  "range": "Array enum: explosives | gas | flammable_liquid | flammable_gas | organic | toxic | radioactive | corrosive | other. Requires mode=truck.",
+  "constraints": [
+    "Requires mode=truck.",
+    "Values from the enum set."
+  ],
+  "businessRules": [
+    "hazmat_type defines: Specify the type of hazardous material being carried and the service will avoid roads which are not suitable for the type of goods specified. Provide multiple values separated by a comma , . Please…",
+    "Each element in hazmat_type must be valid and consistent with related fields.",
+    "Valid options: explosives, gas, flammable_liquid, flammable_gas, organic, .... Each affects solver behavior differently.",
+    "Must stay consistent with: options.routing.mode. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "hazmat_type with mode != truck -> 400.",
+    "A value outside the enum -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: [\"flammable_liquid\"] with mode=truck routes around restrictions.",
+    "Negative: hazmat_type with mode=car -> 400.",
+    "Positive: test with hazmat_type set to \"explosives\"",
+    "Positive: test with hazmat_type set to \"gas\"",
+    "Positive: test with hazmat_type set to \"flammable_liquid\"",
+    "Positive: test with hazmat_type set to \"flammable_gas\"",
+    "Positive: test with hazmat_type set to \"organic\"",
+    "Positive: test with hazmat_type set to \"toxic\"",
+    "Positive: test with hazmat_type set to \"radioactive\"",
+    "Positive: test with hazmat_type set to \"corrosive\"",
+    "Positive: test with hazmat_type set to \"other\"",
+    "Positive: omit optional field hazmat_type",
+    "Interaction: Negative: truck_weight with mode=car -> 400.",
+    "Interaction: Negative: allow=[taxi] with mode=truck -> 400."
+  ],
+  "related": [
+    "options.routing.mode"
+  ],
+  "rules": [
+    "routing-mode-gating"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

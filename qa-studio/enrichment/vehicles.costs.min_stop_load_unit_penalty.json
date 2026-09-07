@@ -1,0 +1,26 @@
+{
+  "path": "vehicles.costs.min_stop_load_unit_penalty",
+  "summary": "Per-unit shortfall penalty vs min_stop_load (per dimension).",
+  "range": "Array of integers, one per capacity dimension.",
+  "constraints": [
+    "Same dimension count as min_stop_load / capacity."
+  ],
+  "businessRules": [
+    "Scales with how far below min_stop_load a delivery falls.",
+    "min_stop_load_unit_penalty defines: Defines the penalty applied per unit of load shortfall when a task’s load is lower than the vehicle’s configured min_stop_load. As a result, higher penalty values make the optimizer increasingly re…",
+    "Each element in min_stop_load_unit_penalty must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.min_stop_load. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: larger shortfall -> proportionally larger penalty.",
+    "Positive: omit optional field min_stop_load_unit_penalty"
+  ],
+  "related": [
+    "vehicles.min_stop_load"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

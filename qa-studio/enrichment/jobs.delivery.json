@@ -1,0 +1,39 @@
+{
+  "path": "jobs.delivery",
+  "summary": "Multi-dimensional quantity delivered at the job (loaded at depot, dropped here); consumes vehicle capacity.",
+  "range": "Array of non-negative integers; dimension count must match vehicles.capacity.",
+  "constraints": [
+    "Non-negative integers.",
+    "Dimension count consistent with capacity/pickup/amount."
+  ],
+  "businessRules": [
+    "Delivered load must fit remaining capacity at every step (C1).",
+    "delivery defines: In case the job involves a delivery step, use this attribute to describe delivery quantity. This attribute supports multidimensional quantities, to support delivering quantities of different units/…",
+    "Each element in delivery must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.capacity, jobs.pickup. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Negative value -> 400.",
+    "Dimension mismatch vs capacity -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: delivery [1] on capacity [4].",
+    "Boundary: delivery equal to capacity fits; +1 breaches -> unassigned.",
+    "Infeasible: delivery exceeds every vehicle's capacity -> unassigned (capacity reason).",
+    "Positive: omit optional field delivery",
+    "Interaction: Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+    "Interaction: Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+    "Interaction: Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+    "Interaction: Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400."
+  ],
+  "related": [
+    "vehicles.capacity",
+    "jobs.pickup"
+  ],
+  "rules": [
+    "capacity-dimension-consistency"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

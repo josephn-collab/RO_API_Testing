@@ -1,0 +1,35 @@
+{
+  "path": "vehicles.costs.per_km",
+  "summary": "Cost per km of distance; effective only when options.objective.travel_cost = distance.",
+  "range": "Integer. Mutually exclusive with per_hour.",
+  "constraints": [
+    "Effective only when travel_cost = distance.",
+    "Mutually exclusive with per_hour."
+  ],
+  "businessRules": [
+    "per_km defines: Define the cost incurred by the vehicle for travelling a distance of one kilometer (km). When per_km cost is used, the final vehicle cost is determined based on the given value, instead of distance…",
+    "Must stay consistent with: vehicles.costs.per_hour, options.objective. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "per_km and per_hour both set -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: per_km cost with travel_cost=distance.",
+    "Negative: per_km + per_hour together -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field per_km",
+    "Interaction: Negative: travel_cost=customized without cost_matrix -> 400.",
+    "Interaction: Behavioral: per_km cost ignored unless travel_cost=distance."
+  ],
+  "related": [
+    "vehicles.costs.per_hour",
+    "options.objective"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

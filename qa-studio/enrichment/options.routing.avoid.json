@@ -1,0 +1,40 @@
+{
+  "path": "options.routing.avoid",
+  "summary": "SOFT road features to avoid where possible (ferry avoided by default).",
+  "range": "Array enum: toll | highway | bbox | left_turn | right_turn | sharp_turn | uturn | service_road | ferry | none. Case-sensitive. bbox is a hard geo filter.",
+  "constraints": [
+    "Values from the enum set; case-sensitive."
+  ],
+  "businessRules": [
+    "Soft preference EXCEPT bbox, which hard-filters to a bounding box (min_lat,min_lon,max_lat,max_lon).",
+    "avoid defines: Specify the type of objects/maneuvers that the route should avoid. This is a soft-constraint. The optimizer would try to avoid the given objects/maneuvers as long as there are feasible, alternative…",
+    "Each element in avoid must be valid and consistent with related fields.",
+    "Valid options: toll, highway, bbox, left_turn, right_turn, .... Each affects solver behavior differently.",
+    "Routing attributes affect which roads/zones are accessible; conflicts cause unsolvable requests.",
+    "Must stay consistent with: options.routing.exclude. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A value outside the enum -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: avoid [\"toll\",\"highway\"].",
+    "Negative: avoid [\"Toll\"] (wrong case) -> 400.",
+    "Positive: test with avoid set to \"toll\"",
+    "Positive: test with avoid set to \"highway\"",
+    "Positive: test with avoid set to \"bbox\"",
+    "Positive: test with avoid set to \"left_turn\"",
+    "Positive: test with avoid set to \"right_turn\"",
+    "Positive: test with avoid set to \"sharp_turn\"",
+    "Positive: test with avoid set to \"uturn\"",
+    "Positive: test with avoid set to \"service_road\"",
+    "Positive: test with avoid set to \"ferry\"",
+    "Positive: test with avoid set to \"none\"",
+    "Positive: omit optional field avoid"
+  ],
+  "related": [
+    "options.routing.exclude"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

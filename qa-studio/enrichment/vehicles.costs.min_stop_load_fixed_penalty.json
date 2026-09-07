@@ -1,0 +1,27 @@
+{
+  "path": "vehicles.costs.min_stop_load_fixed_penalty",
+  "summary": "Fixed penalty applied when any delivery stop's load is below min_stop_load.",
+  "range": "Integer.",
+  "constraints": [],
+  "businessRules": [
+    "Triggered per stop that falls short of vehicles.min_stop_load; soft — does not force unassignment.",
+    "min_stop_load_fixed_penalty defines: Specify the fixed penalty to be applied in case the vehicle is assigned to any delivery task with a load below the specified min_stop_load threshold. If all the tasks assigned to the vehicle have l…",
+    "Must stay consistent with: vehicles.min_stop_load. Changes here may require validation of those fields.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: a delivery below min_stop_load still served but incurs this fixed penalty.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field min_stop_load_fixed_penalty"
+  ],
+  "related": [
+    "vehicles.min_stop_load"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

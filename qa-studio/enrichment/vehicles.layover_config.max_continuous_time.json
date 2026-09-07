@@ -1,0 +1,30 @@
+{
+  "path": "vehicles.layover_config.max_continuous_time",
+  "summary": "Max continuous driving time before a mandatory rest. Required within layover_config.",
+  "range": "Required non-negative integer seconds.",
+  "constraints": [
+    "Required.",
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "After this much continuous driving, a layover_duration rest is inserted.",
+    "max_continuous_time defines: Define the maximum time, in seconds, that a driver can drive without taking a break. This field is mandatory when using the layover_config attribute. Please note that accumulation of driving time i…",
+    "Must stay consistent with: vehicles.layover_config.layover_duration. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: max_continuous_time 16200 (4.5h) triggers a rest on long routes.",
+    "Boundary: a route just under the limit takes no rest.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_continuous_time"
+  ],
+  "related": [
+    "vehicles.layover_config.layover_duration"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

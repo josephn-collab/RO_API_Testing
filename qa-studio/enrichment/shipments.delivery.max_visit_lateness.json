@@ -1,0 +1,35 @@
+{
+  "path": "shipments.delivery.max_visit_lateness",
+  "summary": "Tolerated lateness for the delivery step; overrides the global value.",
+  "range": "Non-negative integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Lateness beyond it makes the delivery (and the pair) infeasible.",
+    "max_visit_lateness defines: It determines the allowable delay, in seconds, to begin a shipment delivery after its designated time window has concluded. Please note that this parameter would override the constraint.max_visit_l…",
+    "Must stay consistent with: shipments.delivery.time_windows. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Infeasible: delivery unreachable within window + tolerance -> pair unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_visit_lateness",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "shipments.delivery.time_windows"
+  ],
+  "rules": [
+    "time-window-feasibility"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

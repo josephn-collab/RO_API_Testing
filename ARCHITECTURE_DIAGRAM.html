@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QA Studio — Architecture & Flow</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#64748b; --line:#cbd5e1;
+    --compiler:#2563eb;  --compiler-bg:#eff6ff;
+    --draft:#d97706;     --draft-bg:#fef3c7;
+    --studio:#0d9488;    --studio-bg:#f0fdfa;
+    --skills:#7c3aed;    --skills-bg:#f5f3ff;
+    --claude:#d97706;    --claude-bg:#fffbeb;
+    --output:#16a34a;    --output-bg:#f0fdf4;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#f1f5f9;color:var(--ink);
+       font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       padding:28px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 18px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 22px;font-size:13px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+  .zone{background:var(--card);border:1px solid var(--line);border-left-width:6px;
+        border-radius:14px;padding:16px 18px;margin:0 auto;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .zone h2{font-size:15px;margin:0 0 12px;letter-spacing:.2px;display:flex;align-items:center;gap:8px}
+  .num{display:inline-flex;width:22px;height:22px;border-radius:50%;color:#fff;
+       align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .zone .why{color:var(--muted);font-size:12.5px;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+
+  .z-compiler{border-color:var(--compiler);background:var(--compiler-bg)}
+  .z-compiler .num{background:var(--compiler)} .z-compiler h2{color:var(--compiler)}
+  .z-draft{border-color:var(--draft);background:var(--draft-bg)}
+  .z-draft .num{background:var(--draft)} .z-draft h2{color:var(--draft)}
+  .z-studio{border-color:var(--studio);background:var(--studio-bg)}
+  .z-studio .num{background:var(--studio)} .z-studio h2{color:var(--studio)}
+  .z-claude{border-color:var(--claude);background:var(--claude-bg)}
+  .z-claude .num{background:var(--claude)} .z-claude h2{color:var(--claude)}
+  .z-output{border-color:var(--output);background:var(--output-bg)}
+  .z-output .num{background:var(--output)} .z-output h2{color:var(--output)}
+
+  .row{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+  .box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;flex:1;min-width:150px}
+  .box b{display:block;font-size:13.5px;margin-bottom:2px}
+  .box small{color:var(--muted);font-size:12px}
+  .arrow-h{align-self:center;color:var(--muted);font-size:20px;font-weight:700;padding:0 2px}
+  .arrow-v{text-align:center;color:var(--muted);font-size:24px;line-height:1;margin:8px 0}
+  .arrow-v .lbl{display:block;font-size:12px;color:var(--muted);margin-top:-2px}
+
+  .chip{background:#fff;border:1px dashed var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;display:inline-flex;gap:6px;align-items:center}
+  .feed{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+  .feed .into{color:var(--muted);font-size:12px}
+  .tag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;color:#fff}
+  .t-skills{background:var(--skills)} .t-compiler{background:var(--compiler)} .t-studio{background:var(--studio)} .t-draft{background:var(--draft)}
+  .stat{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12px;margin:6px 6px 0 0}
+  .stat b{color:var(--compiler)}
+  .feedback{margin:14px auto 0;max-width:1080px;color:var(--skills);font-size:12.5px;
+            border:1px dashed var(--skills);border-radius:10px;padding:8px 12px;background:var(--skills-bg)}
+  .note{color:var(--muted);font-size:12px;margin-top:18px;text-align:center}
+  .zone-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .zone-pair .zone{margin:0}
+  @media print{body{background:#fff;padding:0}.zone{break-inside:avoid}}
+  @media(max-width:800px){.zone-pair{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>QA Authoring Studio — Architecture &amp; Flow</h1>
+  <p class="sub">How a feature selection becomes a validated suite of test cases. Truth flows from the Compiler · reasoning from Claude · every result is validated before it is trusted.</p>
+
+  <div class="legend">
+    <span><i class="dot" style="background:var(--compiler)"></i> Compiler — owns product truth</span>
+    <span><i class="dot" style="background:var(--draft)"></i> Draft Features — not-yet-in-spec</span>
+    <span><i class="dot" style="background:var(--studio)"></i> QA Studio — assemble &amp; validate</span>
+    <span><i class="dot" style="background:var(--skills)"></i> Skills — how Claude reasons</span>
+    <span><i class="dot" style="background:var(--claude)"></i> Claude — reasoning engine</span>
+    <span><i class="dot" style="background:var(--output)"></i> Output — trusted deliverable</span>
+  </div>
+
+  <!-- ZONE 1: COMPILER & ZONE 1b: DRAFT FEATURES (SIDE-BY-SIDE) -->
+  <div class="zone-pair">
+    <!-- ZONE 1: COMPILER -->
+    <div class="zone z-compiler">
+      <h2><span class="num">1</span> COMPILER &nbsp;—&nbsp; single source of product truth &nbsp;<small style="color:var(--muted);font-weight:400">(build-time)</small></h2>
+      <div class="row">
+        <div class="box"><b>openapi.json</b><small>the API spec — field structure &amp; types</small></div>
+        <div class="arrow-h">＋</div>
+        <div class="box"><b>enrichment/ · 167 files</b><small>contain business rules, validation ranges, mandatory conditions and testing guidance</small></div>
+        <div class="arrow-h">＋</div>
+        <div class="box"><b>rules/ · 21 files</b><small>cross-field relationships</small></div>
+      </div>
+      <div class="arrow-v">▼</div>
+      <div class="row">
+        <div class="box" style="border-color:var(--compiler)"><b>data/compiled/</b><small>Knowledge base: Features, Relationships, Validation Rules</small></div>
+      </div>
+      <div class="why"><b>Why:</b> all product facts live here — so test cases never drift from the real API. Update spec, re-compile, whole tool updates.</div>
+    </div>
+
+    <!-- ZONE 1b: DRAFT FEATURES -->
+    <div class="zone z-draft">
+      <h2><span class="num">1b</span> DRAFT FEATURES &nbsp;—&nbsp; not-yet-in-spec &nbsp;<small style="color:var(--muted);font-weight:400">(runtime merge)</small></h2>
+      <div class="row">
+        <div class="box"><b>overlay.json</b><small>split-order &amp; unused-vehicle-reasons</small></div>
+        <div class="arrow-h">→</div>
+        <div class="box"><b>testingSuggestions</b><small>tagged: Positive: / Negative-validation: / Interaction:</small></div>
+      </div>
+      <div class="arrow-v">▼</div>
+      <div class="row">
+        <div class="box" style="border-color:var(--draft)"><b>Draft obligations</b><small>classified at app runtime, fed into capacity</small></div>
+      </div>
+      <div class="feed">
+        <span class="into">Appear in app as:</span>
+        <span class="chip"><span class="tag t-draft">draft</span> amber chip</span>
+        <span class="chip">testingSuggestions in prompt</span>
+      </div>
+      <div class="why"><b>Why:</b> different guidance flow — testingSuggestions in overlay.json, not enrichment files (which stay out until feature lands in spec).</div>
+    </div>
+  </div>
+
+  <div class="arrow-v">▼<span class="lbl">both compiled &amp; draft features loaded by the app</span></div>
+  <div class="zone z-studio">
+    <h2><span class="num">2</span> QA STUDIO &nbsp;—&nbsp; select, assemble, validate, export &nbsp;<small style="color:var(--muted);font-weight:400">(browser · no server · no API key)</small></h2>
+    <div class="row">
+      <div class="box"><b>Config</b><small>region · vehicles · jobs · Positive / Negative</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box"><b>Feature selection</b><small>live checkbox tree built from openapi.json — auto-syncs with the spec</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box"><b>Count plan</b><small>Standard vs Important → exact, repeatable per-feature targets</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box" style="border-color:var(--studio)"><b>Prompt Builder</b><small>assembles one copy-paste prompt</small></div>
+    </div>
+    <div class="feed">
+      <span class="into">Prompt Builder assembles from:</span>
+      <span class="chip"><span class="tag t-skills">Skills</span> how to reason + output contract</span>
+      <span class="chip"><span class="tag t-compiler">Compiled</span> knowledge for selected features only</span>
+      <span class="chip"><span class="tag t-draft">Draft</span> testingSuggestions (if draft features selected)</span>
+    </div>
+    <div class="why"><b>Why:</b> the app injects only the knowledge the selected features need (not the entire knowledge base) — accurate, cheap, and the count plan makes coverage explicit instead of leaving it to the model.</div>
+  </div>
+
+  <div class="arrow-v">▼<span class="lbl">Copy prompt ⧉ &nbsp; (manual)</span></div>
+
+  <!-- ZONE 3: CLAUDE -->
+  <div class="zone z-claude">
+    <h2><span class="num">3</span> CLAUDE &nbsp;—&nbsp; the reasoning engine &nbsp;<small style="color:var(--muted);font-weight:400">(manual copy / paste)</small></h2>
+    <div class="row">
+      <div class="box"><b>Paste prompt into Claude</b><small>governed by the Skills layer — use only injected knowledge, never invent facts</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box"><b>Claude proposes test cases</b><small>which scenarios, which values, which assertions — returns a JSON array</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box"><b>Paste JSON back</b><small>into QA Studio (or load a .json file)</small></div>
+    </div>
+    <div class="why"><b>Why:</b> Claude is used only for reasoning — it is never the source of truth. No server or API key keeps the tool zero-cost and zero-setup.</div>
+  </div>
+
+  <div class="arrow-v">▼</div>
+
+  <!-- ZONE 4: VALIDATE & DELIVER -->
+  <div class="zone z-output">
+    <h2><span class="num">4</span> VALIDATE &amp; DELIVER</h2>
+    <div class="row">
+      <div class="box" style="border-color:var(--output)"><b>Validation engine</b><small>AJV vs the OpenAPI schema &nbsp;+&nbsp; the business rules</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box"><b>Results table + Coverage matrix</b><small>10-field cases · feature × Positive/Negative grid · coverage %</small></div>
+      <div class="arrow-h">→</div>
+      <div class="box"><b>⬇ Export CSV</b><small>Excel-ready hand-off to test-management tools</small></div>
+    </div>
+    <div class="why"><b>Why:</b> this is the credibility step — every AI-generated payload is verified against the real schema &amp; rules <em>before</em> a human trusts it. "Verified valid," not "probably valid."</div>
+  </div>
+
+  <div class="feedback">↺ <b>Feedback loop:</b> the Coverage matrix's gaps feed back into the next prompt as priorities — so each round targets what is still missing.</div>
+
+  <p class="note">Open in a browser and screenshot the whole page, or each numbered zone, for slides. Colors map to the ownership legend above.</p>
+</div>
+</body>
+</html>

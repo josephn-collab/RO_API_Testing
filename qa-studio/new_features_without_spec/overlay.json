@@ -1,0 +1,41 @@
+{
+  "note": "Draft feature definitions for capabilities NOT yet in openapi.json. Source docs are the PDFs in this folder. The QA Studio merges these over the spec so draft fields appear in the tree, validate (typed), and feed the prompt/coverage — each flagged 'draft'. Remove an entry once the feature ships in the real openapi.json.",
+  "features": [
+    {
+      "id": "split-order",
+      "source": "[Atomic] Split Order Feature-2026071721444587.pdf",
+      "status": "draft",
+      "title": "Split Order",
+      "target": "jobs.items.properties",
+      "fields": {
+        "split": {
+          "type": "object",
+          "description": "Split Order (DRAFT, not in spec): allow a large single job to be split across multiple vehicles when no single vehicle has enough capacity. Jobs only (not shipments).",
+          "additionalProperties": false,
+          "properties": {
+            "can_be_split": { "type": "boolean", "description": "Whether this job may be split. Default false." },
+            "max_splits": { "type": "integer", "description": "Maximum number of splits for this job." },
+            "quant": { "type": "number", "description": "Minimum quantity of each split as a ratio of job load. Applies only when the problem load dimension is 1 (multi-dimension behavior is TBC per the doc)." }
+          }
+        }
+      },
+      "rules": [
+        "split applies to single jobs only; shipments are not supported.",
+        "The sub-jobs created by a split share the SAME job id as the original.",
+        "If a job's demand exceeds capacity and can_be_split is false or absent -> the job is UNASSIGNED (HTTP 200, result.code 0, job in result.unassigned).",
+        "If can_be_split is true and there are enough vehicles -> the job is split across vehicles; each split's pickup/delivery sub-volume sums to the original job's value.",
+        "Response (informational, not request-validated): route steps carry split_indicator (int, 0-based, strictly less than max_splits) and per-split pickup/delivery arrays."
+      ],
+      "testingSuggestions": [
+        "High delivery volume (e.g. ~5x a single vehicle's capacity) with can_be_split=false or absent -> expect the job in result.unassigned.",
+        "Same high-volume job with can_be_split=true, max_splits sufficient, and ~5 vehicles -> expect a valid solution where the job is split across vehicles (sub-deliveries sum to the original).",
+        "Malformed split input (e.g. wrong types, or split on a shipment) -> expect HTTP 400 input validation failed.",
+        "Boundary: max_splits exactly equal to the number of vehicles needed; quant at the minimum ratio."
+      ],
+      "limitations": [
+        "Jobs only (shipments not supported).",
+        "quant multi-dimension load behavior is undefined in the source doc (mark TBC)."
+      ]
+    }
+  ]
+}

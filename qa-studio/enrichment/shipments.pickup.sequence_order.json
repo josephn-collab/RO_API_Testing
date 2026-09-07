@@ -1,0 +1,35 @@
+{
+  "path": "shipments.pickup.sequence_order",
+  "summary": "Ordering value of the pickup step; must be <= its delivery's sequence_order.",
+  "range": "Integer in [0,100]. pickup.sequence_order <= delivery.sequence_order.",
+  "constraints": [
+    "[0,100]; pickup value <= delivery value."
+  ],
+  "businessRules": [
+    "sequence_order defines: Use this parameter to prioritize completing the shipment pickup relative to certain other tasks. A task configured with a sequence_order of 2 will be done after the task with sequence_order of 1, b…",
+    "Must stay consistent with: shipments.delivery.sequence_order. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "pickup.sequence_order > delivery.sequence_order -> 400."
+  ],
+  "testingGuidance": [
+    "Negative: pickup order greater than delivery order -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field sequence_order",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ],
+  "related": [
+    "shipments.delivery.sequence_order"
+  ],
+  "rules": [
+    "pickup-delivery-precedence"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

@@ -1,0 +1,23 @@
+{
+  "path": "zones.geofence_id",
+  "summary": "ID of a pre-created geofence, as an alternative to inline geometry.",
+  "range": "String id of an existing geofence. Each zone needs geometry OR geofence_id.",
+  "constraints": [
+    "A zone must provide exactly one of geometry / geofence_id."
+  ],
+  "businessRules": [
+    "geofence_id defines: Provide the ID of a pre-created geofence using the [Geofence API](https://docs.nextbillion.ai/docs/tracking/api/geofence). Please note that one of geometry or geofence_id should be provided.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A zone with neither geometry nor geofence_id -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: zone via geofence_id.",
+    "Negative: zone with neither geometry nor geofence_id -> 400.",
+    "Positive: omit optional field geofence_id"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

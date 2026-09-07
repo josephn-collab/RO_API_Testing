@@ -1,0 +1,36 @@
+{
+  "path": "shipments.max_time_in_vehicle",
+  "summary": "Max time the load may remain onboard between pickup and delivery.",
+  "range": "Non-negative integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "If the route between pickup and delivery exceeds this, the pair is infeasible (C4).",
+    "max_time_in_vehicle defines: Use this parameter to limit the drive time for which a shipment stays in the vehicle. The time-in-vehicle calculations start once the pickup leg of shipment is completed after serving any setup and…",
+    "Must stay consistent with: shipments.pickup, shipments.delivery. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: generous max_time_in_vehicle covers the leg.",
+    "Infeasible: max_time_in_vehicle smaller than the pickup->delivery travel -> unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_time_in_vehicle",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ],
+  "related": [
+    "shipments.pickup",
+    "shipments.delivery"
+  ],
+  "rules": [
+    "pickup-delivery-precedence"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

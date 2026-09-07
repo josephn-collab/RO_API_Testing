@@ -1,0 +1,27 @@
+{
+  "path": "depots.throughput.handling_duration",
+  "summary": "Per-vehicle handling time at the depot (seconds).",
+  "range": "Integer seconds. Default 0.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "handling_duration defines: Specify the unit time needed for loading orders into a vehicle. The number of orders that can be served within this duration is determined by the max_load setting. Please note that: * Default value…",
+    "Must stay consistent with: depots.throughput. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: handling_duration 300 per vehicle.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field handling_duration"
+  ],
+  "related": [
+    "depots.throughput"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

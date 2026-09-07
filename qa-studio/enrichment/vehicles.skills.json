@@ -1,0 +1,35 @@
+{
+  "path": "vehicles.skills",
+  "summary": "Capability tags the vehicle provides; must be a superset of any task it serves.",
+  "range": "Array of non-negative integers; may be empty (then it can only serve tasks with empty skills).",
+  "constraints": [
+    "Non-negative integers."
+  ],
+  "businessRules": [
+    "A task is assignable to this vehicle iff task.skills is a subset of vehicle.skills.",
+    "A single high-skill vehicle can become a bottleneck under load.",
+    "skills defines: It is a multi-dimensional object that can be used to define multiple skills and abilities of drivers or vehicles. Please note that only those vehicles with all the skills needed for a job/shipment …",
+    "Each element in skills must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.skills, shipments.skills. Changes here may require validation of those fields.",
+    "Rule: Vehicle must have all skills required by the job (exact match, case-sensitive).",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Skills matching is case-sensitive and exact. Vehicle must have ALL skills required by job."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: vehicle skills [1,2] serves a job needing [2].",
+    "Infeasible: no vehicle has the required skill -> job unassigned (skill reason).",
+    "Boundary: empty vehicle skills can serve only empty-skill jobs.",
+    "Positive: omit optional field skills",
+    "Interaction: Infeasible: job needs skill 3, no vehicle has 3 -> unassigned.",
+    "Interaction: Positive: job needs [2]; only the vehicle whose skills include 2 serves it."
+  ],
+  "related": [
+    "jobs.skills",
+    "shipments.skills"
+  ],
+  "rules": [
+    "skills-superset"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

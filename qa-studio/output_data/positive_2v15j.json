@@ -1,0 +1,2139 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Objective travel_cost=duration",
+    "title": "Feasible delivery plan minimizing duration (mode=car)",
+    "description": "Enum coverage: travel_cost=duration with mode=car. 2 vehicles deliver 15 jobs; all assigned.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 16,
+          "end_index": 16,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Delivery 1",
+          "location_index": 1,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Delivery 2",
+          "location_index": 2,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Delivery 3",
+          "location_index": 3,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Delivery 4",
+          "location_index": 4,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Delivery 5",
+          "location_index": 5,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Delivery 6",
+          "location_index": 6,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Delivery 7",
+          "location_index": 7,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_8",
+          "description": "Delivery 8",
+          "location_index": 8,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_9",
+          "description": "Delivery 9",
+          "location_index": 9,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_10",
+          "description": "Delivery 10",
+          "location_index": 10,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_11",
+          "description": "Delivery 11",
+          "location_index": 11,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_12",
+          "description": "Delivery 12",
+          "location_index": 12,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_13",
+          "description": "Delivery 13",
+          "location_index": 13,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_14",
+          "description": "Delivery 14",
+          "location_index": 14,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_15",
+          "description": "Delivery 15",
+          "location_index": 15,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "duration"
+        },
+        "routing": {
+          "mode": "car"
+        }
+      }
+    },
+    "expectedResult": "200; status:'Ok' with id; result.code==0; all 15 jobs assigned; result.summary.unassigned==0; result.unassigned empty; each route delivery load <= capacity [100].",
+    "priority": "P1",
+    "severity": "Critical (S1)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.service",
+        "jobs.time_windows",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Objective travel_cost=distance",
+    "title": "Feasible delivery plan minimizing distance (mode=car)",
+    "description": "Enum coverage: travel_cost=distance with mode=car. Same fleet/jobs; all assigned; objective optimizes distance.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 16,
+          "end_index": 16,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Delivery 1",
+          "location_index": 1,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Delivery 2",
+          "location_index": 2,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Delivery 3",
+          "location_index": 3,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Delivery 4",
+          "location_index": 4,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Delivery 5",
+          "location_index": 5,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Delivery 6",
+          "location_index": 6,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Delivery 7",
+          "location_index": 7,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_8",
+          "description": "Delivery 8",
+          "location_index": 8,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_9",
+          "description": "Delivery 9",
+          "location_index": 9,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_10",
+          "description": "Delivery 10",
+          "location_index": 10,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_11",
+          "description": "Delivery 11",
+          "location_index": 11,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_12",
+          "description": "Delivery 12",
+          "location_index": 12,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_13",
+          "description": "Delivery 13",
+          "location_index": 13,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_14",
+          "description": "Delivery 14",
+          "location_index": 14,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_15",
+          "description": "Delivery 15",
+          "location_index": 15,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        },
+        "routing": {
+          "mode": "car"
+        }
+      }
+    },
+    "expectedResult": "200; result.code==0; all 15 jobs assigned; result.unassigned empty; solution optimizes total distance (travel_cost=distance).",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.service",
+        "jobs.time_windows",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Routing mode=truck",
+    "title": "Feasible delivery plan with truck routing (travel_cost=duration)",
+    "description": "Enum coverage: routing mode=truck. Truck profile still yields a fully assigned plan.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 16,
+          "end_index": 16,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Delivery 1",
+          "location_index": 1,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Delivery 2",
+          "location_index": 2,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Delivery 3",
+          "location_index": 3,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Delivery 4",
+          "location_index": 4,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Delivery 5",
+          "location_index": 5,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Delivery 6",
+          "location_index": 6,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Delivery 7",
+          "location_index": 7,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_8",
+          "description": "Delivery 8",
+          "location_index": 8,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_9",
+          "description": "Delivery 9",
+          "location_index": 9,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_10",
+          "description": "Delivery 10",
+          "location_index": 10,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_11",
+          "description": "Delivery 11",
+          "location_index": 11,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_12",
+          "description": "Delivery 12",
+          "location_index": 12,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_13",
+          "description": "Delivery 13",
+          "location_index": 13,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_14",
+          "description": "Delivery 14",
+          "location_index": 14,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_15",
+          "description": "Delivery 15",
+          "location_index": 15,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "duration"
+        },
+        "routing": {
+          "mode": "truck"
+        }
+      }
+    },
+    "expectedResult": "200; result.code==0; all 15 jobs assigned; result.unassigned empty; routes computed with truck profile.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.service",
+        "jobs.time_windows",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Pickup jobs",
+    "title": "Feasible pickup plan within capacity (mode=car)",
+    "description": "jobs.pickup coverage: 15 pickup jobs; picked-up load accumulates to route end and stays within capacity.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 16,
+          "end_index": 16,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Pickup 1",
+          "location_index": 1,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Pickup 2",
+          "location_index": 2,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Pickup 3",
+          "location_index": 3,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Pickup 4",
+          "location_index": 4,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Pickup 5",
+          "location_index": 5,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Pickup 6",
+          "location_index": 6,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Pickup 7",
+          "location_index": 7,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_8",
+          "description": "Pickup 8",
+          "location_index": 8,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_9",
+          "description": "Pickup 9",
+          "location_index": 9,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_10",
+          "description": "Pickup 10",
+          "location_index": 10,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_11",
+          "description": "Pickup 11",
+          "location_index": 11,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_12",
+          "description": "Pickup 12",
+          "location_index": 12,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_13",
+          "description": "Pickup 13",
+          "location_index": 13,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_14",
+          "description": "Pickup 14",
+          "location_index": 14,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_15",
+          "description": "Pickup 15",
+          "location_index": 15,
+          "pickup": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "duration"
+        },
+        "routing": {
+          "mode": "car"
+        }
+      }
+    },
+    "expectedResult": "200; result.code==0; all 15 jobs assigned; result.unassigned empty; each route cumulative pickup load never exceeds capacity [100].",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.pickup",
+        "jobs.service",
+        "jobs.time_windows",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Job time windows",
+    "title": "All deliveries scheduled inside their time windows",
+    "description": "jobs.time_windows coverage: California-clustered jobs with a 12h window are all served within their windows.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            100
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Delivery 1",
+          "location_index": 0,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Delivery 2",
+          "location_index": 3,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Delivery 3",
+          "location_index": 6,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Delivery 4",
+          "location_index": 10,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Delivery 5",
+          "location_index": 15,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Delivery 6",
+          "location_index": 1,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Delivery 7",
+          "location_index": 4,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_8",
+          "description": "Delivery 8",
+          "location_index": 9,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_9",
+          "description": "Delivery 9",
+          "location_index": 0,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_10",
+          "description": "Delivery 10",
+          "location_index": 3,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_11",
+          "description": "Delivery 11",
+          "location_index": 6,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_12",
+          "description": "Delivery 12",
+          "location_index": 10,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_13",
+          "description": "Delivery 13",
+          "location_index": 15,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_14",
+          "description": "Delivery 14",
+          "location_index": 1,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        },
+        {
+          "id": "job_15",
+          "description": "Delivery 15",
+          "location_index": 4,
+          "delivery": [
+            5
+          ],
+          "service": 120,
+          "time_windows": [
+            [
+              1752570000,
+              1752613200
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "duration"
+        },
+        "routing": {
+          "mode": "car"
+        }
+      }
+    },
+    "expectedResult": "200; result.code==0; all 15 jobs assigned; every job step arrival falls within [1752570000,1752613200]; steps[].late_by==0; result.summary.num_late_visits==0.",
+    "priority": "P1",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.service",
+        "jobs.time_windows",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Priority + capacity",
+    "title": "Mixed-priority deliveries fit within a constrained fleet",
+    "description": "jobs.priority + capacity coverage: 15 mixed-priority deliveries (demand 150) fit within combined capacity (160); all assigned.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            80
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 16,
+          "end_index": 16,
+          "capacity": [
+            80
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Delivery 1",
+          "location_index": 1,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 10
+        },
+        {
+          "id": "job_2",
+          "description": "Delivery 2",
+          "location_index": 2,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 20
+        },
+        {
+          "id": "job_3",
+          "description": "Delivery 3",
+          "location_index": 3,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 30
+        },
+        {
+          "id": "job_4",
+          "description": "Delivery 4",
+          "location_index": 4,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 40
+        },
+        {
+          "id": "job_5",
+          "description": "Delivery 5",
+          "location_index": 5,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 50
+        },
+        {
+          "id": "job_6",
+          "description": "Delivery 6",
+          "location_index": 6,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 60
+        },
+        {
+          "id": "job_7",
+          "description": "Delivery 7",
+          "location_index": 7,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 70
+        },
+        {
+          "id": "job_8",
+          "description": "Delivery 8",
+          "location_index": 8,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 80
+        },
+        {
+          "id": "job_9",
+          "description": "Delivery 9",
+          "location_index": 9,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 90
+        },
+        {
+          "id": "job_10",
+          "description": "Delivery 10",
+          "location_index": 10,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 100
+        },
+        {
+          "id": "job_11",
+          "description": "Delivery 11",
+          "location_index": 11,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 10
+        },
+        {
+          "id": "job_12",
+          "description": "Delivery 12",
+          "location_index": 12,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 20
+        },
+        {
+          "id": "job_13",
+          "description": "Delivery 13",
+          "location_index": 13,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 30
+        },
+        {
+          "id": "job_14",
+          "description": "Delivery 14",
+          "location_index": 14,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 40
+        },
+        {
+          "id": "job_15",
+          "description": "Delivery 15",
+          "location_index": 15,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ],
+          "priority": 50
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "duration"
+        },
+        "routing": {
+          "mode": "car"
+        }
+      }
+    },
+    "expectedResult": "200; result.code==0; all 15 jobs assigned; result.unassigned empty; no route delivery load exceeds capacity [80]; total assigned delivery equals 150.",
+    "priority": "P1",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.service",
+        "jobs.time_windows",
+        "jobs.priority",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Distinct start/end depots",
+    "title": "Vehicles start and finish at different indices",
+    "description": "start_index != end_index coverage: each route begins at its start_index and ends at its end_index.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Van A",
+          "start_index": 0,
+          "end_index": 6,
+          "capacity": [
+            100
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Van B",
+          "start_index": 16,
+          "end_index": 5,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "description": "Delivery 1",
+          "location_index": 1,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_2",
+          "description": "Delivery 2",
+          "location_index": 2,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_3",
+          "description": "Delivery 3",
+          "location_index": 3,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_4",
+          "description": "Delivery 4",
+          "location_index": 4,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_5",
+          "description": "Delivery 5",
+          "location_index": 5,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_6",
+          "description": "Delivery 6",
+          "location_index": 6,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_7",
+          "description": "Delivery 7",
+          "location_index": 7,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_8",
+          "description": "Delivery 8",
+          "location_index": 8,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_9",
+          "description": "Delivery 9",
+          "location_index": 9,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_10",
+          "description": "Delivery 10",
+          "location_index": 10,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_11",
+          "description": "Delivery 11",
+          "location_index": 11,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_12",
+          "description": "Delivery 12",
+          "location_index": 12,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_13",
+          "description": "Delivery 13",
+          "location_index": 13,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_14",
+          "description": "Delivery 14",
+          "location_index": 14,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        },
+        {
+          "id": "job_15",
+          "description": "Delivery 15",
+          "location_index": 15,
+          "delivery": [
+            10
+          ],
+          "service": 180,
+          "time_windows": [
+            [
+              1752570000,
+              1755162000
+            ]
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "duration"
+        },
+        "routing": {
+          "mode": "car"
+        }
+      }
+    },
+    "expectedResult": "200; result.code==0; veh_1 route starts at index 0 ends at 6; veh_2 starts at 16 ends at 5; all 15 jobs assigned; result.unassigned empty.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive",
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.service",
+        "jobs.time_windows",
+        "options.objective.travel_cost",
+        "options.routing.mode"
+      ]
+    }
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "region": "USA",
+  "note": "Seed pool of real Charlotte metro coordinates. Format: lat/lon in WGS84 decimal degrees. The app formats these as \"lat, lon\" strings for locations.location and picks a random subset per scenario.",
+  "locations": [
+    { "lat": 35.18952692570508, "lon": -80.89330320785108, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.29523686459408, "lon": -80.92982855204947, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.29070385594037, "lon": -80.89312100695167, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.27309546933942, "lon": -80.87069567523136, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.27049691971556, "lon": -80.87032671233015, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.25622310343211, "lon": -80.89103836135077, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.224717211601885, "lon": -80.87861535741087, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.249362854472665, "lon": -80.72633832733992, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.23070073686961, "lon": -80.72191194895859, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.20975022730328, "lon": -80.71573201875334, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.20662642254547, "lon": -80.69539062140373, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.17722634606829, "lon": -80.70343185822504, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.15947598019038, "lon": -80.69480699731412, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.15274545501332, "lon": -80.68383814181652, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.14421756017511, "lon": -80.68142421302049, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.11402892802089, "lon": -80.69107344903513, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.39771144099315, "lon": -80.75439236615924, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.38945151565095, "lon": -80.76325751171237, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.38831428389214, "lon": -80.75062072012102, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.372603075286804, "lon": -80.74764335953778, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.39113174141768, "lon": -80.7752334149611, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.274570564170425, "lon": -80.95297122825967, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.262526296520186, "lon": -80.940364232022, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.246630279329125, "lon": -80.91534910107922, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.22708144054324, "lon": -80.91270644405813, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.16355458131518, "lon": -80.89616246573785, "city": "Charlotte", "state": "NC" },
+    { "lat": 35.120866684093855, "lon": -80.93315018817002, "city": "Charlotte", "state": "NC" }
+  ]
+}

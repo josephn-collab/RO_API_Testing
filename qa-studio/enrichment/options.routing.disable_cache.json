@@ -1,0 +1,19 @@
+{
+  "path": "options.routing.disable_cache",
+  "summary": "If true, do not reuse the 60-minute cached travel matrix.",
+  "range": "Boolean. Default false.",
+  "constraints": [],
+  "businessRules": [
+    "disable_cache defines: Specify if the optimizer should cache the matrix result set (containing ETAs and distances) for the given set of locations in the request. Once the results are cached, the optimizer can use it duri…",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Boundary: default false (cache reused).",
+    "Behavioral: true forces fresh matrix computation (slower, current data).",
+    "Positive: omit optional field disable_cache"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

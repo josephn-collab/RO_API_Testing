@@ -1,0 +1,31 @@
+{
+  "path": "options.objective.custom.value",
+  "summary": "Metric the custom objective acts on. Required within custom.",
+  "range": "Required enum: for type=min -> vehicles | completion_time; for type=min-max -> tasks | travel_cost.",
+  "constraints": [
+    "Required.",
+    "Must be valid for the chosen type."
+  ],
+  "businessRules": [
+    "value defines: The value parameter accepts four inputs, two of them are valid for min type and other two are valid for min-max type custom objective. Let’s look at the values for min type objective: * vehicles: S…",
+    "Valid options: vehicles, completion_time, travel_cost, tasks. Each affects solver behavior differently.",
+    "Must stay consistent with: options.objective.custom.type. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "value not valid for the chosen type -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: type=min, value=completion_time (finish everything as early as possible).",
+    "Positive: test with value set to \"vehicles\"",
+    "Positive: test with value set to \"completion_time\"",
+    "Positive: test with value set to \"travel_cost\"",
+    "Positive: test with value set to \"tasks\"",
+    "Positive: omit optional field value"
+  ],
+  "related": [
+    "options.objective.custom.type"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

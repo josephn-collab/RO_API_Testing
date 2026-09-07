@@ -1,0 +1,30 @@
+{
+  "path": "options.constraint",
+  "summary": "Soft-constraint penalties shaping trade-offs (overtime, lateness, sequence). Ineffective when relations is used.",
+  "range": "Object of penalty/limit integers. All soft.",
+  "constraints": [],
+  "businessRules": [
+    "These are SOFT — they penalize, never force infeasibility. Entirely ineffective when relations is present.",
+    "constraint defines: This attribute defines both the soft and hard constraints for an optimization job. Soft constraints are constraints that do not necessarily have to be satisfied, but the optimization algorithm will…",
+    "Must stay consistent with: options.constraint.max_visit_lateness, relations. Changes here may require validation of those fields.",
+    "Rule: Relations define hard sequencing: job pairs, duration bounds, vehicle affinity.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: raise visit_lateness_penalty to discourage late visits.",
+    "Interaction: with relations set, these penalties have no effect.",
+    "Positive: omit optional field constraint",
+    "Interaction: Interaction: with a relation set, raising visit_lateness_penalty has no effect.",
+    "Interaction: Infeasible: an in_direct_sequence relation whose ordering is impossible -> all its tasks unassigned."
+  ],
+  "related": [
+    "options.constraint.max_visit_lateness",
+    "relations"
+  ],
+  "rules": [
+    "relations-supersede-soft"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

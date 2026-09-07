@@ -1,0 +1,15 @@
+{
+  "id": "route-balancing-subordinate-to-hard-constraints",
+  "summary": "Route balancing / penalty terms are best-effort and never override hard constraints (C1–C7); infeasible tasks stay unassigned regardless of balancing configuration.",
+  "applies_to": [
+    "options.objective",
+    "options.constraint.max_vehicle_overtime",
+    "options.constraint.vehicle_overtime_penalty",
+    "options.constraint.visit_lateness_penalty"
+  ],
+  "rule": "Balancing and penalty terms under options.objective (e.g. minimize_visits_over_threshold) and options.constraint (vehicle_overtime_penalty, visit_lateness_penalty, max_vehicle_overtime as a soft constraint) are best-effort and subordinate to all hard constraints (C1–C7: capacity, time windows, precedence, max-stops, max-duration, skills, zones, depots). A task infeasible under hard constraints stays unassigned in result.unassigned regardless of balancing weights. Enabling balancing must never cause an otherwise-feasible task to become unassigned; it only shifts the order of feasible assignments.",
+  "testingGuidance": [
+    "Positive: all jobs feasible under hard constraints + balancing options enabled -> all jobs still assigned (assert assignment count only, never the specific route distribution).",
+    "Negative-infeasible: a job infeasible under a hard constraint (e.g. impossible time window) stays unassigned regardless of balancing weights (assert unassigned reason)."
+  ]
+}

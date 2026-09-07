@@ -1,0 +1,42 @@
+{
+  "path": "options.constraint.max_visit_lateness",
+  "summary": "Global max lateness after a task window (seconds); a per-task max_visit_lateness overrides it.",
+  "range": "Integer seconds (max tolerated lateness vs a task's window). Not-in-spec: non-negativity / exact rejection behavior (TBC).",
+  "constraints": [
+    "Integer seconds (API Facts §1.3/§1.5)."
+  ],
+  "businessRules": [
+    "A task's own max_visit_lateness overrides this global value (C2).",
+    "Lateness within tolerance is feasible and surfaces as steps[].late_by and summary.total_visit_lateness; lateness beyond tolerance is infeasible (C2).",
+    "max_visit_lateness defines: This is a soft constraint for permissible delay, in seconds, to complete a job or shipment after its time window is over. If a job or shipment’s lateness exceeds this value, it will be considered a…",
+    "Must stay consistent with: jobs.max_visit_lateness, options.constraint.visit_lateness_penalty. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: a global tolerance (e.g. 600s) lets a slightly-late arrival still be served, surfacing late_by within tolerance (C2).",
+    "Positive: zero tolerance (0) with on-time arrival is served with no lateness (C2).",
+    "Boundary: arrival exactly at window-end + max_visit_lateness is accepted; beyond it is infeasible (C2).",
+    "Negative-infeasible: a window unreachable even within the tolerance -> task unassigned (time-window reason) (C2 example 2).",
+    "Interaction: a job carrying its own max_visit_lateness overrides this global value (C2).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_visit_lateness",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "jobs.max_visit_lateness",
+    "options.constraint.visit_lateness_penalty"
+  ],
+  "rules": [
+    "time-window-feasibility"
+  ],
+  "_source": "OptimizationConstraints.md#C2 + API Facts §1.3/§1.5"
+}

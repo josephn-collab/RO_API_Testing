@@ -1,0 +1,35 @@
+{
+  "path": "options.routing.truck_weight",
+  "summary": "Total truck weight in kg (incl. trailers/goods). mode=truck only.",
+  "range": "Integer kg. Requires mode=truck.",
+  "constraints": [
+    "Requires mode=truck.",
+    "Positive integer kg."
+  ],
+  "businessRules": [
+    "truck_weight defines: Specify the truck weight including the trailers and shipped goods, in kilograms. Please note that this parameter is effective only when mode=truck.",
+    "Must stay consistent with: options.routing.mode. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "truck_weight with mode != truck -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: 18000 kg with mode=truck.",
+    "Negative: truck_weight with mode=bike -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field truck_weight",
+    "Interaction: Negative: truck_weight with mode=car -> 400.",
+    "Interaction: Negative: allow=[taxi] with mode=truck -> 400."
+  ],
+  "related": [
+    "options.routing.mode"
+  ],
+  "rules": [
+    "routing-mode-gating"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

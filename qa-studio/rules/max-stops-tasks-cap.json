@@ -1,0 +1,13 @@
+{
+  "id": "max-stops-tasks-cap",
+  "summary": "Per-vehicle hard caps on stops/tasks; demand beyond the cap is reassigned or unassigned.",
+  "applies_to": [
+    "vehicles.max_stops",
+    "vehicles.max_tasks"
+  ],
+  "rule": "Served stops must be <= max_stops and served tasks <= max_tasks (a shipment consumes two stops). Tasks beyond the caps are assigned to other vehicles or returned unassigned. A cap of 0 makes the vehicle serve nothing. When fleet-wide caps fall below eligible demand, the surplus is necessarily unassigned.",
+  "testingGuidance": [
+    "Boundary: max_tasks 5 with 6 eligible jobs -> the 6th is reassigned or unassigned.",
+    "Combination: two vehicles each max_tasks 5, 12 jobs -> >=2 unassigned."
+  ]
+}

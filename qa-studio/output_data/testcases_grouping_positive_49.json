@@ -1,0 +1,2697 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle begins route at start_index 0",
+    "description": "A vehicle anchored at start_index 0 serves one job.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Vehicle Start Index",
+    "title": "Vehicle starts at the last valid location index (boundary)",
+    "description": "start_index set to len(location)-1 is accepted as the last valid anchor.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 2
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 0
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Vehicle Start Index",
+    "title": "Open start when start_index and start_depot_ids are omitted",
+    "description": "With no start anchor the vehicle starts at its first task (open start).",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1"
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 0
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 and J2 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Vehicle End Index",
+    "title": "Closed route returns to its origin depot",
+    "description": "end_index equal to start_index forces the vehicle back to its origin.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.end_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; route ends at location_index 0 (== start_index)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Vehicle End Index",
+    "title": "Route ends at a distinct end depot",
+    "description": "end_index differing from start_index terminates the route at another location.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 2
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.end_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; route ends at location_index 2",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Vehicle End Index",
+    "title": "Open route when end_index is omitted",
+    "description": "Omitting end_index yields an open route that ends at the last served task.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.end_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; open route (no fixed end) ends at last task",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Capacity Constraint",
+    "title": "Delivery within a single-dimension capacity",
+    "description": "A delivery below capacity keeps onboard load within the bound.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            40
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load <= 100 at every step",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-008",
+    "feature": "Capacity Constraint",
+    "title": "Demand exactly equal to capacity is feasible (boundary)",
+    "description": "A delivery equal to capacity is at-the-limit and still assignable.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            50
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            50
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load == 50 (<= capacity)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-009",
+    "feature": "Capacity Constraint",
+    "title": "Multi-dimension capacity within both bounds",
+    "description": "A 2-D capacity with a 2-D delivery within both dimensions is accepted.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10,
+            100
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            2,
+            50
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load <= [10,100] on both dimensions",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-010",
+    "feature": "Vehicle Time Window",
+    "title": "Route completes within a comfortable shift",
+    "description": "A 09:00-17:00 shift comfortably contains the route.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "34.1478, -118.1445"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; route end <= 61200",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-011",
+    "feature": "Vehicle Time Window",
+    "title": "Feasible route inside a tight shift window",
+    "description": "A short 09:00-10:00 shift still contains a single nearby job.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "34.0195, -118.4912"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            36000
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; route end <= 36000",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-012",
+    "feature": "Vehicle Time Window",
+    "title": "Route end bounded by the shift end (boundary)",
+    "description": "The whole route must finish no later than time_window[1].",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "34.1478, -118.1445"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            43200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; route end <= 43200",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-013",
+    "feature": "Job Location Index",
+    "title": "Job served at a valid location index",
+    "description": "A job referencing an in-range location_index is served.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-014",
+    "feature": "Job Location Index",
+    "title": "Job at the last valid location index (boundary)",
+    "description": "location_index == len(location)-1 is the last valid reference.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 2
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-015",
+    "feature": "Job Location Index",
+    "title": "Multiple jobs at distinct valid indices",
+    "description": "Several jobs each reference a distinct in-range index and are served.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 2
+        },
+        {
+          "id": "J3",
+          "location_index": 3
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1, J2, J3 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-016",
+    "feature": "Job Delivery",
+    "title": "Single-dimension delivery within capacity",
+    "description": "A delivery [1] on capacity [4] is served within the bound.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            4
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.delivery",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load <= 4 at every step",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-017",
+    "feature": "Job Delivery",
+    "title": "Delivery equal to capacity is feasible (boundary)",
+    "description": "A delivery equal to capacity is at-the-limit and served.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            4
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            4
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.delivery",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load == 4 (<= capacity)",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-018",
+    "feature": "Job Delivery",
+    "title": "Multi-dimension delivery consistent with capacity",
+    "description": "A 2-D delivery matches a 2-D capacity and stays within both bounds.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10,
+            10
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.delivery",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load <= [10,10] on both dimensions",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-019",
+    "feature": "Job Setup",
+    "title": "Job with a setup time is served within the shift",
+    "description": "A job carrying a 60s setup time is served; setup counts toward elapsed time.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "setup": 60
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.setup"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; route end <= 61200",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-020",
+    "feature": "Job Setup",
+    "title": "Zero setup time is accepted (boundary)",
+    "description": "A setup of 0 seconds is a valid at-the-limit value.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "setup": 0
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.setup"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; result.unassigned empty",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-021",
+    "feature": "Job Setup",
+    "title": "Two jobs at the same location each carry setup",
+    "description": "Two jobs sharing a location_index are both served; setup is applied once per location.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "setup": 120
+        },
+        {
+          "id": "J2",
+          "location_index": 1,
+          "setup": 120
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "jobs.setup",
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 and J2 assigned; route end <= 61200",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-022",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 10m",
+    "description": "A request with order_grouping (grouping_diameter 10m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 10
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-023",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 25m",
+    "description": "A request with order_grouping (grouping_diameter 25m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 25
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-024",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 50m",
+    "description": "A request with order_grouping (grouping_diameter 50m) over 4 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 1
+        },
+        {
+          "id": "J5",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 50
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-025",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 75m",
+    "description": "A request with order_grouping (grouping_diameter 75m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 75
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-026",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 100m",
+    "description": "A request with order_grouping (grouping_diameter 100m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 100
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-027",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 150m",
+    "description": "A request with order_grouping (grouping_diameter 150m) over 4 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 1
+        },
+        {
+          "id": "J5",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 150
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-028",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 200m",
+    "description": "A request with order_grouping (grouping_diameter 200m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 200
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-029",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 300m",
+    "description": "A request with order_grouping (grouping_diameter 300m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 300
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-030",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 400m",
+    "description": "A request with order_grouping (grouping_diameter 400m) over 4 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 1
+        },
+        {
+          "id": "J5",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 400
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-031",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 500m",
+    "description": "A request with order_grouping (grouping_diameter 500m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 500
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-032",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 750m",
+    "description": "A request with order_grouping (grouping_diameter 750m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 750
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-033",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 1000m",
+    "description": "A request with order_grouping (grouping_diameter 1000m) over 4 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 1
+        },
+        {
+          "id": "J5",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 1000
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-034",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 1500m",
+    "description": "A request with order_grouping (grouping_diameter 1500m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 1500
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-035",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 2000m",
+    "description": "A request with order_grouping (grouping_diameter 2000m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 2000
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-036",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 3000m",
+    "description": "A request with order_grouping (grouping_diameter 3000m) over 4 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 1
+        },
+        {
+          "id": "J5",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 3000
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-037",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 4000m",
+    "description": "A request with order_grouping (grouping_diameter 4000m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 4000
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-038",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 5000m",
+    "description": "A request with order_grouping (grouping_diameter 5000m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 5000
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-039",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 7500m",
+    "description": "A request with order_grouping (grouping_diameter 7500m) over 4 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 1
+        },
+        {
+          "id": "J5",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 7500
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-040",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 10000m",
+    "description": "A request with order_grouping (grouping_diameter 10000m) over 2 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 10000
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-041",
+    "feature": "Order Grouping",
+    "title": "order_grouping accepted with grouping_diameter 250m",
+    "description": "A request with order_grouping (grouping_diameter 250m) over 3 co-located tasks is accepted and feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1
+        },
+        {
+          "id": "J2",
+          "location_index": 1
+        },
+        {
+          "id": "J3",
+          "location_index": 1
+        },
+        {
+          "id": "J4",
+          "location_index": 2
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 250
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; result.unassigned empty (order_grouping is a soft optimization; the merge decision is solver-chosen and not asserted)",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-042",
+    "feature": "Capacity + Time Windows (combination)",
+    "title": "Capacitated jobs served within the shift",
+    "description": "Delivery within capacity plus a vehicle shift are jointly satisfied.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            4
+          ]
+        },
+        {
+          "id": "J2",
+          "location_index": 2,
+          "delivery": [
+            5
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.delivery",
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 and J2 assigned; onboard load <= 10 at every step; route end <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-043",
+    "feature": "Start/End Index + Capacity (combination)",
+    "title": "Closed-route vehicle serves capacitated deliveries",
+    "description": "A vehicle with distinct start/end and capacity serves deliveries within the bound.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 3,
+          "capacity": [
+            10
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            3
+          ]
+        },
+        {
+          "id": "J2",
+          "location_index": 2,
+          "delivery": [
+            4
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 and J2 assigned; onboard load <= 10; route ends at location_index 3",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-044",
+    "feature": "Grouping + Capacity (combination)",
+    "title": "Grouped, capacitated jobs are served",
+    "description": "order_grouping over co-located capacitated jobs remains feasible within capacity.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J2",
+          "location_index": 1,
+          "delivery": [
+            3
+          ]
+        },
+        {
+          "id": "J3",
+          "location_index": 2,
+          "delivery": [
+            4
+          ]
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 100
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "vehicles.capacity",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; onboard load <= 10 at every step",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-045",
+    "feature": "Grouping + Setup (combination)",
+    "title": "Grouped tasks sharing a location carry setup",
+    "description": "order_grouping over co-located jobs that carry setup remains feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "setup": 60
+        },
+        {
+          "id": "J2",
+          "location_index": 1,
+          "setup": 60
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 50
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "jobs.setup",
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 and J2 assigned; route end <= 61200",
+    "priority": "P3",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-046",
+    "feature": "Time Window + Delivery + Setup (combination)",
+    "title": "Windowed, capacitated job with setup",
+    "description": "A job with a delivery and a setup is served within capacity and the shift.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            6
+          ],
+          "setup": 120
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.time_window",
+        "jobs.delivery",
+        "jobs.setup",
+        "vehicles.capacity"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; J1 assigned; onboard load <= 10; route end <= 61200",
+    "priority": "P2",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-047",
+    "feature": "Two Vehicles + Windows (combination)",
+    "title": "Two vehicles serve windowed capacitated jobs",
+    "description": "Two vehicles with shifts and capacities serve several deliveries.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            10
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            4
+          ]
+        },
+        {
+          "id": "J2",
+          "location_index": 2,
+          "delivery": [
+            5
+          ]
+        },
+        {
+          "id": "J3",
+          "location_index": 3,
+          "delivery": [
+            6
+          ]
+        }
+      ]
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; every job assigned XOR unassigned; for any assigned job onboard load <= 10 and route end <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-048",
+    "feature": "Grouping + Capacity + Time Window (combination)",
+    "title": "Broad combination with grouping",
+    "description": "order_grouping with capacitated, windowed jobs over a co-located cluster remains feasible.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            20
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            3
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J2",
+          "location_index": 1,
+          "delivery": [
+            4
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J3",
+          "location_index": 2,
+          "delivery": [
+            5
+          ]
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 150
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.delivery",
+        "jobs.setup"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; all jobs assigned; onboard load <= 20 at every step; route end <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-049",
+    "feature": "Full Scenario (combination)",
+    "title": "Five vehicles serve twenty-five capacitated, windowed jobs with grouping",
+    "description": "A realistic full-scale request: 5 vehicles with shifts and capacities serve 25 deliveries (some with setup) under order_grouping; assert only invariants.",
+    "testData": {
+      "locations": {
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "V1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            30
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V2",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            30
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V3",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            30
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V4",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            30
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        },
+        {
+          "id": "V5",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            30
+          ],
+          "time_window": [
+            32400,
+            61200
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "J1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J2",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J3",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J4",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J5",
+          "location_index": 5,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J6",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J7",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J8",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J9",
+          "location_index": 9,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J10",
+          "location_index": 10,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J11",
+          "location_index": 11,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J12",
+          "location_index": 12,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J13",
+          "location_index": 13,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J14",
+          "location_index": 14,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J15",
+          "location_index": 15,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J16",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J17",
+          "location_index": 2,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J18",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J19",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J20",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J21",
+          "location_index": 6,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        },
+        {
+          "id": "J22",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J23",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J24",
+          "location_index": 9,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "J25",
+          "location_index": 10,
+          "delivery": [
+            2
+          ],
+          "setup": 60
+        }
+      ],
+      "options": {
+        "grouping": {
+          "order_grouping": {
+            "grouping_diameter": 200
+          }
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "vehicles.time_window",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.setup",
+        "options.grouping.order_grouping",
+        "options.grouping.order_grouping.grouping_diameter"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status Ok; result.code==0; every job assigned XOR in result.unassigned with a reason; for each vehicle onboard load <= 30 at every step; every route end <= 61200",
+    "priority": "P1",
+    "type": "Positive"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "path": "shipments.volume.height",
+  "summary": "Shipment cargo height (meters).",
+  "range": "Number, meters.",
+  "constraints": [
+    "Non-negative number."
+  ],
+  "businessRules": [
+    "height defines: Cargo height, in meters.",
+    "Must stay consistent with: shipments.volume. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Boundary: height equal to vehicle height fits.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field height"
+  ],
+  "related": [
+    "shipments.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,19 @@
+{
+  "path": "options.routing.cross_border",
+  "summary": "Allow international border crossing (North America only by default).",
+  "range": "Boolean.",
+  "constraints": [],
+  "businessRules": [
+    "cross_border defines: Specify if crossing an international border is allowed for operations near border areas. When set to false, the API will prohibit any routes crossing international borders. When set to true, the se…",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: cross_border true enables cross-country routes.",
+    "Boundary: default (no crossing).",
+    "Positive: omit optional field cross_border"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

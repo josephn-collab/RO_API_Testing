@@ -1,0 +1,21 @@
+{
+  "path": "options.grouping.order_grouping",
+  "summary": "Merge nearby tasks into a single stop.",
+  "range": "Object: { grouping_diameter }.",
+  "constraints": [],
+  "businessRules": [
+    "order_grouping defines: Specify the criteria for grouping nearby tasks. The grouped tasks will be treated as one stop by the optimizer and no cost would be incurred when driver travels to different tasks within a group. U…",
+    "Must stay consistent with: options.grouping.order_grouping.grouping_diameter. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: group tasks within a small diameter into one stop.",
+    "Positive: omit optional field order_grouping"
+  ],
+  "related": [
+    "options.grouping.order_grouping.grouping_diameter"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

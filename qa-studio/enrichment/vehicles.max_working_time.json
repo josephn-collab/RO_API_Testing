@@ -1,0 +1,41 @@
+{
+  "path": "vehicles.max_working_time",
+  "summary": "Hard cap on total working duration: service + waiting + setup + driving all count.",
+  "range": "Non-negative integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds; total working time <= max_working_time."
+  ],
+  "businessRules": [
+    "Unlike max_travel_time, waiting and service count — a long wait for a late window can breach this.",
+    "max_working_time defines: Specify the maximum duration, in seconds, that the vehicle can work for on the assigned route. Please note that all types of driver activities during the route—service, waiting, setup, and driving—…",
+    "Must stay consistent with: vehicles.max_travel_time, vehicles.time_window. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: generous max_working_time covers driving+service+wait.",
+    "Infeasible: a late time window forces waiting that pushes working time past the cap -> unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_working_time",
+    "Interaction: Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Interaction: Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Interaction: Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Interaction: Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480.",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "vehicles.max_travel_time",
+    "vehicles.time_window"
+  ],
+  "rules": [
+    "max-duration-distance-cap"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

@@ -1,0 +1,19 @@
+{
+  "path": "shipments.follow_lifo_order",
+  "summary": "Enforce last-in-first-out loading/unloading for the shipment.",
+  "range": "Boolean. Default false.",
+  "constraints": [],
+  "businessRules": [
+    "follow_lifo_order defines: Specify whether the shipment route should follow LIFO (last in, first out). Use this parameter when the loading or unloading sequence of cargo is important. The default value is \\false\\.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: follow_lifo_order true respected across concurrent shipments.",
+    "Boundary: default false.",
+    "Positive: omit optional field follow_lifo_order"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

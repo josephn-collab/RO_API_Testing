@@ -1,0 +1,32 @@
+{
+  "path": "depots.time_windows",
+  "summary": "Operational windows during which the depot can be used.",
+  "range": "Array of [start,end] Unix-second pairs; non-overlapping.",
+  "constraints": [
+    "Each start <= end; non-overlapping."
+  ],
+  "businessRules": [
+    "A vehicle must start/reload at the depot within one of its windows.",
+    "time_windows defines: Specify the time-windows during which the depot is operational and allows vehicles to be loaded / unloaded. The time periods should be expressed as a UNIX timestamp in seconds. Please note that: * …",
+    "Each element in time_windows must be valid and consistent with related fields.",
+    "Must stay consistent with: depots.service. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Infeasible: a reload needed outside all depot windows -> task unassigned.",
+    "Positive: omit optional field time_windows",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "depots.service"
+  ],
+  "rules": [
+    "time-window-feasibility"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

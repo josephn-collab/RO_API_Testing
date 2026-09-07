@@ -1,0 +1,15 @@
+{
+  "id": "matrix-pairing",
+  "summary": "Custom matrices must be square N×N over the location array; a distance_matrix requires a duration_matrix.",
+  "applies_to": [
+    "distance_matrix",
+    "duration_matrix",
+    "cost_matrix",
+    "locations.location"
+  ],
+  "rule": "Every custom matrix must be N×N where N = len(locations.location). Providing distance_matrix WITHOUT duration_matrix is a validation error (400). A cost_matrix is honored only when travel_cost=customized.",
+  "testingGuidance": [
+    "Negative: distance_matrix supplied alone -> 400.",
+    "Negative: an N×(N-1) matrix -> 400."
+  ]
+}

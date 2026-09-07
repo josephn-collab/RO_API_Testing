@@ -1,0 +1,35 @@
+{
+  "path": "vehicles.breaks.service",
+  "summary": "Duration of a driver break (seconds).",
+  "range": "Non-negative integer seconds. Default 0.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Break duration adds to elapsed/working time and can push the route past the shift or max_working_time.",
+    "service defines: Specify the break duration, in seconds.",
+    "Must stay consistent with: vehicles.max_working_time. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: service 1800 (30-min break).",
+    "Interaction: a long break inflates working time and can breach max_working_time (C6).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field service",
+    "Interaction: Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Interaction: Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Interaction: Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Interaction: Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480."
+  ],
+  "related": [
+    "vehicles.max_working_time"
+  ],
+  "rules": [
+    "max-duration-distance-cap"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

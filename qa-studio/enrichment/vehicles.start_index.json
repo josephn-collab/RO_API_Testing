@@ -1,0 +1,47 @@
+{
+  "path": "vehicles.start_index",
+  "summary": "Index into locations.location where the vehicle begins its route.",
+  "range": "Integer in [0, len(location)). If neither start_index nor start_depot_ids is given, the vehicle starts at its first task.",
+  "constraints": [
+    "Range [0, len(location)).",
+    "Integer only."
+  ],
+  "businessRules": [
+    "start_index defines: Specify the index of the vehicle’s starting point in the location array. The valid value range is \\[0, length of location array). Please note that if either of the start_index or start_depot_ids is…",
+    "Must stay consistent with: locations.location, vehicles.end_index, vehicles.start_depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "start_index >= len(location) -> 400.",
+    "start_index < 0 -> 400.",
+    "Non-integer start_index (e.g. \"0\") -> 400 type error."
+  ],
+  "testingGuidance": [
+    "Positive: start_index 0 (nominal anchor).",
+    "Boundary: start_index len-1 (last valid index).",
+    "Negative-validation: start_index == len(location) -> 400 (out of range).",
+    "Negative-validation: start_index -1 -> 400 (below range).",
+    "Negative-validation: non-integer start_index like \"0\" -> 400 type error.",
+    "Interaction: omit both start_index and start_depot_ids -> vehicle starts at its first task (open start).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field start_index",
+    "Interaction: Negative: a job location_index equal to len(location) -> 400.",
+    "Interaction: Negative: a non-integer index like \"first\" -> 400 type error.",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+    "Interaction: Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+  ],
+  "related": [
+    "locations.location",
+    "vehicles.end_index",
+    "vehicles.start_depot_ids"
+  ],
+  "rules": [
+    "location-index-range",
+    "multi-depot-reachability"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

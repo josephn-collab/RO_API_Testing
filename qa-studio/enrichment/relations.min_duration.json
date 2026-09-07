@@ -1,0 +1,31 @@
+{
+  "path": "relations.min_duration",
+  "summary": "Min required duration between the related steps (seconds).",
+  "range": "Integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds.",
+    "min_duration <= max_duration when both set."
+  ],
+  "businessRules": [
+    "min_duration defines: This attribute is effective only when precedence type relation is used. Use min_duration to enforce a minimum time-gap between the two tasks specified in steps object. When specified, the second ta…",
+    "Must stay consistent with: relations.max_duration. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "min_duration > max_duration -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: enforce a minimum dwell between steps.",
+    "Negative: min_duration > max_duration -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field min_duration"
+  ],
+  "related": [
+    "relations.max_duration"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

@@ -1,0 +1,33 @@
+{
+  "region": "India",
+  "note": "Seed pool of real Hyderabad metro coordinates. Format: lat/lon in WGS84 decimal degrees. The app formats these as \"lat, lon\" strings for locations.location and picks a random subset per scenario.",
+  "locations": [
+    { "lat": 17.542688621652715, "lon": 78.48238524451742, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.502777896574212, "lon": 78.38708671419693, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.499042972141588, "lon": 78.38792448192567, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.49852233219101, "lon": 78.3785389818064, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.50003960866327, "lon": 78.35676430991286, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.493623860767304, "lon": 78.35567233615696, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.488614763145797, "lon": 78.35873298427242, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.485527614492018, "lon": 78.37269122633617, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.48642817428921, "lon": 78.37680281878235, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.41716159211455, "lon": 78.43853670574819, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.41012879880268, "lon": 78.443909123574, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.408824511453737, "lon": 78.42824948861357, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.402700024640154, "lon": 78.4623202260498, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.40123318230746, "lon": 78.47540614538671, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.413586122234875, "lon": 78.45692367771716, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.394485067267105, "lon": 78.48486771644527, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.333160086010203, "lon": 78.57929356417965, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.326774174198803, "lon": 78.58748664819716, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.324317429980386, "lon": 78.60010895709469, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.31373194288023, "lon": 78.58100937754885, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.31968710608582, "lon": 78.59258159846544, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.314652276705186, "lon": 78.59381615724509, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.31643295589265, "lon": 78.5749625087064, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.317608993765532, "lon": 78.57212950573967, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.48289435342982, "lon": 78.59553394476931, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.500887651591093, "lon": 78.58875886923576, "city": "Hyderabad", "state": "Telangana" },
+    { "lat": 17.51487958613065, "lon": 78.57910989699094, "city": "Hyderabad", "state": "Telangana" }
+  ]
+}

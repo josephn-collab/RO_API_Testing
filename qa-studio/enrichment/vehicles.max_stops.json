@@ -1,0 +1,36 @@
+{
+  "path": "vehicles.max_stops",
+  "summary": "Hard cap on the number of stops on the vehicle's route (breaks/layovers not counted).",
+  "range": "Non-negative integer. A shipment consumes TWO stops (pickup + delivery).",
+  "constraints": [
+    "Non-negative integer.",
+    "Served stops on the route must be <= max_stops."
+  ],
+  "businessRules": [
+    "Tasks beyond the cap go to other vehicles or result.unassigned.",
+    "max_stops 0 makes the vehicle effectively unused.",
+    "max_stops defines: Specify the maximum number of stops that the vehicle can make. Whenever the vehicle makes a stop during a trip, it is counted against the “max\\_stop” constraint. Vehicles stopping for breaks or lay…",
+    "Must stay consistent with: vehicles.max_tasks. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: max_stops 8 with 8 eligible jobs — all served.",
+    "Boundary: 9th eligible job with max_stops 8 -> unassigned or reassigned.",
+    "Infeasible: fleet cap below total eligible demand forces unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_stops",
+    "Interaction: Boundary: max_tasks 5 with 6 eligible jobs -> the 6th is reassigned or unassigned.",
+    "Interaction: Combination: two vehicles each max_tasks 5, 12 jobs -> >=2 unassigned."
+  ],
+  "related": [
+    "vehicles.max_tasks"
+  ],
+  "rules": [
+    "max-stops-tasks-cap"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

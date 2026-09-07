@@ -1,0 +1,35 @@
+{
+  "path": "relations.vehicle",
+  "summary": "Vehicle ID the relation is pinned to; mandatory for type=pinned.",
+  "range": "String vehicle id. Required when type=pinned. A vehicle can't be reused across relations.",
+  "constraints": [
+    "Required for pinned.",
+    "Same vehicle can't appear in more than one relation."
+  ],
+  "businessRules": [
+    "vehicle defines: Specifies the ID of the vehicle that would fulfill the steps. This field is mandatory when using type = pinned. Providing the same vehicle ID to multiple ‘relations’ is prohibited. The vehicle ID p…",
+    "Must stay consistent with: relations.type. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "pinned without vehicle -> 400.",
+    "A vehicle reused across relations -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: pinned relation binding tasks to V1.",
+    "Negative: two relations pinning the same vehicle -> 400.",
+    "Positive: omit optional field vehicle",
+    "Interaction: Negative: relation type 'sequence' with steps=[{type: 'job', id: 'J999'}] but J999 does not exist in jobs -> HTTP 400.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V999' but V999 not in vehicles -> HTTP 400.",
+    "Interaction: Positive: relation type 'sequence' with steps=[{type: 'job', id: 'J1'}, {type: 'delivery', id: 'S1'}] where both ids exist -> accepted.",
+    "Interaction: Negative: relation type 'pinned' with vehicle='V1' appears twice (two different relations) -> HTTP 400 (duplicate pinning)."
+  ],
+  "related": [
+    "relations.type"
+  ],
+  "rules": [
+    "relations-reference-integrity"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

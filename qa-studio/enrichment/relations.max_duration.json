@@ -1,0 +1,29 @@
+{
+  "path": "relations.max_duration",
+  "summary": "Max allowed duration between the related steps (seconds).",
+  "range": "Integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds.",
+    "max_duration >= min_duration when both set."
+  ],
+  "businessRules": [
+    "max_duration defines: This attribute is effective only when precedence type relation is used. max_duration restricts the travel time of the vehicle to go from location of first task to the location of second task specif…",
+    "Must stay consistent with: relations.min_duration. Changes here may require validation of those fields.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: cap the gap between a pickup and its delivery.",
+    "Infeasible: max_duration smaller than the unavoidable gap -> tasks unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_duration"
+  ],
+  "related": [
+    "relations.min_duration"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

@@ -1,0 +1,34 @@
+{
+  "path": "distance_matrix",
+  "summary": "Custom N×N distances (meters) overriding real distances; REQUIRES duration_matrix.",
+  "range": "Array of integer arrays, N×N (meters). Must be accompanied by duration_matrix.",
+  "constraints": [
+    "Square N×N over locations.location.",
+    "Requires duration_matrix to also be provided."
+  ],
+  "businessRules": [
+    "distance_matrix defines: An array of arrays to denote the user-defined distances, in meters, for travelling between each pair of geographic coordinates mentioned in the location array. When this input is provided, actual d…",
+    "Each element in distance_matrix must be valid and consistent with related fields.",
+    "Must stay consistent with: duration_matrix. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "distance_matrix without duration_matrix -> 400.",
+    "Non-square matrix -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: distance_matrix + duration_matrix together.",
+    "Negative: distance_matrix alone -> 400.",
+    "Positive: omit optional field distance_matrix",
+    "Interaction: Negative: distance_matrix supplied alone -> 400.",
+    "Interaction: Negative: an N×(N-1) matrix -> 400."
+  ],
+  "related": [
+    "duration_matrix"
+  ],
+  "rules": [
+    "matrix-pairing"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

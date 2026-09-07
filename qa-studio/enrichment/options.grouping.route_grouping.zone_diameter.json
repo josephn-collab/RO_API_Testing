@@ -1,0 +1,25 @@
+{
+  "path": "options.grouping.route_grouping.zone_diameter",
+  "summary": "Diameter (meters) for system-generated zones.",
+  "range": "Number, meters. Default 1000.",
+  "constraints": [
+    "Non-negative number (meters)."
+  ],
+  "businessRules": [
+    "zone_diameter defines: Specify the diameter of the zone, routes within which will be prioritized before routes falling in other zones. Please note * zone_diameter is the straight line distance, in meters. * It is effecti…",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Boundary: default 1000m; smaller -> more, tighter zones.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field zone_diameter"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

@@ -1,0 +1,30 @@
+{
+  "path": "jobs.revenue",
+  "summary": "Revenue earned by completing the job; used in the profit trade-off. Cannot combine with outsourcing_cost.",
+  "range": "Integer. Mutually exclusive with outsourcing_cost.",
+  "constraints": [
+    "Cannot be set together with outsourcing_cost on the same job."
+  ],
+  "businessRules": [
+    "revenue defines: Specify the revenue earned by completing this job. The optimizer uses the revenue input to identify the potential profit earned by fulfilling this job after taking into account the costs incurred t…",
+    "Must stay consistent with: jobs.outsourcing_cost. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Both revenue and outsourcing_cost set -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: revenue 500.",
+    "Negative: revenue + outsourcing_cost together -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field revenue"
+  ],
+  "related": [
+    "jobs.outsourcing_cost"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

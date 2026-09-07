@@ -1,0 +1,36 @@
+{
+  "path": "shipments",
+  "summary": "Array of paired pickup+delivery tasks bound to one vehicle (pickup before delivery). Provide jobs and/or shipments.",
+  "range": "Array of shipment objects. Each requires pickup and delivery sub-objects.",
+  "constraints": [
+    "At least one of jobs / shipments must be present.",
+    "Each shipment requires both pickup and delivery."
+  ],
+  "businessRules": [
+    "shipments defines: The shipments object is used to collect the details of shipments that need to be completed as part of the optimization process. Each shipment should have a pickup and the corresponding delivery ste…",
+    "Each element in shipments must be valid and consistent with related fields.",
+    "Must stay consistent with: shipments.pickup, shipments.delivery, shipments.amount. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A shipment missing pickup or delivery -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: a feasible pickup->delivery shipment.",
+    "Negative: a shipment with only a pickup -> 400.",
+    "Positive: omit optional field shipments",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ],
+  "related": [
+    "shipments.pickup",
+    "shipments.delivery",
+    "shipments.amount"
+  ],
+  "rules": [
+    "pickup-delivery-precedence"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,25 @@
+{
+  "path": "jobs.volume",
+  "summary": "Volumetric demand of the job; needs a vehicle that declares volume to be served.",
+  "range": "Object: { width, depth, height (meters), alignment }.",
+  "constraints": [],
+  "businessRules": [
+    "A job with volume can only be served by a vehicle that declares volume large enough.",
+    "volume defines: Specify the dimensions and alignment configurations for the cargo associated with the task. These inputs will be used to arrange the items into the loading compartment of the vehicle to utilize the…",
+    "Must stay consistent with: jobs.volume.width, jobs.volume.alignment, vehicles.volume. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: job volume fits a vehicle's compartment.",
+    "Infeasible: job volume larger than any vehicle's -> unassigned.",
+    "Positive: omit optional field volume"
+  ],
+  "related": [
+    "jobs.volume.width",
+    "jobs.volume.alignment",
+    "vehicles.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

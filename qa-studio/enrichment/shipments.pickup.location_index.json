@@ -1,0 +1,47 @@
+{
+  "path": "shipments.pickup.location_index",
+  "summary": "Index into locations.location for the shipment's pickup step. Required.",
+  "range": "Required integer in [0, len(location)).",
+  "constraints": [
+    "Required.",
+    "Range [0, len(location)).",
+    "Integer only."
+  ],
+  "businessRules": [
+    "location_index defines: Indicate the index of the location for this shipment pickup. The index references the locations present in the location array. The valid range of value is \\[0, length of location array).",
+    "Must stay consistent with: locations.location, shipments.delivery.location_index. Changes here may require validation of those fields.",
+    "Rule: Capacity dimensions must match across jobs, shipments, and vehicles.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Missing -> 400.",
+    "Out of range (>= len or < 0) -> 400.",
+    "Non-integer -> 400 type error."
+  ],
+  "testingGuidance": [
+    "Positive: a valid in-range pickup index (distinct from delivery).",
+    "Boundary: pickup index len-1 (last valid).",
+    "Negative-validation: pickup index == len(location) -> 400 (out of range).",
+    "Negative-validation: missing pickup location_index -> 400.",
+    "Negative-validation: non-integer pickup index -> 400 type error.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field location_index",
+    "Interaction: Negative: a job location_index equal to len(location) -> 400.",
+    "Interaction: Negative: a non-integer index like \"first\" -> 400 type error.",
+    "Interaction: Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+    "Interaction: Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+    "Interaction: Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+  ],
+  "related": [
+    "locations.location",
+    "shipments.delivery.location_index"
+  ],
+  "rules": [
+    "location-index-range",
+    "pickup-delivery-precedence"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

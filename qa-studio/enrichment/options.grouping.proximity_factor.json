@@ -1,0 +1,26 @@
+{
+  "path": "options.grouping.proximity_factor",
+  "summary": "Bias toward tighter neighbor distances; higher = more, tighter routes.",
+  "range": "Number in [0,10] (recommend [0,1]). Default 0.",
+  "constraints": [
+    "Range [0,10]."
+  ],
+  "businessRules": [
+    "proximity_factor defines: When specified, routes are built taking into account the distance to the nearest tasks. A higher proximity factor helps build routes with closer distances between neighboring tasks, whereas a lower…",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "proximity_factor outside [0,10] -> 400."
+  ],
+  "testingGuidance": [
+    "Boundary: 0 (off) and 1 (recommended max); 11 -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field proximity_factor"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

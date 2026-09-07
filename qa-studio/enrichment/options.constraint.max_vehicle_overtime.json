@@ -1,0 +1,35 @@
+{
+  "path": "options.constraint.max_vehicle_overtime",
+  "summary": "Max overtime allowed after a vehicle's shift window ends (seconds).",
+  "range": "Integer seconds. Default 0.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "Overtime beyond this is penalized via vehicle_overtime_penalty (soft).",
+    "max_vehicle_overtime defines: This is a soft constraint for vehicle overtime. Overtime is defined as the time that a vehicle spends to complete a set of jobs after its time window has ended. max_vehicle_overtime attribute speci…",
+    "Must stay consistent with: options.constraint.vehicle_overtime_penalty. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Values in seconds; must be non-negative. Zero means instantaneous.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: allow 1800s overtime to serve one more task.",
+    "Boundary: default 0 (no overtime).",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_vehicle_overtime",
+    "Interaction: Positive: all jobs feasible under hard constraints + balancing options enabled -> all jobs still assigned (assert assignment count only, never the specific route distribution).",
+    "Interaction: Negative-infeasible: a job infeasible under a hard constraint (e.g. impossible time window) stays unassigned regardless of balancing weights (assert unassigned reason)."
+  ],
+  "related": [
+    "options.constraint.vehicle_overtime_penalty"
+  ],
+  "rules": [
+    "route-balancing-subordinate-to-hard-constraints"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

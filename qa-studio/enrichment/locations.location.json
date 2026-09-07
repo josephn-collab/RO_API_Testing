@@ -1,0 +1,41 @@
+{
+  "path": "locations.location",
+  "summary": "Central array of \"lat, lon\" coordinate strings; every task/vehicle references a coordinate by integer index into this array.",
+  "range": "Array of \"latitude, longitude\" strings (WGS84). At least the indices referenced by vehicles/jobs must exist.",
+  "constraints": [
+    "Each entry is a \"lat, lon\" string; latitude in [-90,90], longitude in [-180,180]."
+  ],
+  "businessRules": [
+    "Referenced everywhere by 0-based integer index (location_index/start_index/end_index); valid index range is [0, len).",
+    "location defines: Indicate all the location coordinates that will be used during optimization. The coordinates should be specified in the format “latitude, longitude”. It is recommended to avoid adding duplicate loc…",
+    "Each element in location must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.location_index, vehicles.start_index. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Out-of-range coordinate value -> 400 input validation failed.",
+    "A referenced index >= len(location) -> 400.",
+    "A malformed coordinate string (not \"lat, lon\") -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: a small pool of valid \"lat, lon\" strings, all indices referenced in range.",
+    "Boundary: coordinates at the extremes -90/90 lat and -180/180 lon accepted.",
+    "Negative-validation: a latitude beyond 90 or longitude beyond 180 -> 400.",
+    "Negative-validation: a referenced index >= len(location) -> 400.",
+    "Negative-validation: a malformed coordinate string (missing comma / non-numeric) -> 400.",
+    "Positive: omit optional field location",
+    "Interaction: Negative: a job location_index equal to len(location) -> 400.",
+    "Interaction: Negative: a non-integer index like \"first\" -> 400 type error.",
+    "Interaction: Negative: distance_matrix supplied alone -> 400.",
+    "Interaction: Negative: an N×(N-1) matrix -> 400."
+  ],
+  "related": [
+    "jobs.location_index",
+    "vehicles.start_index"
+  ],
+  "rules": [
+    "location-index-range"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

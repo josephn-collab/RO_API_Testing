@@ -1,0 +1,31 @@
+{
+  "path": "vehicles.restricted_zones",
+  "summary": "Zones the vehicle may NOT serve tasks in (it may still route through them).",
+  "range": "Array of integer zone IDs.",
+  "constraints": [],
+  "businessRules": [
+    "A task in a restricted zone cannot be assigned to this vehicle, though the vehicle may transit the zone.",
+    "restricted_zones defines: Specifies the zones where the vehicle is restricted from fulfilling any tasks. Although, the vehicle can be routed through such zones. Please note: * If this parameter is provided, then the vehicle…",
+    "Each element in restricted_zones must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.zones, vehicles.allowed_zones. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: restricted_zones [3] — vehicle avoids serving zone-3 tasks but can drive through.",
+    "Infeasible: every vehicle restricts the only zone a job is in -> unassigned.",
+    "Positive: omit optional field restricted_zones",
+    "Interaction: Infeasible: job in zone 2 with every vehicle restricting or not allowing zone 2 -> unassigned.",
+    "Interaction: Positive: job zones [1], vehicle allowed_zones [1] -> served."
+  ],
+  "related": [
+    "jobs.zones",
+    "vehicles.allowed_zones"
+  ],
+  "rules": [
+    "zone-eligibility"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

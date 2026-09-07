@@ -1,0 +1,24 @@
+{
+  "path": "shipments.volume",
+  "summary": "Volumetric demand of the shipment; needs a vehicle that declares volume.",
+  "range": "Object: { width, depth, height (meters), alignment }.",
+  "constraints": [],
+  "businessRules": [
+    "A shipment with volume can only ride a vehicle that declares sufficient volume.",
+    "volume defines: Specify the dimensions and alignment configurations for the cargo associated with the shipment. These inputs will be used to arrange the items into the loading compartment of the vehicle to utilize…",
+    "Must stay consistent with: shipments.volume.alignment, vehicles.volume. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: shipment volume fits the vehicle.",
+    "Infeasible: shipment volume larger than any vehicle's -> unassigned.",
+    "Positive: omit optional field volume"
+  ],
+  "related": [
+    "shipments.volume.alignment",
+    "vehicles.volume"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

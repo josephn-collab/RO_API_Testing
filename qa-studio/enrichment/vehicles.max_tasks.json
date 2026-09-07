@@ -1,0 +1,33 @@
+{
+  "path": "vehicles.max_tasks",
+  "summary": "Hard cap on the number of tasks assignable to the vehicle.",
+  "range": "Positive integer.",
+  "constraints": [
+    "Positive integer; served tasks <= max_tasks."
+  ],
+  "businessRules": [
+    "Excess tasks reassigned or unassigned. max_tasks 0 -> vehicle serves nothing.",
+    "max_tasks defines: Describe the maximum number of tasks that can be assigned to this vehicle. It should be a positive integer.",
+    "Must stay consistent with: vehicles.max_stops. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: max_tasks 5, 5 jobs -> all served.",
+    "Boundary: 6th job with max_tasks 5 -> elsewhere/unassigned.",
+    "Combination: two vehicles each max_tasks 5, 12 jobs -> >=2 unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_tasks",
+    "Interaction: Boundary: max_tasks 5 with 6 eligible jobs -> the 6th is reassigned or unassigned."
+  ],
+  "related": [
+    "vehicles.max_stops"
+  ],
+  "rules": [
+    "max-stops-tasks-cap"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

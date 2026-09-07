@@ -1,0 +1,31 @@
+{
+  "path": "vehicles",
+  "summary": "The fleet array; at least one vehicle is required. Each entry is a vehicle with capacity/skills/shift/anchors.",
+  "range": "Array of vehicle objects; length >= 1. Each requires id.",
+  "constraints": [
+    "Required.",
+    "At least one vehicle."
+  ],
+  "businessRules": [
+    "vehicles defines: The vehicles attribute describes the characteristics and constraints of the vehicles that will be used for fulfilling the tasks. Read more about this attribute in the [Vehicle Object](#vehicle-obje…",
+    "Each element in vehicles must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.capacity, vehicles.skills, vehicles.time_window. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Missing or empty vehicles -> 400.",
+    "A vehicle without id -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: one well-formed vehicle.",
+    "Negative: empty vehicles array -> 400.",
+    "Positive: omit optional field vehicles"
+  ],
+  "related": [
+    "vehicles.capacity",
+    "vehicles.skills",
+    "vehicles.time_window"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

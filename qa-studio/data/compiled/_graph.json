@@ -1,0 +1,2201 @@
+{
+  "nodes": {
+    "locations": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "locations.id": {
+      "type": "integer",
+      "cluster": null
+    },
+    "locations.location": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "locations.approaches": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "vehicles": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.id": {
+      "type": "string",
+      "cluster": null
+    },
+    "vehicles.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "vehicles.start_index": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.start_depot_ids": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.end_index": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.end_depot_ids": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.capacity": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.alternative_capacities": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.time_window": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.skills": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_tasks": {
+      "type": "integer",
+      "cluster": "cluster-2"
+    },
+    "vehicles.breaks": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.breaks.id": {
+      "type": "integer",
+      "cluster": null
+    },
+    "vehicles.breaks.time_windows": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.breaks.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "vehicles.breaks.service": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.fixed": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.per_hour": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.per_km": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.per_order": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.min_stop_load_fixed_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.min_stop_load_unit_penalty": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.deadhead_duration_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.costs.deadhead_distance_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.speed_factor": {
+      "type": "number",
+      "cluster": "cluster-1"
+    },
+    "vehicles.layover_config": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "vehicles.layover_config.max_continuous_time": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.layover_config.layover_duration": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.layover_config.include_service_time": {
+      "type": "boolean",
+      "cluster": "cluster-1"
+    },
+    "vehicles.allowed_zones": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.restricted_zones": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_distance": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_travel_time": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_stops": {
+      "type": "integer",
+      "cluster": "cluster-2"
+    },
+    "vehicles.profile": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_working_time": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.volume": {
+      "type": "object",
+      "cluster": "cluster-3"
+    },
+    "vehicles.volume.width": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "vehicles.volume.depth": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "vehicles.volume.height": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "vehicles.max_depot_runs": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_deadhead_distance": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_deadhead_duration": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.min_stop_load": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "vehicles.depot": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "vehicles.max_travel_cost": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "jobs.id": {
+      "type": "string",
+      "cluster": null
+    },
+    "jobs.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "jobs.location_index": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.delivery": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "jobs.pickup": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "jobs.service": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.time_windows": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "jobs.skills": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "jobs.priority": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.setup": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.zones": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "jobs.depot_ids": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "jobs.load_types": {
+      "type": "array<string>",
+      "cluster": "cluster-4"
+    },
+    "jobs.incompatible_load_types": {
+      "type": "array<string>",
+      "cluster": "cluster-4"
+    },
+    "jobs.sequence_order": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.revenue": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.outsourcing_cost": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.follow_lifo_order": {
+      "type": "boolean",
+      "cluster": null
+    },
+    "jobs.max_visit_lateness": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "jobs.volume": {
+      "type": "object",
+      "cluster": "cluster-3"
+    },
+    "jobs.volume.width": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "jobs.volume.depth": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "jobs.volume.height": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "jobs.volume.alignment": {
+      "type": "string",
+      "cluster": "cluster-3"
+    },
+    "jobs.joint_order": {
+      "type": "integer",
+      "cluster": null
+    },
+    "shipments": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup.id": {
+      "type": "string",
+      "cluster": null
+    },
+    "shipments.pickup.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "shipments.pickup.location_index": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup.service": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup.time_windows": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup.setup": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup.sequence_order": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.pickup.max_visit_lateness": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery.id": {
+      "type": "string",
+      "cluster": null
+    },
+    "shipments.delivery.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "shipments.delivery.location_index": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery.service": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery.time_windows": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery.setup": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery.sequence_order": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.delivery.max_visit_lateness": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.amount": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "shipments.skills": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "shipments.priority": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.zones": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "shipments.load_types": {
+      "type": "array<string>",
+      "cluster": "cluster-4"
+    },
+    "shipments.incompatible_load_types": {
+      "type": "array<string>",
+      "cluster": "cluster-4"
+    },
+    "shipments.max_time_in_vehicle": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.revenue": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.outsourcing_cost": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "shipments.follow_lifo_order": {
+      "type": "boolean",
+      "cluster": null
+    },
+    "shipments.volume": {
+      "type": "object",
+      "cluster": "cluster-3"
+    },
+    "shipments.volume.width": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "shipments.volume.depth": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "shipments.volume.height": {
+      "type": "number",
+      "cluster": "cluster-3"
+    },
+    "shipments.volume.alignment": {
+      "type": "string",
+      "cluster": "cluster-3"
+    },
+    "shipments.joint_order": {
+      "type": "integer",
+      "cluster": null
+    },
+    "depots": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "depots.id": {
+      "type": "string",
+      "cluster": null
+    },
+    "depots.location_index": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "depots.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "depots.time_windows": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "depots.service": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "depots.throughput": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "depots.throughput.handling_duration": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "depots.throughput.max_vehicles": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "depots.throughput.vehicle_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "depots.throughput.max_load": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "depots.throughput.load_penalty": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "options": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.objective": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.objective.travel_cost": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "options.objective.custom": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.objective.custom.type": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "options.objective.custom.value": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "options.objective.allow_early_arrival": {
+      "type": "boolean",
+      "cluster": "cluster-1"
+    },
+    "options.objective.solving_time_limit": {
+      "type": "integer",
+      "cluster": null
+    },
+    "options.constraint": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.constraint.max_vehicle_overtime": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "options.constraint.vehicle_overtime_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "options.constraint.max_visit_lateness": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "options.constraint.visit_lateness_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "options.constraint.sequence_order_penalty": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "options.routing": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.routing.mode": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "options.routing.traffic_timestamp": {
+      "type": "integer",
+      "cluster": null
+    },
+    "options.routing.truck_size": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "options.routing.truck_weight": {
+      "type": "integer",
+      "cluster": "cluster-1"
+    },
+    "options.routing.avoid": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "options.routing.exclude": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "options.routing.disable_cache": {
+      "type": "boolean",
+      "cluster": null
+    },
+    "options.routing.hazmat_type": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "options.routing.profiles": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.routing.allow": {
+      "type": "array<string>",
+      "cluster": "cluster-1"
+    },
+    "options.routing.cross_border": {
+      "type": "boolean",
+      "cluster": null
+    },
+    "options.routing.truck_axle_load": {
+      "type": "number",
+      "cluster": "cluster-1"
+    },
+    "options.grouping": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.grouping.order_grouping": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.grouping.order_grouping.grouping_diameter": {
+      "type": "number",
+      "cluster": "cluster-1"
+    },
+    "options.grouping.route_grouping": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "options.grouping.route_grouping.zone_source": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "options.grouping.route_grouping.zone_ids": {
+      "type": "array<integer>",
+      "cluster": "cluster-1"
+    },
+    "options.grouping.route_grouping.zone_diameter": {
+      "type": "number",
+      "cluster": null
+    },
+    "options.grouping.route_grouping.penalty_factor": {
+      "type": "number",
+      "cluster": null
+    },
+    "options.grouping.proximity_factor": {
+      "type": "number",
+      "cluster": "cluster-1"
+    },
+    "options.webhook": {
+      "type": "object",
+      "cluster": "cluster-5"
+    },
+    "options.webhook.url": {
+      "type": "string",
+      "cluster": "cluster-5"
+    },
+    "options.webhook.events": {
+      "type": "array<string>",
+      "cluster": "cluster-5"
+    },
+    "options.webhook.timeout": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution": {
+      "type": "array<object>",
+      "cluster": null
+    },
+    "solution.vehicle": {
+      "type": "string",
+      "cluster": null
+    },
+    "solution.cost": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps": {
+      "type": "array<object>",
+      "cluster": null
+    },
+    "solution.steps.type": {
+      "type": "string",
+      "cluster": null
+    },
+    "solution.steps.id": {
+      "type": "string",
+      "cluster": null
+    },
+    "solution.steps.arrival": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps.duration": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps.location": {
+      "type": "array<number>",
+      "cluster": null
+    },
+    "solution.steps.location_index": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps.service": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps.waiting_time": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps.load": {
+      "type": "array<integer>",
+      "cluster": null
+    },
+    "solution.steps.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "solution.steps.setup": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.steps.distance": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.duration": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.distance": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.geometry": {
+      "type": "string",
+      "cluster": null
+    },
+    "solution.service": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.waiting_time": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.priority": {
+      "type": "integer",
+      "cluster": null
+    },
+    "solution.delivery": {
+      "type": "array<integer>",
+      "cluster": null
+    },
+    "solution.pickup": {
+      "type": "array<integer>",
+      "cluster": null
+    },
+    "solution.description": {
+      "type": "string",
+      "cluster": null
+    },
+    "solution.setup": {
+      "type": "integer",
+      "cluster": null
+    },
+    "unassigned": {
+      "type": "object",
+      "cluster": null
+    },
+    "unassigned.jobs": {
+      "type": "array<string>",
+      "cluster": null
+    },
+    "unassigned.shipments": {
+      "type": "array<array>",
+      "cluster": null
+    },
+    "description": {
+      "type": "string",
+      "cluster": null
+    },
+    "relations": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "relations.type": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "relations.steps": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "relations.steps.type": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "relations.steps.id": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "relations.vehicle": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "relations.max_duration": {
+      "type": "integer",
+      "cluster": "cluster-6"
+    },
+    "relations.min_duration": {
+      "type": "integer",
+      "cluster": "cluster-6"
+    },
+    "relations.id": {
+      "type": "integer",
+      "cluster": null
+    },
+    "cost_matrix": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "zones": {
+      "type": "array<object>",
+      "cluster": "cluster-1"
+    },
+    "zones.id": {
+      "type": "integer",
+      "cluster": null
+    },
+    "zones.geometry": {
+      "type": "object",
+      "cluster": "cluster-1"
+    },
+    "zones.geometry.type": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "zones.geometry.coordinates": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "zones.geofence_id": {
+      "type": "string",
+      "cluster": "cluster-1"
+    },
+    "distance_matrix": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "duration_matrix": {
+      "type": "array<array>",
+      "cluster": "cluster-1"
+    },
+    "coordinate_jobs": {
+      "type": "array<object>",
+      "cluster": null
+    }
+  },
+  "edges": [
+    {
+      "from": "cost_matrix",
+      "to": "options.objective.travel_cost",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots",
+      "to": "depots.location_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots",
+      "to": "vehicles.start_depot_ids",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.location_index",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.service",
+      "to": "vehicles.max_depot_runs",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.throughput.handling_duration",
+      "to": "depots.throughput",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.throughput",
+      "to": "depots.throughput.max_vehicles",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.throughput",
+      "to": "vehicles.max_depot_runs",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.throughput.load_penalty",
+      "to": "depots.throughput.max_load",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.throughput.max_load",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.throughput.max_vehicles",
+      "to": "depots.throughput.vehicle_penalty",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "depots.time_windows",
+      "to": "depots.service",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "distance_matrix",
+      "to": "duration_matrix",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.delivery",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.delivery",
+      "to": "jobs.pickup",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.depot_ids",
+      "to": "vehicles.start_depot_ids",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.depot_ids",
+      "to": "vehicles.end_depot_ids",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.incompatible_load_types",
+      "to": "jobs.load_types",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs",
+      "to": "jobs.location_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs",
+      "to": "shipments",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.location_index",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.max_visit_lateness",
+      "to": "jobs.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.outsourcing_cost",
+      "to": "jobs.priority",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.outsourcing_cost",
+      "to": "jobs.revenue",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.pickup",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.priority",
+      "to": "jobs.delivery",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.priority",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.sequence_order",
+      "to": "relations",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.service",
+      "to": "jobs.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.service",
+      "to": "vehicles.max_working_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.setup",
+      "to": "jobs.service",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.skills",
+      "to": "vehicles.skills",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.time_windows",
+      "to": "vehicles.time_window",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.volume.alignment",
+      "to": "jobs.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.volume.depth",
+      "to": "jobs.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.volume.height",
+      "to": "jobs.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.volume",
+      "to": "jobs.volume.width",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.volume",
+      "to": "vehicles.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.zones",
+      "to": "vehicles.allowed_zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "jobs.zones",
+      "to": "vehicles.restricted_zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "locations.approaches",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "locations",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "locations",
+      "to": "locations.approaches",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "locations.location",
+      "to": "vehicles.start_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.constraint",
+      "to": "options.constraint.max_visit_lateness",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.constraint",
+      "to": "relations",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.constraint.max_vehicle_overtime",
+      "to": "options.constraint.vehicle_overtime_penalty",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.constraint.max_visit_lateness",
+      "to": "jobs.max_visit_lateness",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.constraint.max_visit_lateness",
+      "to": "options.constraint.visit_lateness_penalty",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.constraint.sequence_order_penalty",
+      "to": "jobs.sequence_order",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping",
+      "to": "options.grouping.order_grouping",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping",
+      "to": "options.grouping.route_grouping",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping",
+      "to": "options.grouping.proximity_factor",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping.order_grouping",
+      "to": "options.grouping.order_grouping.grouping_diameter",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping.route_grouping",
+      "to": "options.grouping.route_grouping.zone_source",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping.route_grouping",
+      "to": "zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping.route_grouping.zone_ids",
+      "to": "zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.grouping.route_grouping.zone_source",
+      "to": "zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options",
+      "to": "options.objective",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options",
+      "to": "options.constraint",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options",
+      "to": "options.routing",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options",
+      "to": "options.grouping",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective.allow_early_arrival",
+      "to": "jobs.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective.custom",
+      "to": "options.objective.custom.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective.custom",
+      "to": "options.objective.custom.value",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective.custom.type",
+      "to": "options.objective.custom.value",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective",
+      "to": "options.objective.travel_cost",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective",
+      "to": "options.objective.custom",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective.travel_cost",
+      "to": "vehicles.costs.per_km",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.objective.travel_cost",
+      "to": "vehicles.costs.per_hour",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.allow",
+      "to": "options.routing.mode",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.avoid",
+      "to": "options.routing.exclude",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.hazmat_type",
+      "to": "options.routing.mode",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing",
+      "to": "options.routing.mode",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing",
+      "to": "options.routing.avoid",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing",
+      "to": "options.routing.exclude",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.mode",
+      "to": "options.routing.truck_size",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.profiles",
+      "to": "vehicles.profile",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.truck_axle_load",
+      "to": "options.routing.mode",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.routing.truck_weight",
+      "to": "options.routing.mode",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.webhook.events",
+      "to": "options.webhook.url",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.webhook",
+      "to": "options.webhook.url",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "options.webhook",
+      "to": "options.webhook.events",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations",
+      "to": "relations.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations",
+      "to": "relations.steps",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.max_duration",
+      "to": "relations.min_duration",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.steps.id",
+      "to": "relations.steps.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.steps.id",
+      "to": "relations.steps",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.steps",
+      "to": "relations.steps.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.steps.type",
+      "to": "relations.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.type",
+      "to": "relations.steps",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.type",
+      "to": "relations.steps.id",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "relations.type",
+      "to": "relations.vehicle",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.amount",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.amount",
+      "to": "shipments.pickup",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.amount",
+      "to": "shipments.delivery",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery",
+      "to": "shipments.pickup",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery",
+      "to": "shipments.delivery.location_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.location_index",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.location_index",
+      "to": "shipments.pickup.location_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.max_visit_lateness",
+      "to": "shipments.delivery.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.sequence_order",
+      "to": "shipments.pickup.sequence_order",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.service",
+      "to": "shipments.delivery.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.setup",
+      "to": "shipments.delivery.service",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.delivery.time_windows",
+      "to": "shipments.pickup.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.incompatible_load_types",
+      "to": "shipments.load_types",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments",
+      "to": "shipments.pickup",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments",
+      "to": "shipments.delivery",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments",
+      "to": "shipments.amount",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.max_time_in_vehicle",
+      "to": "shipments.pickup",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.max_time_in_vehicle",
+      "to": "shipments.delivery",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.outsourcing_cost",
+      "to": "shipments.priority",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.outsourcing_cost",
+      "to": "shipments.revenue",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.pickup",
+      "to": "shipments.pickup.location_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.pickup.location_index",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.pickup.max_visit_lateness",
+      "to": "shipments.pickup.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.pickup.service",
+      "to": "shipments.max_time_in_vehicle",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.pickup.setup",
+      "to": "shipments.pickup.service",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.skills",
+      "to": "vehicles.skills",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.volume.alignment",
+      "to": "shipments.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.volume.depth",
+      "to": "shipments.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.volume.height",
+      "to": "shipments.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.volume",
+      "to": "vehicles.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.volume.width",
+      "to": "shipments.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "shipments.zones",
+      "to": "vehicles.allowed_zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.allowed_zones",
+      "to": "vehicles.restricted_zones",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.alternative_capacities",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.breaks",
+      "to": "vehicles.breaks.time_windows",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.breaks",
+      "to": "vehicles.time_window",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.breaks",
+      "to": "vehicles.layover_config",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.breaks.service",
+      "to": "vehicles.max_working_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.breaks.time_windows",
+      "to": "vehicles.time_window",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.breaks.time_windows",
+      "to": "vehicles.breaks.service",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.deadhead_distance_penalty",
+      "to": "vehicles.max_deadhead_distance",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.deadhead_duration_penalty",
+      "to": "vehicles.max_deadhead_duration",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.fixed",
+      "to": "vehicles.costs",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs",
+      "to": "vehicles.costs.per_km",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs",
+      "to": "vehicles.costs.per_hour",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.min_stop_load_fixed_penalty",
+      "to": "vehicles.min_stop_load",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.min_stop_load_unit_penalty",
+      "to": "vehicles.min_stop_load",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.per_hour",
+      "to": "vehicles.costs.per_km",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.per_hour",
+      "to": "options.objective",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.per_km",
+      "to": "options.objective",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.costs.per_order",
+      "to": "vehicles.costs",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.depot",
+      "to": "vehicles.start_depot_ids",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.end_depot_ids",
+      "to": "vehicles.end_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.end_index",
+      "to": "locations.location",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.end_index",
+      "to": "vehicles.start_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles",
+      "to": "vehicles.skills",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles",
+      "to": "vehicles.time_window",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.layover_config.include_service_time",
+      "to": "vehicles.layover_config.max_continuous_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.layover_config",
+      "to": "vehicles.layover_config.max_continuous_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.layover_config.layover_duration",
+      "to": "vehicles.layover_config.max_continuous_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.layover_config.layover_duration",
+      "to": "vehicles.max_working_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_deadhead_distance",
+      "to": "vehicles.max_depot_runs",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_deadhead_duration",
+      "to": "vehicles.max_depot_runs",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_depot_runs",
+      "to": "vehicles.start_depot_ids",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_distance",
+      "to": "vehicles.max_travel_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_stops",
+      "to": "vehicles.max_tasks",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_travel_cost",
+      "to": "vehicles.max_distance",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_travel_cost",
+      "to": "vehicles.max_travel_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_travel_time",
+      "to": "vehicles.max_working_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_travel_time",
+      "to": "vehicles.time_window",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.max_working_time",
+      "to": "vehicles.time_window",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.min_stop_load",
+      "to": "vehicles.capacity",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.profile",
+      "to": "options.routing",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.speed_factor",
+      "to": "vehicles.max_travel_time",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.start_depot_ids",
+      "to": "vehicles.start_index",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.volume.depth",
+      "to": "vehicles.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.volume.height",
+      "to": "vehicles.volume",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "vehicles.volume",
+      "to": "vehicles.volume.width",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "zones.geometry.coordinates",
+      "to": "zones.geometry.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "zones.geometry",
+      "to": "zones.geometry.type",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "zones.geometry",
+      "to": "zones.geometry.coordinates",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "zones",
+      "to": "zones.geometry",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "zones",
+      "to": "zones.geofence_id",
+      "kind": "relatesTo"
+    },
+    {
+      "from": "zones",
+      "to": "jobs.zones",
+      "kind": "relatesTo"
+    }
+  ],
+  "rules": {
+    "capacity-dimension-consistency": {
+      "applies_to": [
+        "vehicles.capacity",
+        "jobs.delivery",
+        "jobs.pickup",
+        "shipments.amount",
+        "vehicles.alternative_capacities",
+        "vehicles.min_stop_load"
+      ],
+      "summary": "Load-dimension count must be consistent across capacity and every quantity field in the request.",
+      "rule": "The array length of vehicles[].capacity (and each alternative in vehicles[].alternative_capacities) must equal the array length of every jobs[].delivery, jobs[].pickup, and shipments[].amount in the same request. vehicles[].min_stop_load must also have the same dimension count. A dimension mismatch is a validation error (HTTP 400).",
+      "testingGuidance": [
+        "Negative: capacity [10,100] but a job delivery [5] (1 dim vs 2) -> HTTP 400 input validation failed.",
+        "Positive: capacity [10,100] with all deliveries/pickups/amounts 2-dimensional -> accepted.",
+        "Consistency: alternative_capacities with different dimension than primary capacity -> HTTP 400.",
+        "Consistency: min_stop_load [20,30] but capacity [10,100] only -> dimension mismatch HTTP 400."
+      ]
+    },
+    "load-type-compatibility": {
+      "applies_to": [
+        "jobs.load_types",
+        "jobs.incompatible_load_types",
+        "shipments.load_types",
+        "shipments.incompatible_load_types"
+      ],
+      "summary": "Incompatible load types cannot share a vehicle's cargo history.",
+      "rule": "A task whose incompatible_load_types intersects the load types already carried (or scheduled) on a vehicle cannot be co-assigned to it. Load types are effective only with a pickup/delivery step and ignored for a route's first task.",
+      "testingGuidance": [
+        "Behavioral: a job incompatible with 'raw' cannot ride a vehicle that carried 'raw'.",
+        "Positive: compatible load types share a vehicle without issue."
+      ]
+    },
+    "location-index-range": {
+      "applies_to": [
+        "locations.location",
+        "jobs.location_index",
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "shipments.pickup.location_index",
+        "shipments.delivery.location_index",
+        "depots.location_index"
+      ],
+      "summary": "Every location_index / start_index / end_index must resolve within the request's own locations.location array.",
+      "rule": "All index references must be integers in [0, len(locations.location)). An index >= len or < 0, or a non-integer index, is an input validation error (HTTP 400) at submit — distinct from an infeasible-but-valid request.",
+      "testingGuidance": [
+        "Negative: a job location_index equal to len(location) -> 400.",
+        "Negative: a non-integer index like \"first\" -> 400 type error."
+      ]
+    },
+    "matrix-pairing": {
+      "applies_to": [
+        "distance_matrix",
+        "duration_matrix",
+        "cost_matrix",
+        "locations.location"
+      ],
+      "summary": "Custom matrices must be square N×N over the location array; a distance_matrix requires a duration_matrix.",
+      "rule": "Every custom matrix must be N×N where N = len(locations.location). Providing distance_matrix WITHOUT duration_matrix is a validation error (400). A cost_matrix is honored only when travel_cost=customized.",
+      "testingGuidance": [
+        "Negative: distance_matrix supplied alone -> 400.",
+        "Negative: an N×(N-1) matrix -> 400."
+      ]
+    },
+    "max-duration-distance-cap": {
+      "applies_to": [
+        "vehicles.max_travel_time",
+        "vehicles.max_working_time",
+        "vehicles.max_distance",
+        "vehicles.time_window",
+        "vehicles.breaks.service",
+        "vehicles.layover_config.layover_duration"
+      ],
+      "summary": "Per-vehicle hard caps on driving time, working time, and distance (and the shift end) bound each route.",
+      "rule": "Route driving time <= max_travel_time; total working time (service+wait+setup+driving+breaks+layovers) <= max_working_time; distance <= max_distance; route end <= time_window[1]. An insertion that would breach any cap is rejected, routing the task elsewhere or leaving it unassigned. Waiting for a late window can breach max_working_time / the shift even when driving time is small. Break service duration and layover duration both count toward max_working_time.",
+      "testingGuidance": [
+        "Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+        "Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+        "Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+        "Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480."
+      ]
+    },
+    "max-stops-tasks-cap": {
+      "applies_to": [
+        "vehicles.max_stops",
+        "vehicles.max_tasks"
+      ],
+      "summary": "Per-vehicle hard caps on stops/tasks; demand beyond the cap is reassigned or unassigned.",
+      "rule": "Served stops must be <= max_stops and served tasks <= max_tasks (a shipment consumes two stops). Tasks beyond the caps are assigned to other vehicles or returned unassigned. A cap of 0 makes the vehicle serve nothing. When fleet-wide caps fall below eligible demand, the surplus is necessarily unassigned.",
+      "testingGuidance": [
+        "Boundary: max_tasks 5 with 6 eligible jobs -> the 6th is reassigned or unassigned.",
+        "Combination: two vehicles each max_tasks 5, 12 jobs -> >=2 unassigned."
+      ]
+    },
+    "multi-depot-reachability": {
+      "applies_to": [
+        "vehicles.start_index",
+        "vehicles.end_index",
+        "vehicles.start_depot_ids",
+        "vehicles.end_depot_ids",
+        "jobs.depot_ids",
+        "vehicles.max_depot_runs",
+        "depots"
+      ],
+      "summary": "Vehicles may start/end at different depots (by index or depot IDs); tasks restricted by depot_ids need a vehicle whose depots match.",
+      "rule": "With no start/end anchor a vehicle starts at its first task and ends at its last (open route). With multiple depots the solver picks the geographically closest per cluster. A job's depot_ids must intersect an available vehicle's depots, else it is unassigned. Pickup-type jobs need a vehicle with start depots; delivery-type jobs need end depots. max_depot_runs allows reloads but conflicts with layover_config/relations/deadhead caps.",
+      "testingGuidance": [
+        "Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster.",
+        "Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned."
+      ]
+    },
+    "objective-cost-mode-consistency": {
+      "applies_to": [
+        "options.objective.travel_cost",
+        "cost_matrix",
+        "vehicles.costs.per_km",
+        "vehicles.costs.per_hour"
+      ],
+      "summary": "The travel_cost mode must be consistent with the cost inputs: customized needs cost_matrix; per_km needs distance; per_hour needs duration.",
+      "rule": "options.objective.travel_cost=customized requires a cost_matrix (else 400). vehicles.costs.per_km is effective only when travel_cost=distance; vehicles.costs.per_hour only when travel_cost=duration; per_km and per_hour are mutually exclusive on a vehicle.",
+      "testingGuidance": [
+        "Negative: travel_cost=customized without cost_matrix -> 400.",
+        "Behavioral: per_km cost ignored unless travel_cost=distance."
+      ]
+    },
+    "pickup-delivery-precedence": {
+      "applies_to": [
+        "shipments.pickup.location_index",
+        "shipments.delivery.location_index",
+        "shipments.amount",
+        "shipments.max_time_in_vehicle",
+        "shipments.pickup.sequence_order",
+        "shipments.delivery.sequence_order",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows",
+        "shipments",
+        "shipments.pickup",
+        "shipments.delivery"
+      ],
+      "summary": "A shipment's pickup and delivery must be served by the same vehicle, pickup before delivery, with carried amount respected as load and max_time_in_vehicle honored.",
+      "rule": "Both steps are mandatory and co-assigned to one vehicle; the delivery step occurs after the pickup step. Load is added at pickup and removed at delivery, honoring capacity cumulatively (couples with capacity-dimension-consistency). If the pair cannot be co-scheduled feasibly (window precedence, capacity, or max_time_in_vehicle), BOTH steps go to result.unassigned. Delivery must occur after pickup in time and sequence order.",
+      "testingGuidance": [
+        "Infeasible: delivery time window earlier than the pickup window -> precedence infeasible -> both unassigned.",
+        "Infeasible: two amount [3] shipments onboard together on capacity [5] -> one deferred by capacity.",
+        "Precedence: pickup [10:00,11:00], delivery [09:00,09:30] (delivery before pickup) -> both unassigned."
+      ]
+    },
+    "priority-tiebreaker": {
+      "applies_to": [
+        "jobs.priority",
+        "vehicles.capacity",
+        "jobs.time_windows",
+        "jobs.skills",
+        "jobs.outsourcing_cost",
+        "shipments.outsourcing_cost",
+        "shipments.priority"
+      ],
+      "summary": "Priority orders assignment preference but is subordinate to all hard constraints.",
+      "rule": "When not all demand can be served, higher-priority jobs are preferred for assignment, but priority cannot override capacity, time windows, skills, precedence, max-stops, or max-duration. Outsourcing_cost (the cost of leaving a task unassigned) acts as a priority override — when set, tasks with higher outsourcing cost are assigned first. An unsatisfiable high-priority task still goes to result.unassigned.",
+      "testingGuidance": [
+        "Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+        "Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+        "Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first."
+      ]
+    },
+    "relations-reference-integrity": {
+      "applies_to": [
+        "relations.steps.id",
+        "relations.steps.type",
+        "relations.vehicle",
+        "relations.type"
+      ],
+      "summary": "Relation steps must reference valid jobs or shipment steps; pinned relations require a valid vehicle.",
+      "rule": "relations.steps[].id must reference an existing job id (job step) or shipment pickup/delivery id (pickup/delivery step), consistent with steps[].type: 'job' references jobs[].id; 'pickup' or 'delivery' references shipments[].id. Start/end type steps carry no id requirement. relations.vehicle is required when type='pinned' and must reference an existing vehicle id; the same vehicle cannot be pinned by more than one relation. Unresolved references are HTTP 400 validation errors.",
+      "testingGuidance": [
+        "Negative: relation type 'sequence' with steps=[{type: 'job', id: 'J999'}] but J999 does not exist in jobs -> HTTP 400.",
+        "Negative: relation type 'pinned' with vehicle='V999' but V999 not in vehicles -> HTTP 400.",
+        "Positive: relation type 'sequence' with steps=[{type: 'job', id: 'J1'}, {type: 'delivery', id: 'S1'}] where both ids exist -> accepted.",
+        "Negative: relation type 'pinned' with vehicle='V1' appears twice (two different relations) -> HTTP 400 (duplicate pinning)."
+      ]
+    },
+    "relations-supersede-soft": {
+      "applies_to": [
+        "relations",
+        "options.constraint",
+        "jobs.sequence_order",
+        "depots.throughput"
+      ],
+      "summary": "When relations are present, options.constraint soft penalties (and sequence_order/throughput) become ineffective; an unsatisfiable relation unassigns all its tasks.",
+      "rule": "Relations are hard constraints. While any relation is present, options.constraint soft penalties, jobs.sequence_order soft enforcement, and depots.throughput limits are ineffective. If a relation cannot be satisfied, ALL tasks referenced by that relation are placed in result.unassigned (still HTTP 200).",
+      "testingGuidance": [
+        "Interaction: with a relation set, raising visit_lateness_penalty has no effect.",
+        "Infeasible: an in_direct_sequence relation whose ordering is impossible -> all its tasks unassigned."
+      ]
+    },
+    "route-balancing-subordinate-to-hard-constraints": {
+      "applies_to": [
+        "options.objective",
+        "options.constraint.max_vehicle_overtime",
+        "options.constraint.vehicle_overtime_penalty",
+        "options.constraint.visit_lateness_penalty"
+      ],
+      "summary": "Route balancing / penalty terms are best-effort and never override hard constraints (C1–C7); infeasible tasks stay unassigned regardless of balancing configuration.",
+      "rule": "Balancing and penalty terms under options.objective (e.g. minimize_visits_over_threshold) and options.constraint (vehicle_overtime_penalty, visit_lateness_penalty, max_vehicle_overtime as a soft constraint) are best-effort and subordinate to all hard constraints (C1–C7: capacity, time windows, precedence, max-stops, max-duration, skills, zones, depots). A task infeasible under hard constraints stays unassigned in result.unassigned regardless of balancing weights. Enabling balancing must never cause an otherwise-feasible task to become unassigned; it only shifts the order of feasible assignments.",
+      "testingGuidance": [
+        "Positive: all jobs feasible under hard constraints + balancing options enabled -> all jobs still assigned (assert assignment count only, never the specific route distribution).",
+        "Negative-infeasible: a job infeasible under a hard constraint (e.g. impossible time window) stays unassigned regardless of balancing weights (assert unassigned reason)."
+      ]
+    },
+    "routing-mode-gating": {
+      "applies_to": [
+        "options.routing.mode",
+        "options.routing.truck_size",
+        "options.routing.truck_weight",
+        "options.routing.hazmat_type",
+        "options.routing.truck_axle_load",
+        "options.routing.allow"
+      ],
+      "summary": "Mode-specific routing attributes are only valid for their mode (truck attrs need mode=truck; allow=taxi needs mode=car).",
+      "rule": "truck_size, truck_weight, hazmat_type, and truck_axle_load require options.routing.mode=truck; allow=[taxi] requires mode=car. Supplying a mode-specific attribute under the wrong mode is a validation error (400).",
+      "testingGuidance": [
+        "Negative: truck_weight with mode=car -> 400.",
+        "Negative: allow=[taxi] with mode=truck -> 400."
+      ]
+    },
+    "skills-superset": {
+      "applies_to": [
+        "jobs.skills",
+        "vehicles.skills",
+        "shipments.skills"
+      ],
+      "summary": "A task is assignable to a vehicle only if the vehicle's skills contain ALL of the task's required skills.",
+      "rule": "Assignment is allowed iff task.skills is a subset of vehicle.skills (superset match). A task requiring a skill no vehicle has always goes to result.unassigned (skill reason), even when capacity and time are ample. Empty task skills match any vehicle.",
+      "testingGuidance": [
+        "Infeasible: job needs skill 3, no vehicle has 3 -> unassigned.",
+        "Positive: job needs [2]; only the vehicle whose skills include 2 serves it."
+      ]
+    },
+    "time-window-feasibility": {
+      "applies_to": [
+        "jobs.time_windows",
+        "vehicles.time_window",
+        "jobs.max_visit_lateness",
+        "jobs.service",
+        "vehicles.max_working_time",
+        "shipments.pickup.time_windows",
+        "shipments.delivery.time_windows",
+        "shipments.pickup.max_visit_lateness",
+        "shipments.delivery.max_visit_lateness",
+        "depots.time_windows",
+        "options.constraint.max_visit_lateness",
+        "vehicles.breaks.time_windows"
+      ],
+      "summary": "A stop is feasible only if the vehicle can start it within a window (or within lateness tolerance) and still fit the shift; early arrival waits.",
+      "rule": "Arrival must fall inside one of a task's time_windows, or within max_visit_lateness after it; early arrival waits (inflating elapsed/working time). The whole route including service and waiting must finish within the vehicle's time_window. An impossible window (ends before the earliest reachable arrival, beyond tolerance) sends the task to result.unassigned (time-window reason); HTTP stays 200. This applies uniformly to job steps, shipment pickup/delivery steps, depot anchor points, and break windows — each must satisfy its own window + lateness constraint.",
+      "testingGuidance": [
+        "Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+        "Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+        "Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+        "Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+      ]
+    },
+    "zone-eligibility": {
+      "applies_to": [
+        "jobs.zones",
+        "shipments.zones",
+        "vehicles.allowed_zones",
+        "vehicles.restricted_zones",
+        "zones"
+      ],
+      "summary": "A zoned task can only be served by a vehicle allowed in that zone (and not restricting it); shipments consider both steps' zones.",
+      "rule": "A task in zone Z is assignable only to a vehicle whose allowed_zones include Z (or omits allowed_zones) and whose restricted_zones exclude Z. Empty allowed_zones restricts a vehicle to zone-less tasks. If any job sets zones, all jobs must. A zoned task with no eligible vehicle goes to result.unassigned.",
+      "testingGuidance": [
+        "Infeasible: job in zone 2 with every vehicle restricting or not allowing zone 2 -> unassigned.",
+        "Positive: job zones [1], vehicle allowed_zones [1] -> served."
+      ]
+    }
+  },
+  "clusters": {
+    "cluster-1": [
+      "cost_matrix",
+      "depots",
+      "depots.location_index",
+      "depots.service",
+      "depots.throughput",
+      "depots.throughput.handling_duration",
+      "depots.throughput.load_penalty",
+      "depots.throughput.max_load",
+      "depots.throughput.max_vehicles",
+      "depots.throughput.vehicle_penalty",
+      "depots.time_windows",
+      "distance_matrix",
+      "duration_matrix",
+      "jobs",
+      "jobs.delivery",
+      "jobs.depot_ids",
+      "jobs.location_index",
+      "jobs.max_visit_lateness",
+      "jobs.outsourcing_cost",
+      "jobs.pickup",
+      "jobs.priority",
+      "jobs.revenue",
+      "jobs.sequence_order",
+      "jobs.service",
+      "jobs.setup",
+      "jobs.skills",
+      "jobs.time_windows",
+      "jobs.zones",
+      "locations",
+      "locations.approaches",
+      "locations.location",
+      "options",
+      "options.constraint",
+      "options.constraint.max_vehicle_overtime",
+      "options.constraint.max_visit_lateness",
+      "options.constraint.sequence_order_penalty",
+      "options.constraint.vehicle_overtime_penalty",
+      "options.constraint.visit_lateness_penalty",
+      "options.grouping",
+      "options.grouping.order_grouping",
+      "options.grouping.order_grouping.grouping_diameter",
+      "options.grouping.proximity_factor",
+      "options.grouping.route_grouping",
+      "options.grouping.route_grouping.zone_ids",
+      "options.grouping.route_grouping.zone_source",
+      "options.objective",
+      "options.objective.allow_early_arrival",
+      "options.objective.custom",
+      "options.objective.custom.type",
+      "options.objective.custom.value",
+      "options.objective.travel_cost",
+      "options.routing",
+      "options.routing.allow",
+      "options.routing.avoid",
+      "options.routing.exclude",
+      "options.routing.hazmat_type",
+      "options.routing.mode",
+      "options.routing.profiles",
+      "options.routing.truck_axle_load",
+      "options.routing.truck_size",
+      "options.routing.truck_weight",
+      "relations",
+      "relations.steps",
+      "relations.steps.id",
+      "relations.steps.type",
+      "relations.type",
+      "relations.vehicle",
+      "shipments",
+      "shipments.amount",
+      "shipments.delivery",
+      "shipments.delivery.location_index",
+      "shipments.delivery.max_visit_lateness",
+      "shipments.delivery.sequence_order",
+      "shipments.delivery.service",
+      "shipments.delivery.setup",
+      "shipments.delivery.time_windows",
+      "shipments.max_time_in_vehicle",
+      "shipments.outsourcing_cost",
+      "shipments.pickup",
+      "shipments.pickup.location_index",
+      "shipments.pickup.max_visit_lateness",
+      "shipments.pickup.sequence_order",
+      "shipments.pickup.service",
+      "shipments.pickup.setup",
+      "shipments.pickup.time_windows",
+      "shipments.priority",
+      "shipments.revenue",
+      "shipments.skills",
+      "shipments.zones",
+      "vehicles",
+      "vehicles.allowed_zones",
+      "vehicles.alternative_capacities",
+      "vehicles.breaks",
+      "vehicles.breaks.service",
+      "vehicles.breaks.time_windows",
+      "vehicles.capacity",
+      "vehicles.costs",
+      "vehicles.costs.deadhead_distance_penalty",
+      "vehicles.costs.deadhead_duration_penalty",
+      "vehicles.costs.fixed",
+      "vehicles.costs.min_stop_load_fixed_penalty",
+      "vehicles.costs.min_stop_load_unit_penalty",
+      "vehicles.costs.per_hour",
+      "vehicles.costs.per_km",
+      "vehicles.costs.per_order",
+      "vehicles.depot",
+      "vehicles.end_depot_ids",
+      "vehicles.end_index",
+      "vehicles.layover_config",
+      "vehicles.layover_config.include_service_time",
+      "vehicles.layover_config.layover_duration",
+      "vehicles.layover_config.max_continuous_time",
+      "vehicles.max_deadhead_distance",
+      "vehicles.max_deadhead_duration",
+      "vehicles.max_depot_runs",
+      "vehicles.max_distance",
+      "vehicles.max_travel_cost",
+      "vehicles.max_travel_time",
+      "vehicles.max_working_time",
+      "vehicles.min_stop_load",
+      "vehicles.profile",
+      "vehicles.restricted_zones",
+      "vehicles.skills",
+      "vehicles.speed_factor",
+      "vehicles.start_depot_ids",
+      "vehicles.start_index",
+      "vehicles.time_window",
+      "zones",
+      "zones.geofence_id",
+      "zones.geometry",
+      "zones.geometry.coordinates",
+      "zones.geometry.type"
+    ],
+    "cluster-2": [
+      "vehicles.max_stops",
+      "vehicles.max_tasks"
+    ],
+    "cluster-3": [
+      "jobs.volume",
+      "jobs.volume.alignment",
+      "jobs.volume.depth",
+      "jobs.volume.height",
+      "jobs.volume.width",
+      "shipments.volume",
+      "shipments.volume.alignment",
+      "shipments.volume.depth",
+      "shipments.volume.height",
+      "shipments.volume.width",
+      "vehicles.volume",
+      "vehicles.volume.depth",
+      "vehicles.volume.height",
+      "vehicles.volume.width"
+    ],
+    "cluster-4": [
+      "jobs.incompatible_load_types",
+      "jobs.load_types",
+      "shipments.incompatible_load_types",
+      "shipments.load_types"
+    ],
+    "cluster-5": [
+      "options.webhook",
+      "options.webhook.events",
+      "options.webhook.url"
+    ],
+    "cluster-6": [
+      "relations.max_duration",
+      "relations.min_duration"
+    ]
+  }
+}

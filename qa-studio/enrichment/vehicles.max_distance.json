@@ -1,0 +1,35 @@
+{
+  "path": "vehicles.max_distance",
+  "summary": "Hard cap on cumulative route distance (meters).",
+  "range": "Non-negative integer meters. Applies to distance_matrix values if provided.",
+  "constraints": [
+    "Non-negative integer meters; route distance <= max_distance."
+  ],
+  "businessRules": [
+    "max_distance defines: Specify the total distance, in meters, that the vehicle can travel. This is a constraint on the driving distance of the vehicle. In case distance_matrix is also provided in the input, then this con…",
+    "Must stay consistent with: vehicles.max_travel_time. Changes here may require validation of those fields.",
+    "Values in meters; must be non-negative. Affects routing cost calculations.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: max_distance 100000 (100km) covers the plan.",
+    "Infeasible: max_distance shorter than the leg to the nearest task -> vehicle unused.",
+    "Boundary: route distance exactly max_distance accepted.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field max_distance",
+    "Interaction: Infeasible: nearest task's leg alone exceeds max_travel_time -> vehicle serves nothing.",
+    "Interaction: Interaction: a 40-min wait for a late window pushes route end past the shift -> unassigned.",
+    "Interaction: Break duration: vehicle with max_working_time 480 and two 30-min breaks + 8h driving -> working time 480 (hits cap, no room for service).",
+    "Interaction: Layover: max_working_time 480, 120-min layover + 360-min driving -> working time exactly 480."
+  ],
+  "related": [
+    "vehicles.max_travel_time"
+  ],
+  "rules": [
+    "max-duration-distance-cap"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

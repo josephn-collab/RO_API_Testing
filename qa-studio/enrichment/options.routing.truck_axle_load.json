@@ -1,0 +1,35 @@
+{
+  "path": "options.routing.truck_axle_load",
+  "summary": "Tonnes per axle for truck routing. mode=truck only.",
+  "range": "Number (tonnes). Requires mode=truck.",
+  "constraints": [
+    "Requires mode=truck.",
+    "Positive number."
+  ],
+  "businessRules": [
+    "truck_axle_load defines: Specify the total load per axle (including the weight of trailers and shipped goods) of the truck, in tonnes. When used, the optimizer will use only those routes which are legally allowed to carry …",
+    "Must stay consistent with: options.routing.mode. Changes here may require validation of those fields.",
+    "Values must be non-negative. Zero means no capacity/demand on that dimension.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "truck_axle_load with mode != truck -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: 11.5 with mode=truck.",
+    "Negative: with mode=walk -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field truck_axle_load",
+    "Interaction: Negative: truck_weight with mode=car -> 400.",
+    "Interaction: Negative: allow=[taxi] with mode=truck -> 400."
+  ],
+  "related": [
+    "options.routing.mode"
+  ],
+  "rules": [
+    "routing-mode-gating"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

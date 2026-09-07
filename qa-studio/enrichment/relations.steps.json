@@ -1,0 +1,28 @@
+{
+  "path": "relations.steps",
+  "summary": "The ordered task steps the relation binds. Required.",
+  "range": "Required array of { type, id } objects. Step type: start | end | job | pickup | delivery (id required except start/end).",
+  "constraints": [
+    "Required.",
+    "Each step needs a type; id required except for start/end."
+  ],
+  "businessRules": [
+    "steps defines: The steps property specifies the tasks or steps that are part of the relation and must be carried out in a manner defined in the type parameter. Please note you can add any number of steps here, ex…",
+    "Each element in steps must be valid and consistent with related fields.",
+    "Must stay consistent with: relations.steps.type. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A job/pickup/delivery step without id -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: steps [{type:job,id:J1},{type:job,id:J2}].",
+    "Negative: a job step missing id -> 400.",
+    "Positive: omit optional field steps"
+  ],
+  "related": [
+    "relations.steps.type"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

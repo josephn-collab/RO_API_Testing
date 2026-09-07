@@ -1,0 +1,31 @@
+{
+  "path": "options.grouping.route_grouping.zone_source",
+  "summary": "Where zone definitions come from for route grouping.",
+  "range": "Enum: system_generated (default) | custom_definition (requires zones[]).",
+  "constraints": [
+    "custom_definition requires a zones[] array."
+  ],
+  "businessRules": [
+    "zone_source defines: Specify the source for creating boundaries of the routing zones. The default value is “system\\_generated”. * system\\_generated - Routing zone boundaries are created automatically by the optimizer b…",
+    "Valid options: system_generated, custom_definition. Each affects solver behavior differently.",
+    "Must stay consistent with: zones. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [
+    "zone_source=custom_definition without zones -> 400.",
+    "A value outside the enum -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: system_generated (no zones needed).",
+    "Negative: custom_definition without zones -> 400.",
+    "Positive: test with zone_source set to \"system_generated\"",
+    "Positive: test with zone_source set to \"custom_definition\"",
+    "Positive: omit optional field zone_source"
+  ],
+  "related": [
+    "zones"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

@@ -1,0 +1,37 @@
+{
+  "path": "vehicles.breaks.time_windows",
+  "summary": "Allowed start slots for a driver break; must sit inside the vehicle's shift. Required on a break.",
+  "range": "Required array of [start,end] Unix-second pairs; non-overlapping; each within the vehicle's time_window.",
+  "constraints": [
+    "Required on each break.",
+    "Non-overlapping; each window within vehicles.time_window."
+  ],
+  "businessRules": [
+    "time_windows defines: Describe the possible time slots for the driver's break period to start. The time periods should be expressed as a UNIX timestamp in seconds. Please note that * Individual time window should not ov…",
+    "Each element in time_windows must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.time_window, vehicles.breaks.service. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "A break window outside the shift -> unschedulable / infeasible.",
+    "Overlapping break windows -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: break window [43200,46800] inside a 09:00–17:00 shift.",
+    "Infeasible: break window entirely outside the shift.",
+    "Positive: omit optional field time_windows",
+    "Interaction: Infeasible: job window [09:00,09:30], max_visit_lateness 0, nearest vehicle arrives 09:45 -> unassigned.",
+    "Interaction: Interaction: a long wait for a late window pushes route end past the shift -> unassigned (couples with max-duration-distance-cap).",
+    "Interaction: Shipment: delivery window [09:00,09:30], max_visit_lateness 15, nearest vehicle arrives 09:40 -> accepted within lateness.",
+    "Interaction: Break: break time_windows [12:00,13:00], vehicle arrives 12:30 -> break scheduled at 12:30."
+  ],
+  "related": [
+    "vehicles.time_window",
+    "vehicles.breaks.service"
+  ],
+  "rules": [
+    "time-window-feasibility"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "objective-cost-mode-consistency",
+  "summary": "The travel_cost mode must be consistent with the cost inputs: customized needs cost_matrix; per_km needs distance; per_hour needs duration.",
+  "applies_to": [
+    "options.objective.travel_cost",
+    "cost_matrix",
+    "vehicles.costs.per_km",
+    "vehicles.costs.per_hour"
+  ],
+  "rule": "options.objective.travel_cost=customized requires a cost_matrix (else 400). vehicles.costs.per_km is effective only when travel_cost=distance; vehicles.costs.per_hour only when travel_cost=duration; per_km and per_hour are mutually exclusive on a vehicle.",
+  "testingGuidance": [
+    "Negative: travel_cost=customized without cost_matrix -> 400.",
+    "Behavioral: per_km cost ignored unless travel_cost=distance."
+  ]
+}

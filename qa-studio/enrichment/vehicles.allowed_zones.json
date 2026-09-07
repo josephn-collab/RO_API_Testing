@@ -1,0 +1,33 @@
+{
+  "path": "vehicles.allowed_zones",
+  "summary": "Zones the vehicle may serve tasks in.",
+  "range": "Array of integer zone IDs. Empty array = only zone-less tasks. Omitted = all zones.",
+  "constraints": [],
+  "businessRules": [
+    "Empty allowed_zones restricts the vehicle to tasks with no zone.",
+    "A task in a non-allowed zone cannot be served by this vehicle.",
+    "allowed_zones defines: Specifies the zones where the vehicle is allowed to fulfil any tasks. Please note the following: * If this parameter is provided, then the vehicle can fulfil tasks only in the given zones but, it i…",
+    "Each element in allowed_zones must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.zones, vehicles.restricted_zones. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Vehicle and job zones must intersect. Vehicle without zone restrictions can serve any zone."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: allowed_zones [1] serves jobs.zones [1].",
+    "Infeasible: a job in zone 2 with no vehicle allowed there -> unassigned.",
+    "Boundary: empty allowed_zones + a zoned job -> unassigned.",
+    "Positive: omit optional field allowed_zones",
+    "Interaction: Infeasible: job in zone 2 with every vehicle restricting or not allowing zone 2 -> unassigned.",
+    "Interaction: Positive: job zones [1], vehicle allowed_zones [1] -> served."
+  ],
+  "related": [
+    "jobs.zones",
+    "vehicles.restricted_zones"
+  ],
+  "rules": [
+    "zone-eligibility"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

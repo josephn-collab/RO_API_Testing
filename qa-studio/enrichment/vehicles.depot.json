@@ -1,0 +1,26 @@
+{
+  "path": "vehicles.depot",
+  "summary": "DEPRECATED — use start_depot_ids / end_depot_ids instead.",
+  "range": "Integer. Deprecated legacy depot reference.",
+  "constraints": [],
+  "businessRules": [
+    "Deprecated: prefer start_depot_ids/end_depot_ids. Retained for backward compatibility.",
+    "depot defines: **Deprecated! Please use the** start_depot_ids **and** end_depot_ids **to configure the originating and culminating depots for the vehicle, respectively.** The depot attribute specifies the ID of t…",
+    "Must stay consistent with: vehicles.start_depot_ids. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Regression: confirm a legacy request using depot still behaves; migrate to start/end_depot_ids.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field depot"
+  ],
+  "related": [
+    "vehicles.start_depot_ids"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

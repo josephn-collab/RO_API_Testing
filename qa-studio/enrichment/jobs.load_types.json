@@ -1,0 +1,29 @@
+{
+  "path": "jobs.load_types",
+  "summary": "Load-type tags on the job; effective only with a pickup/delivery step; combine with incompatible_load_types.",
+  "range": "Array of string tags. Ignored for the first task of a route.",
+  "constraints": [],
+  "businessRules": [
+    "Two load types that are mutually incompatible cannot share a vehicle's history.",
+    "load_types defines: Use this parameter to specify the type of loads for the given job. Once this property is configured, the job can not be served by a vehicle which has serviced any task whose load is incompatible wi…",
+    "Each element in load_types must be valid and consistent with related fields.",
+    "Must stay consistent with: jobs.incompatible_load_types. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: load_types [\"frozen\"].",
+    "Infeasible: a job whose load_type is incompatible with everything already onboard -> deferred/unassigned.",
+    "Positive: omit optional field load_types",
+    "Interaction: Behavioral: a job incompatible with 'raw' cannot ride a vehicle that carried 'raw'.",
+    "Interaction: Positive: compatible load types share a vehicle without issue."
+  ],
+  "related": [
+    "jobs.incompatible_load_types"
+  ],
+  "rules": [
+    "load-type-compatibility"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

@@ -1,0 +1,34 @@
+{
+  "path": "jobs.sequence_order",
+  "summary": "Relative ordering of the job within a route; relations outrank it, it overrides order_grouping.",
+  "range": "Integer in [0,100].",
+  "constraints": [
+    "Integer within [0,100]."
+  ],
+  "businessRules": [
+    "Lower sequence_order is served earlier; a hard relations constraint overrides it.",
+    "sequence_order defines: Use this parameter to prioritize completing a task relative to certain other tasks. A task configured with a sequence_order of 2 will be done after the task with sequence_order of 1, but before the…",
+    "Must stay consistent with: relations. Changes here may require validation of those fields.",
+    "Rule: Relations define hard sequencing: job pairs, duration bounds, vehicle affinity.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Outside [0,100] -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: two jobs sequence_order 1 and 2 served in that order.",
+    "Boundary: 0 and 100 valid; 101 -> 400.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field sequence_order",
+    "Interaction: Interaction: with a relation set, raising visit_lateness_penalty has no effect.",
+    "Interaction: Infeasible: an in_direct_sequence relation whose ordering is impossible -> all its tasks unassigned."
+  ],
+  "related": [
+    "relations"
+  ],
+  "rules": [],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

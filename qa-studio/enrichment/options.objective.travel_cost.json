@@ -1,0 +1,41 @@
+{
+  "path": "options.objective.travel_cost",
+  "summary": "Basis the solver uses to cost travel between stops.",
+  "range": "Enum: duration (default) | distance | air_distance | customized. 'customized' requires cost_matrix.",
+  "constraints": [
+    "travel_cost=customized requires a cost_matrix.",
+    "per_km costs need travel_cost=distance; per_hour costs need travel_cost=duration."
+  ],
+  "businessRules": [
+    "travel_cost defines: The travel_cost parameter specifies the type of cost used by the solver to determine the routes. If the travel_cost parameter is set to distance, the solver will minimize the total distance travele…",
+    "Valid options: duration, distance, air_distance, customized. Each affects solver behavior differently.",
+    "Must stay consistent with: cost_matrix, vehicles.costs.per_km, vehicles.costs.per_hour. Changes here may require validation of those fields.",
+    "Rule: Cost/distance/duration matrices must have consistent dimensions and indices.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "travel_cost=customized without cost_matrix -> 400.",
+    "A value outside the enum -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: each enum value (duration/distance/air_distance).",
+    "Negative: customized without cost_matrix -> 400.",
+    "Positive: test with travel_cost set to \"duration\"",
+    "Positive: test with travel_cost set to \"distance\"",
+    "Positive: test with travel_cost set to \"air_distance\"",
+    "Positive: test with travel_cost set to \"customized\"",
+    "Positive: omit optional field travel_cost",
+    "Interaction: Negative: travel_cost=customized without cost_matrix -> 400.",
+    "Interaction: Behavioral: per_km cost ignored unless travel_cost=distance."
+  ],
+  "related": [
+    "cost_matrix",
+    "vehicles.costs.per_km",
+    "vehicles.costs.per_hour"
+  ],
+  "rules": [
+    "objective-cost-mode-consistency"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

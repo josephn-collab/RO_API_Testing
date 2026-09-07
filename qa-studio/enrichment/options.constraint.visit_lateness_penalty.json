@@ -1,0 +1,32 @@
+{
+  "path": "options.constraint.visit_lateness_penalty",
+  "summary": "Penalty per unit of lateness within tolerance.",
+  "range": "Integer. Default 10.",
+  "constraints": [],
+  "businessRules": [
+    "Higher discourages late visits without forbidding them.",
+    "visit_lateness_penalty defines: Specify the penalty to be applied for every unit of time by which a vehicle is late for a scheduled task. A higher penalty discourages any lateness for a scheduled task. The default value is 10. Us…",
+    "Must stay consistent with: options.constraint.max_visit_lateness. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: raise to prefer on-time routes.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field visit_lateness_penalty",
+    "Interaction: Positive: all jobs feasible under hard constraints + balancing options enabled -> all jobs still assigned (assert assignment count only, never the specific route distribution).",
+    "Interaction: Negative-infeasible: a job infeasible under a hard constraint (e.g. impossible time window) stays unassigned regardless of balancing weights (assert unassigned reason)."
+  ],
+  "related": [
+    "options.constraint.max_visit_lateness"
+  ],
+  "rules": [
+    "route-balancing-subordinate-to-hard-constraints"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

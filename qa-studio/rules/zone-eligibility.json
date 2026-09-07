@@ -1,0 +1,16 @@
+{
+  "id": "zone-eligibility",
+  "summary": "A zoned task can only be served by a vehicle allowed in that zone (and not restricting it); shipments consider both steps' zones.",
+  "applies_to": [
+    "jobs.zones",
+    "shipments.zones",
+    "vehicles.allowed_zones",
+    "vehicles.restricted_zones",
+    "zones"
+  ],
+  "rule": "A task in zone Z is assignable only to a vehicle whose allowed_zones include Z (or omits allowed_zones) and whose restricted_zones exclude Z. Empty allowed_zones restricts a vehicle to zone-less tasks. If any job sets zones, all jobs must. A zoned task with no eligible vehicle goes to result.unassigned.",
+  "testingGuidance": [
+    "Infeasible: job in zone 2 with every vehicle restricting or not allowing zone 2 -> unassigned.",
+    "Positive: job zones [1], vehicle allowed_zones [1] -> served."
+  ]
+}

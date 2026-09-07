@@ -1,0 +1,38 @@
+{
+  "path": "shipments.outsourcing_cost",
+  "summary": "Cost of leaving the shipment unassigned; overrides priority. Cannot combine with revenue.",
+  "range": "Integer. Overrides priority. Mutually exclusive with revenue.",
+  "constraints": [
+    "Cannot be set together with revenue."
+  ],
+  "businessRules": [
+    "A high outsourcing_cost makes the solver prefer serving this shipment over a higher-priority one.",
+    "outsourcing_cost defines: Specify the cost of keeping this shipment unassigned, namely, the cost of outsourcing the shipment. When provided, the optimizer weighs the cost of assigning the shipment against the cost of keepin…",
+    "Must stay consistent with: shipments.priority, shipments.revenue. Changes here may require validation of those fields.",
+    "Rule: Higher priority jobs are serviced first; ties break by job ID order.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "Both outsourcing_cost and revenue set -> 400."
+  ],
+  "testingGuidance": [
+    "Behavioral: high outsourcing_cost shipment preferred over a higher-priority one for the last slot.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field outsourcing_cost",
+    "Interaction: Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+    "Interaction: Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+    "Interaction: Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first."
+  ],
+  "related": [
+    "shipments.priority",
+    "shipments.revenue"
+  ],
+  "rules": [
+    "priority-tiebreaker"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

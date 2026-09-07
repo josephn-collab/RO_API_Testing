@@ -1,0 +1,2767 @@
+[
+  {
+    "testCaseId": "TC-RO-POS-001",
+    "feature": "Vehicle end_index",
+    "title": "Vehicles finish at configured end depots",
+    "description": "start_index != end_index; each route ends at its end_index.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 5,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 6,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 10,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 15,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 18,
+          "capacity": [
+            50
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_25",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; status:'Ok' with id; result.code==0; each route ends at its vehicle end_index; all 25 jobs assigned; result.unassigned empty.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-002",
+    "feature": "Vehicle capacity",
+    "title": "Delivery load within vehicle capacity",
+    "description": "Per-route delivery load never exceeds capacity [50].",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            50
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            50
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_25",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; all 25 jobs assigned; result.unassigned empty; no route load exceeds capacity [50].",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-003",
+    "feature": "Job location_index",
+    "title": "Jobs reference valid location indices",
+    "description": "All 25 job location_index values resolve within locations.location.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            60
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_25",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "jobs.location_index"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; every job served at its referenced location_index; all 25 assigned.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-004",
+    "feature": "Job delivery",
+    "title": "Delivery quantities assigned within capacity",
+    "description": "Delivery demand distributed across the fleet.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            60
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            60
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_25",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery"
+      ],
+      "archetype": "positive"
+    },
+    "expectedResult": "200; result.code==0; all 25 jobs assigned; total assigned delivery equals 50; per-route load <= capacity.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-005",
+    "feature": "Split Order — nominal split",
+    "title": "Large splittable job is split across vehicles",
+    "description": "A job with delivery far above a single vehicle capacity, can_be_split=true, splits across the fleet.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            2
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "big",
+          "location_index": 5,
+          "delivery": [
+            8
+          ],
+          "split": {
+            "can_be_split": true,
+            "max_splits": 5
+          }
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.split.can_be_split",
+        "jobs.split.max_splits"
+      ],
+      "archetype": "positive",
+      "draft": true
+    },
+    "expectedResult": "200; result.code==0; job 'big' (delivery 8 > capacity 2) is SPLIT across vehicles; sub-deliveries sum to 8; 'big' NOT in result.unassigned; no route load exceeds capacity [2].",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-006",
+    "feature": "Split Order — can_be_split=false unassigned",
+    "title": "Non-splittable oversized job is left unassigned",
+    "description": "Delivery ~5x capacity with can_be_split=false; the job cannot fit any single vehicle and is unassigned.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            2
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "big",
+          "location_index": 5,
+          "delivery": [
+            10
+          ],
+          "split": {
+            "can_be_split": false,
+            "max_splits": 5
+          }
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.split.can_be_split",
+        "jobs.split.max_splits"
+      ],
+      "archetype": "infeasible",
+      "draft": true
+    },
+    "expectedResult": "200; result.code==0; job 'big' (delivery 10 > capacity 2, can_be_split=false) appears in result.unassigned with a capacity reason; the 24 normal jobs remain assigned.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-007",
+    "feature": "Split Order — max_splits at needed count",
+    "title": "Split with max_splits exactly equal to splits needed",
+    "description": "Delivery 5 with capacity 1 needs exactly 5 splits; max_splits=5 (=vehicle count) is the boundary.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            1
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            1
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            1
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            1
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            1
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            0
+          ]
+        },
+        {
+          "id": "big",
+          "location_index": 7,
+          "delivery": [
+            5
+          ],
+          "split": {
+            "can_be_split": true,
+            "max_splits": 5
+          }
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.split.can_be_split",
+        "jobs.split.max_splits"
+      ],
+      "archetype": "boundary",
+      "draft": true
+    },
+    "expectedResult": "200; result.code==0; job 'big' is split into exactly 5 parts (one per vehicle); each split delivery <= capacity [1]; sub-deliveries sum to 5.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-008",
+    "feature": "Split Order — quant minimum ratio",
+    "title": "Split honoring a minimum quantity ratio per split",
+    "description": "can_be_split=true with quant set so each split carries at least the minimum ratio of the job load (single load dimension).",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            3
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "big",
+          "location_index": 9,
+          "delivery": [
+            9
+          ],
+          "split": {
+            "can_be_split": true,
+            "max_splits": 5,
+            "quant": 0.2
+          }
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.split.can_be_split",
+        "jobs.split.max_splits"
+      ],
+      "archetype": "boundary",
+      "draft": true
+    },
+    "expectedResult": "200; result.code==0; job 'big' (delivery 9) split so each part >= quant ratio (0.2*9=1.8) and <= capacity [3]; sub-deliveries sum to 9. (quant single-dimension per doc.)",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-009",
+    "feature": "Combination: split + end_index + capacity",
+    "title": "Split job with distinct end depots and capacity limits",
+    "description": "Combines jobs.split (can_be_split), vehicles.end_index and vehicles.capacity in one scenario.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 5,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 6,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 10,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 15,
+          "capacity": [
+            2
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 18,
+          "capacity": [
+            2
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            1
+          ]
+        },
+        {
+          "id": "big",
+          "location_index": 5,
+          "delivery": [
+            7
+          ],
+          "split": {
+            "can_be_split": true,
+            "max_splits": 5
+          }
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.end_index",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.split.can_be_split",
+        "jobs.split.max_splits"
+      ],
+      "archetype": "positive",
+      "draft": true
+    },
+    "expectedResult": "200; result.code==0; 'big' split across vehicles (sub-deliveries sum to 7); each route ends at its end_index; no route exceeds capacity [2]; all jobs assigned.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  },
+  {
+    "testCaseId": "TC-RO-POS-010",
+    "feature": "Combination: split + delivery mix",
+    "title": "Splittable and normal delivery jobs together",
+    "description": "A mix of normal delivery jobs and one splittable oversized job all handled in one plan.",
+    "testData": {
+      "locations": {
+        "id": 1,
+        "location": [
+          "34.0522, -118.2437",
+          "37.3382, -121.8863",
+          "47.6062, -122.3321",
+          "33.8358, -117.9143",
+          "37.8044, -122.2712",
+          "40.6782, -73.9442",
+          "34.1478, -118.1445",
+          "30.2672, -97.7431",
+          "33.4484, -112.074",
+          "37.7749, -122.4194",
+          "34.0195, -118.4912",
+          "32.7767, -96.797",
+          "29.7604, -95.3698",
+          "40.7357, -74.1724",
+          "41.8781, -87.6298",
+          "33.9416, -118.4085",
+          "40.7128, -74.006",
+          "33.749, -84.388",
+          "39.7392, -104.9903",
+          "25.7617, -80.1918"
+        ]
+      },
+      "vehicles": [
+        {
+          "id": "veh_1",
+          "description": "Fleet vehicle 1",
+          "start_index": 0,
+          "end_index": 0,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_2",
+          "description": "Fleet vehicle 2",
+          "start_index": 4,
+          "end_index": 4,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_3",
+          "description": "Fleet vehicle 3",
+          "start_index": 9,
+          "end_index": 9,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_4",
+          "description": "Fleet vehicle 4",
+          "start_index": 14,
+          "end_index": 14,
+          "capacity": [
+            3
+          ]
+        },
+        {
+          "id": "veh_5",
+          "description": "Fleet vehicle 5",
+          "start_index": 17,
+          "end_index": 17,
+          "capacity": [
+            3
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "job_1",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_2",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_3",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_4",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_5",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_6",
+          "location_index": 6,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_7",
+          "location_index": 7,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_8",
+          "location_index": 8,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_9",
+          "location_index": 9,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_10",
+          "location_index": 10,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_11",
+          "location_index": 11,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_12",
+          "location_index": 12,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_13",
+          "location_index": 13,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_14",
+          "location_index": 14,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_15",
+          "location_index": 15,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_16",
+          "location_index": 16,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_17",
+          "location_index": 17,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_18",
+          "location_index": 18,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_19",
+          "location_index": 19,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_20",
+          "location_index": 1,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_21",
+          "location_index": 2,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_22",
+          "location_index": 3,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_23",
+          "location_index": 4,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "job_24",
+          "location_index": 5,
+          "delivery": [
+            2
+          ]
+        },
+        {
+          "id": "big",
+          "location_index": 12,
+          "delivery": [
+            9
+          ],
+          "split": {
+            "can_be_split": true,
+            "max_splits": 5
+          }
+        }
+      ],
+      "options": {
+        "objective": {
+          "travel_cost": "distance"
+        }
+      }
+    },
+    "details": {
+      "features": [
+        "locations.location",
+        "vehicles.capacity",
+        "jobs.location_index",
+        "jobs.delivery",
+        "jobs.split.can_be_split",
+        "jobs.split.max_splits"
+      ],
+      "archetype": "positive",
+      "draft": true
+    },
+    "expectedResult": "200; result.code==0; normal jobs assigned within capacity [3]; 'big' split across vehicles (sub-deliveries sum to 9); result.unassigned empty.",
+    "priority": "P2",
+    "severity": "High (S2)",
+    "type": "Positive"
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "path": "shipments.joint_order",
+  "summary": "Joint-order group ID; all tasks in the group are assigned together or none.",
+  "range": "Integer group ID.",
+  "constraints": [],
+  "businessRules": [
+    "Atomic group: if any member is infeasible, the whole group is unassigned.",
+    "joint_order defines: Specify a joint order group ID that this shipment is associated with. Tasks having the same joint order group ID are treated as a single unit: either all tasks in the group are assigned, or none ar…",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: two shipments sharing joint_order 3 both assigned.",
+    "Infeasible: one member of the group infeasible -> the whole group unassigned.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field joint_order"
+  ],
+  "related": [],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

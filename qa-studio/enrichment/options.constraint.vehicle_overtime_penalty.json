@@ -1,0 +1,32 @@
+{
+  "path": "options.constraint.vehicle_overtime_penalty",
+  "summary": "Penalty per unit of vehicle overtime.",
+  "range": "Integer. Default 200.",
+  "constraints": [],
+  "businessRules": [
+    "Scales the cost of exceeding the shift; higher discourages overtime.",
+    "vehicle_overtime_penalty defines: This parameter defines the penalty applied for every unit of time a vehicle operates beyond its scheduled time window. A higher penalty encourages the optimizer to minimize or eliminate overtime al…",
+    "Must stay consistent with: options.constraint.max_vehicle_overtime. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "This is a soft constraint. Violations are penalized but don't make solutions infeasible.",
+    "Zero means no penalty/cost; larger values increase incentive to avoid violation.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Behavioral: high penalty keeps routes within the shift.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field vehicle_overtime_penalty",
+    "Interaction: Positive: all jobs feasible under hard constraints + balancing options enabled -> all jobs still assigned (assert assignment count only, never the specific route distribution).",
+    "Interaction: Negative-infeasible: a job infeasible under a hard constraint (e.g. impossible time window) stays unassigned regardless of balancing weights (assert unassigned reason)."
+  ],
+  "related": [
+    "options.constraint.max_vehicle_overtime"
+  ],
+  "rules": [
+    "route-balancing-subordinate-to-hard-constraints"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

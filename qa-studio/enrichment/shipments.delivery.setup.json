@@ -1,0 +1,27 @@
+{
+  "path": "shipments.delivery.setup",
+  "summary": "One-time setup time at the delivery location (seconds).",
+  "range": "Non-negative integer seconds.",
+  "constraints": [
+    "Non-negative integer seconds."
+  ],
+  "businessRules": [
+    "setup defines: Specify the set-up duration, in seconds, for the delivery. setup is the one-time effort needed apart from working on the original task- for example, effort to record some information for compliance…",
+    "Must stay consistent with: shipments.delivery.service. Changes here may require validation of those fields.",
+    "Numeric field; verify sign (positive/negative) and unit from spec.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: delivery setup 60.",
+    "Boundary: zero value (0)",
+    "Boundary: negative value (-1)",
+    "Boundary: very large value",
+    "Positive: omit optional field setup"
+  ],
+  "related": [
+    "shipments.delivery.service"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}

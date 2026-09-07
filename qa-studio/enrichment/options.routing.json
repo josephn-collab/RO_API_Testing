@@ -1,0 +1,23 @@
+{
+  "path": "options.routing",
+  "summary": "Road-network routing configuration: mode, avoid/exclude, truck attributes, profiles, traffic.",
+  "range": "Object of routing options. mode defaults to car.",
+  "constraints": [],
+  "businessRules": [
+    "routing defines: This attribute is used to define the routing configurations for the optimization job.",
+    "Must stay consistent with: options.routing.mode, options.routing.avoid, options.routing.exclude. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: mode=truck with truck_size/weight for HGV routing.",
+    "Positive: omit optional field routing"
+  ],
+  "related": [
+    "options.routing.mode",
+    "options.routing.avoid",
+    "options.routing.exclude"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

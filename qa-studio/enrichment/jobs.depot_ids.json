@@ -1,0 +1,29 @@
+{
+  "path": "jobs.depot_ids",
+  "summary": "Depots that can source/sink this job; no effect if the job has no pickup/delivery step.",
+  "range": "Array of depot id strings.",
+  "constraints": [],
+  "businessRules": [
+    "Only vehicles whose depots intersect the job's depot_ids can fulfill it.",
+    "depot_ids defines: Specify the depots which can be used to fulfil this job. In case of a pickup job, the assigned vehicle will deliver the goods to the depot specified here, at the end of its trip. Conversely, in cas…",
+    "Each element in depot_ids must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.start_depot_ids, vehicles.end_depot_ids. Changes here may require validation of those fields.",
+    "Rule: Shipments: pickup always occurs before delivery on the route.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: job depot_ids [\"A\"] served by a vehicle starting at A.",
+    "Infeasible: job depot_ids incompatible with any vehicle's depots -> unassigned.",
+    "Positive: omit optional field depot_ids",
+    "Interaction: Positive: two depots north/south, demand split by region -> each vehicle serves its nearby cluster."
+  ],
+  "related": [
+    "vehicles.start_depot_ids",
+    "vehicles.end_depot_ids"
+  ],
+  "rules": [
+    "multi-depot-reachability"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

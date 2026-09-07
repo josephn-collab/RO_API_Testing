@@ -1,0 +1,27 @@
+{
+  "path": "options.objective",
+  "summary": "Defines what the solver optimizes (cost basis + custom min/min-max terms + early-arrival behavior).",
+  "range": "Object: { travel_cost?, custom?, allow_early_arrival?, solving_time_limit? }.",
+  "constraints": [],
+  "businessRules": [
+    "objective defines: This attribute is used to configure the objective of the optimization job.",
+    "Must stay consistent with: options.objective.travel_cost, options.objective.custom. Changes here may require validation of those fields.",
+    "Rule: Vehicle's allowed_zones must include the job/shipment's zones.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [],
+  "testingGuidance": [
+    "Positive: travel_cost=distance to minimize kilometers.",
+    "Positive: omit optional field objective",
+    "Interaction: Positive: all jobs feasible under hard constraints + balancing options enabled -> all jobs still assigned (assert assignment count only, never the specific route distribution).",
+    "Interaction: Negative-infeasible: a job infeasible under a hard constraint (e.g. impossible time window) stays unassigned regardless of balancing weights (assert unassigned reason)."
+  ],
+  "related": [
+    "options.objective.travel_cost",
+    "options.objective.custom"
+  ],
+  "rules": [
+    "route-balancing-subordinate-to-hard-constraints"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

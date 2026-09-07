@@ -1,0 +1,35 @@
+{
+  "path": "options.routing.allow",
+  "summary": "Road features the vehicle is allowed to use (e.g. taxi lanes). mode=car only.",
+  "range": "Array enum: taxi. Requires mode=car.",
+  "constraints": [
+    "Requires mode=car.",
+    "Only 'taxi' supported."
+  ],
+  "businessRules": [
+    "allow defines: Use this parameter to let the optimizer use taxi-specific lanes/roads for calculating routes. When not specified, the routes generated will not use any taxi specific lanes. It is effective only whe…",
+    "Each element in allow must be valid and consistent with related fields.",
+    "Valid options: taxi. Each affects solver behavior differently.",
+    "Routing attributes affect which roads/zones are accessible; conflicts cause unsolvable requests.",
+    "Must stay consistent with: options.routing.mode. Changes here may require validation of those fields.",
+    "Optional field. Omitting uses solver's default behavior (no penalty)."
+  ],
+  "validationRules": [
+    "allow with mode != car -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: allow [\"taxi\"] with mode=car.",
+    "Negative: allow with mode=truck -> 400.",
+    "Positive: test with allow set to \"taxi\"",
+    "Positive: omit optional field allow",
+    "Interaction: Negative: truck_weight with mode=car -> 400.",
+    "Interaction: Negative: allow=[taxi] with mode=truck -> 400."
+  ],
+  "related": [
+    "options.routing.mode"
+  ],
+  "rules": [
+    "routing-mode-gating"
+  ],
+  "_source": "RouteOptimizationOverview.md §3.6–3.8"
+}

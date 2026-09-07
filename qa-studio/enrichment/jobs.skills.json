@@ -1,0 +1,39 @@
+{
+  "path": "jobs.skills",
+  "summary": "Skills required to perform the job; the servicing vehicle's skills must be a superset.",
+  "range": "Array of positive integers (each > 0); may be empty (any vehicle qualifies).",
+  "constraints": [
+    "Each skill > 0."
+  ],
+  "businessRules": [
+    "Assignable iff job.skills subset of vehicle.skills.",
+    "skills defines: Define the skills needed to complete the job. This attribute supports multidimensional skills allowing users to add multiple skills. Read more about the behavior of this attribute in the [Multi-Dim…",
+    "Each element in skills must be valid and consistent with related fields.",
+    "Must stay consistent with: vehicles.skills. Changes here may require validation of those fields.",
+    "Rule: Higher priority jobs are serviced first; ties break by job ID order.",
+    "Rule: Vehicle must have all skills required by the job (exact match, case-sensitive).",
+    "Optional field. Omitting uses solver's default behavior (no penalty).",
+    "Skills matching is case-sensitive and exact. Vehicle must have ALL skills required by job."
+  ],
+  "validationRules": [
+    "Non-integer skill -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: job skills [2] served by vehicle skills [1,2].",
+    "Infeasible: job needs a skill no vehicle has -> unassigned (skill reason).",
+    "Boundary: empty job skills -> any vehicle.",
+    "Positive: omit optional field skills",
+    "Interaction: Combination: tight capacity + one high-priority + one low-priority job competing for the last slot -> high-priority assigned, low-priority unassigned.",
+    "Interaction: Combination: high-priority job whose only skill is unavailable on any vehicle -> still unassigned despite priority.",
+    "Interaction: Interaction: two jobs with equal priority; one has outsourcing_cost 100, other 50 -> cost-based job assigned first.",
+    "Interaction: Infeasible: job needs skill 3, no vehicle has 3 -> unassigned.",
+    "Interaction: Positive: job needs [2]; only the vehicle whose skills include 2 serves it."
+  ],
+  "related": [
+    "vehicles.skills"
+  ],
+  "rules": [
+    "skills-superset"
+  ],
+  "_source": "OptimizationConstraints.md + RouteOptimizationOverview.md"
+}

@@ -1,0 +1,28 @@
+{
+  "path": "vehicles.layover_config",
+  "summary": "Continuous-driving limit plus a mandatory rest; alternative to breaks.",
+  "range": "Object: { max_continuous_time (req), layover_duration (req), include_service_time? }. Only ONE of breaks / layover_config.",
+  "constraints": [
+    "Requires max_continuous_time and layover_duration.",
+    "Cannot combine with breaks."
+  ],
+  "businessRules": [
+    "layover_config defines: Use this object to configure continuous driving time limitations and subsequent rest duration for the driver. Please note that only one of layover_config or breaks is allowed for a vehicle, at a time.",
+    "Must stay consistent with: vehicles.layover_config.max_continuous_time, vehicles.breaks. Changes here may require validation of those fields.",
+    "Required field. Missing causes HTTP 400 validation error."
+  ],
+  "validationRules": [
+    "Both layover_config and breaks set -> 400.",
+    "Missing max_continuous_time or layover_duration -> 400."
+  ],
+  "testingGuidance": [
+    "Positive: rest after each max_continuous_time of driving.",
+    "Negative: layover_config together with breaks -> 400."
+  ],
+  "related": [
+    "vehicles.layover_config.max_continuous_time",
+    "vehicles.breaks"
+  ],
+  "rules": [],
+  "_source": "RouteOptimizationOverview.md §3.2–3.4 + OptimizationConstraints.md"
+}
