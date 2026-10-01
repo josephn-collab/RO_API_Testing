@@ -525,6 +525,195 @@
       ],
       "enrichment_references": [],
       "rule_references": []
+    },
+    {
+      "id": "multi-order-v2",
+      "source": "Multi_Order_V2.pdf",
+      "status": "draft",
+      "title": "Multi-Order Merging (Metric-Driven Same-Location Job Grouping)",
+      "target": "options.properties",
+      "description": "Enable metric-driven merging of co-located jobs into multi-order stops, where the optimizer decides which same-location orders to combine based on plan quality. Solves the Velocitor use case: backend no longer needs to pre-merge orders (which loses information), and the optimizer merges only where it improves the solution. Also removes the restriction that a job may carry only pickup OR delivery (now allows both). Two sub-features: (1) mixed pickup+delivery per job (§2.1, unconditional), and (2) multi-order merging (§2.2, opt-in, defaults to off).",
+      "fields": {
+        "multiorders": {
+          "type": "object",
+          "description": "Multi-order grouping configuration (DRAFT, not in spec): opt-in metric-driven merging of co-located jobs. Flexible API only; Fast API returns 400 if present.",
+          "additionalProperties": false,
+          "properties": {
+            "merge": {
+              "type": "boolean",
+              "description": "Enable metric-driven multi-order merging. When true, optimizer combines co-located eligible orders only where the combination improves the plan (total objective). Default: false.",
+              "default": false
+            },
+            "force_merge": {
+              "type": "boolean",
+              "description": "Force merging of every eligible co-located group, regardless of plan quality. Requires merge=true. Warning: may worsen planning results; use only if orders at same address are significantly smaller than vehicle capacity. Default: false.",
+              "default": false
+            },
+            "radius_m": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0,
+              "description": "Proximity radius for treating nearby orders as one address (in meters). NOT SUPPORTED in v1; must be 0. Only exact location_index match is used for grouping. Default: 0.",
+              "default": 0
+            }
+          }
+        }
+      },
+      "jobLevelField": {
+        "can_be_merged": {
+          "type": "boolean",
+          "description": "Per-order opt-out from multi-order merging. When false, this job is never merged with co-located jobs, even if merging is enabled. Default: true. Lives on jobs[].properties (not nested under multiorders).",
+          "default": true,
+          "note": "This is a job-level field, not under options.multiorders; include in jobs.items.properties."
+        }
+      },
+      "constraints": [
+        "Flexible API only. Fast API requests with options.multiorders present return HTTP 400.",
+        "§2.1: Mixed pickup+delivery validation removed. A job may now carry both pickup and delivery quantities simultaneously. Capacity is checked separately for each direction (never netted). These three combinations remain rejected: (a) follow_lifo_order with both quantities, (b) depot_ids with both quantities, (c) split.can_be_split with both quantities.",
+        "§2.2.2: Three parameters group under options.multiorders: merge, force_merge, radius_m.",
+        "merge=true enables metric-driven merging; false disables it (default). When disabled, co-located jobs are planned as separate stops, exactly as today.",
+        "force_merge requires merge=true; submit with force_merge=true and merge=false/absent returns HTTP 400.",
+        "radius_m must be 0 (only value supported). Any positive value returns HTTP 400. Keep field for request-shape stability; radius-based proximity is future work (§Out of scope).",
+        "§2.4: Eligibility criteria for multi-order candidacy (hard admissibility rules, not negotiable): (a) Same location_index (necessary key), (b) can_be_merged=true on all jobs, (c) Identical skills, (d) Identical zones, (e) Non-empty time_window intersection, (f) load_types/incompatible_load_types sets must not conflict, (g) sequence_order must match or absent on both, (h) joint_order must match or absent on both, (i) depot_ids must be identical AND merge must not produce both quantities, (j) split.can_be_split must be false, (k) follow_lifo_order must be false, (l) volume (3D packing) must be absent, (m) max_time_in_vehicle must be absent.",
+        "Eligibility partitions jobs at a location into candidate groups + ineligible jobs (no error; ineligible jobs planned separately).",
+        "§2.3: After eligibility, optimizer decides whether each candidate should be realized as a multi-order. Decision happens during search, not preprocessing. Candidate is formed only where the total objective improves. Per-order costs (costs.per_order, unassigned penalty) are counted on original orders, not the merged stop, to prevent bias toward merging.",
+        "force_merge=true overrides this decision and forms every candidate unconditionally. Dissolve move is disabled. Warning: a multi-order that no vehicle can absorb gets unassigned with all its member orders unassigned (all-or-nothing).",
+        "§2.5: Aggregation rules for merged-stop values: service=sum, setup=max, delivery/pickup=dimension-wise sum (never netted), time_windows=intersection, priority=max, revenue/outsourcing_cost=sum, max_visit_lateness=min, description=joined ('; '-separated).",
+        "§2.6: Response representation. A realized multi-order produces one job-type step with: (a) step.id = synthetic multi-order id (reserved high numeric range, never appears in request), (b) step.original_job_ids = ascending array of merged job ids (new field, present only on multi-order steps), (c) step.service/setup/delivery/pickup aggregated per §2.5, (d) step.load = post-stop load (load_before - delivery + pickup).",
+        "Unassigned[] reports orders individually under original ids; multi-order id never appears in unassigned[].",
+        "Summary counters (total jobs, pickup, delivery) count original orders, never multi-order stops.",
+        "§2.7: Multi-order ids are ephemeral (per-plan only, not durable keys). Same address can merge in one plan and stay separate in the next as inputs change. Consumers must key off original_job_ids, never multi-order ids.",
+        "Multi-order ids come from reserved high numeric range; submitting a job id in that range is a 400 error.",
+        "Ids are assigned deterministically, so same request + same seed = same ids.",
+        "No string multi-order id; API returns numeric only. MVRO composes customer-facing label from original_job_ids.",
+        "§3.3: Re-optimization uses original job ids in input (multi-order ids rejected at validation). Previous plan's groupings recovered from shared step; same grouping remains stable if inputs unchanged. If changes make a merge a bad idea, dissolve move applies and multi-orders break up. Ids reassigned for new plan (invisible if consumer reads original_job_ids).",
+        "Shipments are never merged in v1; only jobs. A shipment step and co-located job stay separate.",
+        "Candidate merging is single-plan (optimizer weighs each candidate against plan being built, not exhaustive merge-combination search)."
+      ],
+      "responseFields": {
+        "routes.steps.original_job_ids": {
+          "type": "array",
+          "items": {"type": "integer"},
+          "description": "New field. Array of original job ids that were merged into this multi-order step, in ascending order. Present only on multi-order steps. Absent on ordinary steps (job_id only). Used by MVRO to fan-out multi-order result back to original orders.",
+          "note": "Use presence of this field to distinguish multi-order step from ordinary step (more robust than type-flag approach)."
+        },
+        "routes.steps.service": {
+          "type": "integer",
+          "description": "Multi-order value: sum(service) over merged orders. Existing field; semantics widened."
+        },
+        "routes.steps.setup": {
+          "type": "integer",
+          "description": "Multi-order value: max(setup) over merged orders. Existing field; semantics widened."
+        },
+        "routes.steps.delivery": {
+          "type": "array",
+          "description": "Multi-order value: dimension-wise sum of delivery quantities over merged orders. Existing field; now populated for multi-order steps (previously only for split jobs)."
+        },
+        "routes.steps.pickup": {
+          "type": "array",
+          "description": "Multi-order value: dimension-wise sum of pickup quantities over merged orders. Existing field; now populated for multi-order steps (previously only for split jobs)."
+        },
+        "routes.steps.load": {
+          "type": "array",
+          "description": "Post-stop load: load_before - delivery + pickup. Existing field; applies to multi-order steps."
+        },
+        "result.unassigned": {
+          "type": "array",
+          "description": "If a multi-order merge candidate cannot be served (combined load exceeds all vehicles, or some other block), individual orders are reported in unassigned[] under their own ids. Reason string may mention grouping context where multiple orders of same candidate are unassigned together."
+        }
+      },
+      "testingSuggestions": [
+        "Positive-feature-parity: Mixed pickup+delivery (no merging): one job with delivery=6, pickup=4, vehicle capacity=10 → assigned; vehicle leaves depot with 6, carries 4 after stop, routes show both pickup and delivery.",
+        "Positive-feature-parity: Mixed pickup+delivery (no merging), capacity check on peak: same job, vehicle capacity=5 → unassigned (need 6 for delivery peak, not netted to 2).",
+        "Positive: Merging off (default): two co-located jobs (3min service, 2min service) with merge=false/absent → two separate steps at same location under own ids, second starts after first finishes.",
+        "Positive: Merging on, improves plan: same two small jobs, merge=true → one multi-order step, 5 min total service, setup counted once, original_job_ids=[id1, id2], combined delivery/pickup populated.",
+        "Positive: Merging on, does not improve: three co-located orders whose combined load exceeds every vehicle, but fit as 2-vehicle solution → not merged; all three on separate steps under own ids, both vehicles used, no unassigned order.",
+        "Positive: Merging on, eligibility partition: three co-located jobs, one requires extra skill → skilled job never a candidate; other two may merge. No error.",
+        "Positive: Merging on, time-window intersection: orders promised 09:00-10:00 and 09:30-11:00 → candidates; if merged, stop must arrive in 09:30-10:00.",
+        "Positive: Merging on, disjoint time windows: orders promised 09:00-09:30 and 10:00-11:00 → never candidates; always separate steps.",
+        "Positive: Forced merging shows trade-off: three co-located orders with combined load exceeding all vehicles, force_merge=true → merged into one multi-order that no vehicle absorbs; all three members unassigned with group-context reason.",
+        "Positive: force_merge requires merge: force_merge=true with merge=false/absent → HTTP 400.",
+        "Positive: Per-order opt-out: three co-located small orders, one with can_be_merged=false → at most two-member multi-order plus one separate step.",
+        "Positive: Original job ids preserved: multi-order with id=999 from merge of [id1=117, id2=118] → original_job_ids=[117,118], ascending order.",
+        "Positive: Deterministic ids: same request + same seed → same multi-order ids in result.",
+        "Positive: Verify multi-order step fields: service=sum, setup=max, delivery/pickup=dimension-wise sums, load computed correctly.",
+        "Positive: Verify response consistency: step.service + step.setup = total time at stop (matches RouteQ formula).",
+        "Positive: Verify per-member timing: all members start service at same time under last_arrival (default).",
+        "Positive: Verify unassigned reporting: unassigned members reported individually under own ids (not multi-order id).",
+        "Positive: Multi-dimensional amounts: two orders [300,15] and [100,5] merged → multi-order delivery/pickup are [400,20].",
+        "Positive: Verify load progression: start 0 → before merged stop X → after merged stop (X-delivery+pickup) → end.",
+        "Positive: Re-optimization stability: re-run same request → same grouping intact; remove one order → grouping dissolves (remaining order separate).",
+        "Positive: Re-optimization input correction: previous plan had multi-order id, re-opt uses original_job_ids → accepted; multi-order id in re-opt input → rejected.",
+        "Negative-validation: radius_m set to any value != 0 → HTTP 400 (not supported in v1).",
+        "Negative-validation: force_merge=true without merge=true → HTTP 400.",
+        "Negative-validation: Job id in reserved multi-order range → HTTP 400.",
+        "Negative-validation: Re-optimization with multi-order id in input → HTTP 400.",
+        "Negative-validation: Relation referencing multi-order id → HTTP 400 (relations must reference original job ids).",
+        "Negative-validation: Mixed pickup+delivery with follow_lifo_order → HTTP 400.",
+        "Negative-validation: Mixed pickup+delivery with depot_ids → HTTP 400.",
+        "Negative-validation: Mixed pickup+delivery with split.can_be_split → HTTP 400.",
+        "Negative-validation: Fast API with options.multiorders present → HTTP 400.",
+        "Negative-infeasible: Merging attempt, no vehicle can serve combined load → both orders unassigned.",
+        "Boundary: merge=true, force_merge=false (recommended): optimizer chooses per-candidate; some addresses merge, others don't as plan evolves.",
+        "Boundary: merge=true, force_merge=true (warning): all candidates forced; may produce unassigned multi-orders.",
+        "Boundary: Arrival exactly at eligibility threshold → included in candidate.",
+        "Boundary: Arrival 1 sec outside time-window intersection → not a candidate.",
+        "Interaction: Skills + zones: orders eligible if skills identical AND zones identical (both conditions required).",
+        "Interaction: Priority in merged stop: max(priority) → single-priority group; priority serves as rank, summing would be wrong.",
+        "Interaction: LIFO constraint: LIFO-ordered job can never merge (eligibility rule). If you need LIFO + merging, split into separate locations (workaround).",
+        "Interaction: Pinned vehicle: relations with type=pinned can restrict where merged members go. If pin restricts members to different vehicles, merge cannot occur.",
+        "Backward-compatibility: Existing requests without multiorders options pass unchanged. All non-merging tests regress clean. Mixed pickup+delivery only active if explicitly sent."
+      ],
+      "limitations": [
+        "radius_m not supported. Only exact location_index match defines co-location. Customers with per-order geocoding must deduplicate addresses themselves. Radius-based proximity is top item of §Out of scope.",
+        "Merging is not guaranteed. It is an optimizer decision, so enabling merge=true does not promise one stop per address. Same address may merge in one plan and not in the next as inputs change.",
+        "Multi-order ids are per-plan, not durable. Must never be stored as keys. If consumer caches id as stable reference, re-optimization will break the mapping. Use original_job_ids.",
+        "Time-window intersection is conservative. Disjoint windows → never candidates, even where vehicle could serve in two visits.",
+        "Not eligible to merge: split orders, LIFO-ordered jobs, 3D volume jobs, jobs with max_time_in_vehicle, jobs with per-job depot bindings producing both quantities.",
+        "Shipments not merged in v1. A shipment step and co-located job stay separate steps.",
+        "Merging decided within one plan. Optimizer weights each candidate against plan being built, not against exhaustive search over every merge combination.",
+        "Excluded from simulation mode (simulation-mode.md).",
+        "§2.1 (mixed pickup+delivery) carries none of the above limitations. It is unconditional and independent of multi-order options."
+      ],
+      "enrichment_references": [],
+      "rule_references": []
+    },
+    {
+      "id": "multi-order-v2-job-field",
+      "source": "Multi_Order_V2.pdf (§2.2: Per-order opt-out)",
+      "status": "draft",
+      "title": "Multi-Order: jobs[].can_be_merged (Per-Order Opt-Out)",
+      "target": "jobs.items.properties",
+      "description": "Per-order opt-out from multi-order merging (companion to multi-order-v2). When can_be_merged=false on a job, that job is excluded from every multi-order grouping, even if options.multiorders.merge=true. Lives directly on the job object (jobs[].can_be_merged). Keeps RouteQ's field name and default (true).",
+      "fields": {
+        "can_be_merged": {
+          "type": "boolean",
+          "description": "Per-order opt-out from multi-order merging. When false, this job is never merged with co-located jobs, even if options.multiorders.merge=true. When true (default), job is eligible for merging subject to eligibility rules (§2.4 of Multi_Order_V2.pdf).",
+          "default": true
+        }
+      },
+      "constraints": [
+        "Only meaningful when options.multiorders.merge=true. If merging is disabled globally, this field is ignored.",
+        "When can_be_merged=false, the job is planned as a standalone stop (never grouped with co-located jobs).",
+        "This is a per-order field; different jobs at the same location can have different can_be_merged values, partitioning eligible and ineligible groups.",
+        "Eligible jobs with can_be_merged=false are never candidates for merging; ineligible jobs are never candidates regardless of this field (eligibility rules in §2.4 take precedence).",
+        "Flexible API only; Fast API silently ignores this field."
+      ],
+      "testingSuggestions": [
+        "Positive: Merging off (default, merge absent/false): can_be_merged value ignored; all jobs standalone regardless of field value.",
+        "Positive: Merging on, can_be_merged=true (default): job eligible for grouping with co-located orders (subject to §2.4 eligibility rules).",
+        "Positive: Merging on, can_be_merged=false: job planned standalone; co-located jobs with can_be_merged=true may still merge with each other.",
+        "Positive: Three co-located jobs, one with can_be_merged=false → at most two-job multi-order step + one separate step under the opt-out job's id.",
+        "Positive: Verify can_be_merged=false job appears as ordinary job step (not in multi-order).",
+        "Positive: Multiple jobs with can_be_merged=false at same location → each stays separate (no merging among them either).",
+        "Negative-validation: Non-boolean can_be_merged (e.g., string 'false') → HTTP 400 validation error."
+      ],
+      "limitations": [
+        "Only affects multi-order eligibility. Does not prevent a job from being combined via other mechanisms.",
+        "Field value is evaluated per-request; no persistence across re-optimization. Each re-optimization re-evaluates can_be_merged afresh."
+      ],
+      "enrichment_references": [],
+      "rule_references": []
     }
   ]
 }
